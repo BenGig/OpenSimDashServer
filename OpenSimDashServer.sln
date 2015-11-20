@@ -16,6 +16,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerCLI", "ServerCLI\Serv
 		{84E135E9-EBAE-43CC-9FCF-900DA667CD8E} = {84E135E9-EBAE-43CC-9FCF-900DA667CD8E}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rfactor1", "rfactor1\rfactor1.vcxproj", "{5B52A46F-9946-4EA7-B28E-910FBFD76D19}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -56,6 +58,12 @@ Global
 		{148B9140-02CD-43C9-A02E-ED5E9365A809}.Release|x64.Build.0 = Release|x64
 		{148B9140-02CD-43C9-A02E-ED5E9365A809}.Release|x86.ActiveCfg = Release|Win32
 		{148B9140-02CD-43C9-A02E-ED5E9365A809}.Release|x86.Build.0 = Release|Win32
+		{5B52A46F-9946-4EA7-B28E-910FBFD76D19}.Debug|x64.ActiveCfg = Debug|x64
+		{5B52A46F-9946-4EA7-B28E-910FBFD76D19}.Debug|x86.ActiveCfg = Debug|Win32
+		{5B52A46F-9946-4EA7-B28E-910FBFD76D19}.Debug|x86.Build.0 = Debug|Win32
+		{5B52A46F-9946-4EA7-B28E-910FBFD76D19}.Release|x64.ActiveCfg = Release|x64
+		{5B52A46F-9946-4EA7-B28E-910FBFD76D19}.Release|x86.ActiveCfg = Release|Win32
+		{5B52A46F-9946-4EA7-B28E-910FBFD76D19}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,5 +71,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D4052ECB-9551-4AE6-94FA-E7C03A6C2E9F} = {20DBF045-A146-40C8-BFAF-F1A73D4FB508}
 		{2BA48BAF-A681-454D-8477-B41620DDC4CC} = {20DBF045-A146-40C8-BFAF-F1A73D4FB508}
+		{5B52A46F-9946-4EA7-B28E-910FBFD76D19} = {20DBF045-A146-40C8-BFAF-F1A73D4FB508}
 	EndGlobalSection
 EndGlobal
