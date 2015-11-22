@@ -18,7 +18,7 @@ extern "C" __declspec(dllexport)
 PluginObjectType __cdecl GetPluginType() { return(PO_INTERNALS); }
 
 extern "C" __declspec(dllexport)
-int __cdecl GetPluginVersion() { return(6); } // InternalsPluginV01 functionality
+int __cdecl GetPluginVersion() { return(6); } // InternalsPluginV06 functionality
 
 extern "C" __declspec(dllexport)
 PluginObject * __cdecl CreatePluginObject() { return((PluginObject *) new OpenDashPlugin); }
@@ -168,16 +168,16 @@ void OpenDashPlugin::UpdateTelemetry(const TelemInfoV01 &info)
 	data.telemetry.detached = info.mDetached;  
 	memcpy(data.telemetry.dentSeverity, info.mDentSeverity, sizeof(info.mDentSeverity));
 	data.telemetry.lastImpactTime = info.mLastImpactET;
-	data.telemetry.lastImpactPos = info.mLastImpactPos;
+	data.telemetry.lastImpactPos.Set(info.mLastImpactPos.x, info.mLastImpactPos.y, info.mLastImpactPos.z);
 	data.telemetry.lastImpactMagnitude = info.mLastImpactMagnitude;
 
-	data.telemetry.pos = info.mPos;
-	data.telemetry.localVel = info.mLocalVel;
-	data.telemetry.localAccel = info.mLocalAccel;
+	data.telemetry.pos.Set(info.mPos.x, info.mPos.y, info.mPos.z);
+	data.telemetry.localVel.Set(info.mLocalVel.x, info.mLocalVel.y, info.mLocalVel.z);
+	data.telemetry.localAccel.Set(info.mLocalAccel.x, info.mLocalAccel.y, info.mLocalAccel.z);
 	memcpy(data.telemetry.orientation, info.mOri, sizeof(info.mOri));
-	data.telemetry.localRot = info.mLocalRot;
-	data.telemetry.localRotAccel = info.mLocalRotAccel;
-	
+	data.telemetry.localRot.Set(info.mLocalRot.x, info.mLocalRot.y, info.mLocalRot.z);
+	data.telemetry.localRotAccel.Set(info.mLocalRotAccel.x, info.mLocalRotAccel.y, info.mLocalRotAccel.z);
+
 	// Additional data provided by rFactor 2
 	data.telemetry.filteredThrottle = info.mFilteredThrottle;
 	data.telemetry.filteredBrake = info.mFilteredBrake;
@@ -238,7 +238,7 @@ void OpenDashPlugin::UpdateScoring(const ScoringInfoV01 &info)
 	data.event.raining = info.mRaining;
 	data.event.ambientTemp = info.mAmbientTemp;
 	data.event.trackTemp = info.mTrackTemp;
-	data.event.wind = info.mWind;
+	data.event.wind.Set(info.mWind.x, info.mWind.y, info.mWind.z);
 	data.event.onPathWetness = info.mOnPathWetness;
 	data.event.offPathWetness = info.mOffPathWetness;
 
@@ -272,13 +272,12 @@ void OpenDashPlugin::UpdateScoring(const ScoringInfoV01 &info)
 		data.scoring[i].lapStartTime = info.mVehicle[i].mLapStartET;
 		data.scoring[i].speed = sqrt(pow(info.mVehicle[i].mLocalVel.x, 2) + pow(info.mVehicle[i].mLocalVel.y, 2) + pow(info.mVehicle[i].mLocalVel.z, 2));
 		data.scoring[i].control = info.mVehicle[i].mControl;
-		data.scoring[i].pos = info.mVehicle[i].mPos;
-		data.scoring[i].localVel = info.mVehicle[i].mLocalVel;
-		data.scoring[i].localAccel = info.mVehicle[i].mLocalAccel;
-		// TODO: test copy result
+		data.scoring[i].pos.Set(info.mVehicle[i].mPos.x, info.mVehicle[i].mPos.y, info.mVehicle[i].mPos.z);
+		data.scoring[i].localVel.Set(info.mVehicle[i].mLocalVel.x, info.mVehicle[i].mLocalVel.y, info.mVehicle[i].mLocalVel.z);
+		data.scoring[i].localAccel.Set(info.mVehicle[i].mLocalAccel.x, info.mVehicle[i].mLocalAccel.y, info.mVehicle[i].mLocalAccel.z);
 		memcpy(data.scoring[i].orientation, info.mVehicle[i].mOri, sizeof(info.mVehicle[i].mOri));
-		data.scoring[i].localRot = info.mVehicle[i].mLocalRot;
-		data.scoring[i].localRotAccel = info.mVehicle[i].mLocalRotAccel;
+		data.scoring[i].localRot.Set(info.mVehicle[i].mLocalRot.x, info.mVehicle[i].mLocalRot.y, info.mVehicle[i].mLocalRot.z);
+		data.scoring[i].localRotAccel.Set(info.mVehicle[i].mLocalRotAccel.x, info.mVehicle[i].mLocalRotAccel.y, info.mVehicle[i].mLocalRotAccel.z);
 
 		
 		// Extension for rFactor 2

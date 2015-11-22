@@ -70,9 +70,9 @@ bool ConnectorRF::Read()
 			sd->event.raining.flt = td.data.event.raining;
 			sd->event.ambientTemp.flt = td.data.event.ambientTemp;
 			sd->event.trackTemp.flt = td.data.event.trackTemp;
-			sd->event.wind.x = td.data.event.wind[0];
-			sd->event.wind.y = td.data.event.wind[1];
-			sd->event.wind.z = td.data.event.wind[2];
+			sd->event.wind.x = td.data.event.wind.x;
+			sd->event.wind.y = td.data.event.wind.y;
+			sd->event.wind.z = td.data.event.wind.z;
 			sd->event.onPathWetness.flt = td.data.event.onPathWetness;
 			sd->event.offPathWetness.flt = td.data.event.offPathWetness;
 			sd->event.inRealtime.bl = td.data.event.inRealtime;
@@ -125,9 +125,9 @@ bool ConnectorRF::Read()
 				else
 					sd->scoring[i].currentSector.lint = td.data.scoring[i].sector;
 
-				sd->scoring[i].position.x = td.data.scoring[i].pos[0];
-				sd->scoring[i].position.y = td.data.scoring[i].pos[1];
-				sd->scoring[i].position.z = td.data.scoring[i].pos[2];
+				sd->scoring[i].position.x = td.data.scoring[i].pos.x;
+				sd->scoring[i].position.y = td.data.scoring[i].pos.y;
+				sd->scoring[i].position.z = td.data.scoring[i].pos.z;
 
 				sd->scoring[i].headlights.lint = td.data.scoring[i].headlights;
 				sd->scoring[i].qualification.lint = td.data.scoring[i].qualification;
@@ -181,7 +181,7 @@ bool ConnectorRF::Read()
 			sd->telemetry.fuel.flt = td.data.telemetry.fuel;
 			sd->telemetry.gear.lint = td.data.telemetry.gear;
 			sd->telemetry.engineRPM.flt = td.data.telemetry.engineRPM;
-			sd->telemetry.speed.flt = 3.6 * sqrt(pow(td.data.telemetry.localVel[0], 2) + pow(td.data.telemetry.localVel[1], 2) + pow(td.data.telemetry.localVel[2], 2));
+			sd->telemetry.speed.flt = 3.6 * sqrt(pow(td.data.telemetry.localVel.x, 2) + pow(td.data.telemetry.localVel.y, 2) + pow(td.data.telemetry.localVel.z, 2));
 
 			sd->telemetry.unfilteredThrottle.flt = td.data.telemetry.unfilteredThrottle;
 			sd->telemetry.unfilteredBrake.flt = td.data.telemetry.unfilteredBrake;

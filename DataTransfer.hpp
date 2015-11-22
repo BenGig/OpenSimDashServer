@@ -7,8 +7,14 @@
 //Ý Description: Exchange data written in shared memory                     Þ
 //Ý                                                                         Þ
 //ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
-
 #include "InternalsPlugin.hpp"
+
+struct TelemVect
+{
+	float x, y, z;
+
+	void Set(const float a, const float b, const float c) { x = a; y = b; z = c; }
+};
 
 // One data set for each car
 struct VehicleScoringInfo
@@ -44,15 +50,15 @@ struct VehicleScoringInfo
 	char vehicleClass[32];		// vehicle class
 
 	// Position and derivatives
-	TelemVect3 pos;				// world position in meters
-	TelemVect3 localVel;		// velocity (meters/sec) in local vehicle coordinates
-	TelemVect3 localAccel;		// acceleration (meters/sec^2) in local vehicle coordinates
+	TelemVect pos;				// world position in meters
+	TelemVect localVel;		// velocity (meters/sec) in local vehicle coordinates
+	TelemVect localAccel;		// acceleration (meters/sec^2) in local vehicle coordinates
 
 	// Orientation and derivatives
-	TelemVect3 orientation[3];	// rows of orientation matrix (use TelemQuat conversions if desired), also converts local
+	TelemVect orientation[3];	// rows of orientation matrix (use TelemQuat conversions if desired), also converts local
 								// vehicle vectors into world X, Y, or Z using dot product of rows 0, 1, or 2 respectively
-	TelemVect3 localRot;		// rotation (radians/sec) in local vehicle coordinates
-	TelemVect3 localRotAccel;	// rotational acceleration (radians/sec^2) in local vehicle coordinates
+	TelemVect localRot;		// rotation (radians/sec) in local vehicle coordinates
+	TelemVect localRotAccel;	// rotational acceleration (radians/sec^2) in local vehicle coordinates
 	
 	// Extension for rFactor 2
 	long slotId;				// slot ID (note that it can be re-used in multiplayer after someone leaves)
@@ -120,18 +126,18 @@ struct TelemetryInfo
 	unsigned char dentSeverity[8]; // dent severity at 8 locations around the car (0=none, 1=some, 2=more)
 	double lastImpactTime;
 	double lastImpactMagnitude;
-	TelemVect3 lastImpactPos;
+	TelemVect lastImpactPos;
 
 	// Position and derivatives
-	TelemVect3 pos;               // world position in meters
-	TelemVect3 localVel;          // velocity (meters/sec) in local vehicle coordinates
-	TelemVect3 localAccel;        // acceleration (meters/sec^2) in local vehicle coordinates
+	TelemVect pos;               // world position in meters
+	TelemVect localVel;          // velocity (meters/sec) in local vehicle coordinates
+	TelemVect localAccel;        // acceleration (meters/sec^2) in local vehicle coordinates
 
 	// Orientation and derivatives
-	TelemVect3 orientation[3];            // rows of orientation matrix (use TelemQuat conversions if desired), also converts local
+	TelemVect orientation[3];            // rows of orientation matrix (use TelemQuat conversions if desired), also converts local
                                  // vehicle vectors into world X, Y, or Z using dot product of rows 0, 1, or 2 respectively
-	TelemVect3 localRot;          // rotation (radians/sec) in local vehicle coordinates
-	TelemVect3 localRotAccel;     // rotational acceleration (radians/sec^2) in local vehicle coordinates
+	TelemVect localRot;          // rotation (radians/sec) in local vehicle coordinates
+	TelemVect localRotAccel;     // rotational acceleration (radians/sec^2) in local vehicle coordinates
 
 	  // Driver input
 	double unfilteredThrottle;    // ranges  0.0-1.0
@@ -200,7 +206,7 @@ struct EventInfo
 	double raining;
 	double ambientTemp;
 	double trackTemp;
-	TelemVect3 wind;
+	TelemVect wind;
 	double onPathWetness;
 	double offPathWetness;
 };

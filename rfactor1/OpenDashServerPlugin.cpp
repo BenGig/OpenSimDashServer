@@ -13,12 +13,11 @@
 const long OpenDashPlugin::rFactorVersion = 1;
 
 // plugin information
-// plugin information
 unsigned g_uPluginID = 0;
-char     g_szPluginName[] = "OpenDashPlugin - 2005.11.30";
+char     g_szPluginName[] = "OpenDashPlugin";
 unsigned g_uPluginVersion = 001;
 unsigned g_uPluginObjectCount = 1;
-InternalsPluginInfo g_PluginInfo;
+OpenSimDashPluginInfo g_PluginInfo;
 
 
 // interface to plugin information
@@ -44,24 +43,24 @@ PluginObjectInfo* __cdecl GetPluginObjectInfo(const unsigned uIndex)
 	}
 }
 
-InternalsPluginInfo::InternalsPluginInfo()
+OpenSimDashPluginInfo::OpenSimDashPluginInfo()
 {
 	// put together a name for this plugin
-	sprintf(m_szFullName, "%s - %s", g_szPluginName, InternalsPluginInfo::GetName());
+	sprintf(m_szFullName, "%s - %s", g_szPluginName, OpenSimDashPluginInfo::GetName());
 }
 
-const char*    InternalsPluginInfo::GetName()     const { return OpenDashPlugin::GetName(); }
-const char*    InternalsPluginInfo::GetFullName() const { return m_szFullName; }
-const char*    InternalsPluginInfo::GetDesc()     const { return "Example Internals Plugin"; }
-const unsigned InternalsPluginInfo::GetType()     const { return OpenDashPlugin::GetType(); }
-const char*    InternalsPluginInfo::GetSubType()  const { return OpenDashPlugin::GetSubType(); }
-const unsigned InternalsPluginInfo::GetVersion()  const { return OpenDashPlugin::GetVersion(); }
-void*          InternalsPluginInfo::Create()      const { return new OpenDashPlugin(); }
+const char*    OpenSimDashPluginInfo::GetName()     const { return OpenDashPlugin::GetName(); }
+const char*    OpenSimDashPluginInfo::GetFullName() const { return m_szFullName; }
+const char*    OpenSimDashPluginInfo::GetDesc()     const { return "OpenSimDash Connector Plugin"; }
+const unsigned OpenSimDashPluginInfo::GetType()     const { return OpenDashPlugin::GetType(); }
+const char*    OpenSimDashPluginInfo::GetSubType()  const { return OpenDashPlugin::GetSubType(); }
+const unsigned OpenSimDashPluginInfo::GetVersion()  const { return OpenDashPlugin::GetVersion(); }
+void*          OpenSimDashPluginInfo::Create()      const { return new OpenDashPlugin(); }
 
 // InternalsPlugin class
 
-const char OpenDashPlugin::m_szName[] = "InternalsPlugin";
-const char OpenDashPlugin::m_szSubType[] = "Internals";
+const char OpenDashPlugin::m_szName[] = "OpenSimDash Plugin";
+const char OpenDashPlugin::m_szSubType[] = "OpenSimDash";
 const unsigned OpenDashPlugin::m_uID = 1;
 const unsigned OpenDashPlugin::m_uVersion = 3;  // set to 3 for InternalsPluginV3 functionality and added graphical and vehicle info
 
@@ -84,12 +83,6 @@ void OpenDashPlugin::Log(const char * const msg)
 		fprintf(fo, "%s\n", msg);
 		fclose(fo);
 	}
-}
-
-PluginObjectInfo * OpenDashPlugin::GetInfo()
-{
-	PluginObjectInfo * poi = new InternalsPluginInfo();
-	return poi;	
 }
 
 void OpenDashPlugin::Startup()
@@ -208,14 +201,14 @@ void OpenDashPlugin::UpdateTelemetry(const TelemInfoV2 &info)
 	data.telemetry.detached = info.mDetached;  
 	memcpy(data.telemetry.dentSeverity, info.mDentSeverity, sizeof(info.mDentSeverity));
 	data.telemetry.lastImpactTime = info.mLastImpactET;
-	data.telemetry.lastImpactPos = info.mLastImpactPos;
+	data.telemetry.lastImpactPos.Set(info.mLastImpactPos.x, info.mLastImpactPos.y, info.mLastImpactPos.z);
 	data.telemetry.lastImpactMagnitude = info.mLastImpactMagnitude;
 
-	data.telemetry.pos = info.mPos;
-	data.telemetry.localVel = info.mLocalVel;
-	data.telemetry.localAccel = info.mLocalAccel;
-	data.telemetry.localRot = info.mLocalRot;
-	data.telemetry.localRotAccel = info.mLocalRotAccel;
+	data.telemetry.pos.Set(info.mPos.x, info.mPos.y, info.mPos.z);
+	data.telemetry.localVel.Set(info.mLocalVel.x, info.mLocalVel.y, info.mLocalVel.z);
+	data.telemetry.localAccel.Set(info.mLocalAccel.x, info.mLocalAccel.y, info.mLocalAccel.z);
+	data.telemetry.localRot.Set(info.mLocalRot.x, info.mLocalRot.y, info.mLocalRot.z);
+	data.telemetry.localRotAccel.Set(info.mLocalRotAccel.x, info.mLocalRotAccel.y, info.mLocalRotAccel.z);
 	
 
 	WriteDataToMemory();
@@ -246,9 +239,10 @@ void OpenDashPlugin::UpdateScoring(const ScoringInfoV2 &info)
 	data.event.raining = info.mRaining;
 	data.event.ambientTemp = info.mAmbientTemp;
 	data.event.trackTemp = info.mTrackTemp;
-	data.event.wind = info.mWind;
+	data.event.wind.Set(info.mWind.x, info.mWind.y, info.mWind.z);
 	data.event.onPathWetness = info.mOnPathWetness;
 	data.event.offPathWetness = info.mOffPathWetness;
+
 
 	for (int i = 0; i < info.mNumVehicles;  i++)
 	{
@@ -280,12 +274,11 @@ void OpenDashPlugin::UpdateScoring(const ScoringInfoV2 &info)
 		data.scoring[i].lapStartTime = info.mVehicle[i].mLapStartET;
 		data.scoring[i].speed = sqrt(pow(info.mVehicle[i].mLocalVel.x, 2) + pow(info.mVehicle[i].mLocalVel.y, 2) + pow(info.mVehicle[i].mLocalVel.z, 2));
 		data.scoring[i].control = info.mVehicle[i].mControl;
-		data.scoring[i].pos = info.mVehicle[i].mPos;
-		data.scoring[i].localVel = info.mVehicle[i].mLocalVel;
-		data.scoring[i].localAccel = info.mVehicle[i].mLocalAccel;
-		// TODO: test copy result
-		data.scoring[i].localRot = info.mVehicle[i].mLocalRot;
-		data.scoring[i].localRotAccel = info.mVehicle[i].mLocalRotAccel;
+		data.scoring[i].pos.Set(info.mVehicle[i].mPos.x, info.mVehicle[i].mPos.y, info.mVehicle[i].mPos.z);
+		data.scoring[i].localVel.Set(info.mVehicle[i].mLocalVel.x, info.mVehicle[i].mLocalVel.y, info.mVehicle[i].mLocalVel.z);
+		data.scoring[i].localAccel.Set(info.mVehicle[i].mLocalAccel.x, info.mVehicle[i].mLocalAccel.y, info.mVehicle[i].mLocalAccel.z);
+		data.scoring[i].localRot.Set(info.mVehicle[i].mLocalRot.x, info.mVehicle[i].mLocalRot.y, info.mVehicle[i].mLocalRot.z);
+		data.scoring[i].localRotAccel.Set(info.mVehicle[i].mLocalRotAccel.x, info.mVehicle[i].mLocalRotAccel.y, info.mVehicle[i].mLocalRotAccel.z);
 	}
 
 	WriteDataToMemory();
@@ -293,5 +286,10 @@ void OpenDashPlugin::UpdateScoring(const ScoringInfoV2 &info)
 
 void OpenDashPlugin::WriteDataToMemory()
 {
+	// TODO: remove sizes after debug
+	int size = sizeof(data);
+	int eSize = sizeof(data.event);
+	int tSize = sizeof(data.telemetry);
+	int cSize = sizeof(data.scoring[0]);
 	CopyMemory((PVOID)pBuf, &data, sizeof(data));
 }

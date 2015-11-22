@@ -21,13 +21,13 @@
 #include "../DataTransfer.hpp"
 
 // This is used for app to find out information about the plugin
-class InternalsPluginInfo : public PluginObjectInfo
+class OpenSimDashPluginInfo : public PluginObjectInfo
 {
 public:
 
 	// Constructor/destructor
-	InternalsPluginInfo();
-	~InternalsPluginInfo() {}
+	OpenSimDashPluginInfo();
+	~OpenSimDashPluginInfo() {}
 
 	// Derived from base class PluginObjectInfo
 	virtual const char*    GetName()     const;
@@ -62,7 +62,7 @@ public:
 	OpenDashPlugin() {}
 	~OpenDashPlugin() {}
 
-	// Called from class InternalsPluginInfo to return specific information about plugin
+	// Called from class OpsnSimDashPluginInfo to return specific information about plugin
 	static const char *   GetName() { return m_szName; }
 	static const unsigned GetType() { return PO_INTERNALS; }
 	static const char *   GetSubType() { return m_szSubType; }
@@ -124,6 +124,5 @@ private:
 
 	UnifiedRfData data;
 };
-
 
 
