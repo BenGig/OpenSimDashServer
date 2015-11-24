@@ -13,6 +13,11 @@ Connector::Connector()
 	lastQuickUpdate = std::chrono::steady_clock::now() - quickInterval;
 }
 
+Connector::~Connector()
+{
+	sdem.Reset();
+}
+
 bool Connector::slowReady()
 {
 	if (std::chrono::steady_clock::now() >= lastSlowUpdate + slowInterval)

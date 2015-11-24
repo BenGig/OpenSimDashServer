@@ -91,5 +91,6 @@ void ConnectorScheduler::Stop()
 		//Sleep(100);
 		delete (ConnectorRF*)connector; connector = nullptr;
 		delete td;
+		sdem.Reset();
 	}
 }

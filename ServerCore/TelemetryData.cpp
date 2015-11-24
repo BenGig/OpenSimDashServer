@@ -15,8 +15,7 @@ bool TelemetryData::Connect()
 
 		if (hMapFile == NULL)
 		{
-			_tprintf(TEXT("Could not open file mapping object (%d).\n"),
-				GetLastError());
+			// _tprintf(TEXT("Could not open file mapping object (%d).\n"), GetLastError());
 			return false;
 		}
 
@@ -28,8 +27,7 @@ bool TelemetryData::Connect()
 
 		if (pBuf == NULL)
 		{
-			_tprintf(TEXT("Could not map view of file (%d).\n"),
-				GetLastError());
+			// _tprintf(TEXT("Could not map view of file (%d).\n"), GetLastError());
 
 			CloseHandle(hMapFile);
 

@@ -10,6 +10,16 @@ struct dataServed
 };
 static dataServed * data = NULL;
 
+static void broadcast(struct mg_connection *nc, const char *msg, size_t len) {
+	struct mg_connection *c;
+	char buf[500];
+
+	snprintf(buf, sizeof(buf), "%p %.*s", nc, (int)len, msg);
+	for (c = mg_next(nc->mgr, NULL); c != NULL; c = mg_next(nc->mgr, c)) {
+		mg_send_websocket_frame(c, WEBSOCKET_OP_TEXT, buf, strlen(buf));
+	}
+}
+
 static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 	char buf[10024] = { 0 };
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
@@ -54,17 +64,58 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			}
 			mg_send_http_chunk(nc, "", 0);
 		}
+		else if (strstr(buf, "json1"))
+		{
+			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
+			switch (webserverSim) {
+			case SIM_RF:
+				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
+				std::wstring * str = SimRacingToolsJson1(conn->sd);
+				response = cv.to_bytes(*str);
+				delete str;
+				mg_printf_http_chunk(nc, response.c_str());
+			}
+			mg_send_http_chunk(nc, "", 0);
+		}
+		else if (strstr(buf, "json2"))
+		{
+			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
+			switch (webserverSim) {
+			case SIM_RF:
+				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
+				std::wstring * str = SimRacingToolsJson1(conn->sd);
+				response = cv.to_bytes(*str);
+				delete str;
+				mg_printf_http_chunk(nc, response.c_str());
+			}
+			mg_send_http_chunk(nc, "", 0);
+		}
+		else if (strstr(buf, "json3"))
+		{
+			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
+			switch (webserverSim) {
+			case SIM_RF:
+				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
+				std::wstring * str = SimRacingToolsJson3(conn->sd);
+				response = cv.to_bytes(*str);
+				delete str;
+				mg_printf_http_chunk(nc, response.c_str());
+
+			}
+			mg_send_http_chunk(nc, "", 0);
+		}
 		else
 		{
 			mg_serve_http(nc, hm, server_opts); // serve file from disk
 		}
 		break;
 	case MG_EV_WEBSOCKET_HANDSHAKE_DONE:
+		broadcast(nc, "joined", 6);
 		break;
 	case MG_EV_WEBSOCKET_FRAME:
 		break;
 	case MG_EV_CLOSE:
-		break;
+		broadcast(nc, "left", 4); break;
 	default:
 		break;
 	}
@@ -116,15 +167,16 @@ void server(void *pParam)
 
 			if (data->simreader->connector != NULL)
 			{
-				webserverSimName = new std::wstring(data->simreader->connector->sim);
+				webserverSimName = data->simreader->connector->SimName();
 				webserverSim = SIM_RF;
+				_tprintf(TEXT("Connected to %s.\n"), webserverSimName->c_str());
 				goto connected;
 			}
 			else
 			{
 				delete webserverSimName;  webserverSimName = NULL;
 				webserverSim = 0;
-				goto connected;
+				delete data->simreader; data->simreader = NULL;
 			}
 			
 			// TODO try to connect to Assetto Corsa
@@ -132,7 +184,7 @@ void server(void *pParam)
 		}
 
 	connected:
-		mg_mgr_poll(&mgr, 1000);
+		mg_mgr_poll(&mgr, 10);
 	}
 	webserverRunning = false;
 }

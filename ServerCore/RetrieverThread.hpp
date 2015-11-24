@@ -11,7 +11,7 @@ static HANDLE hReadingMutex;			// Locked during data transfer, get this before f
 
 
 /*
-This object which 
+Controls the thread which transforms individual sim data into server food.
 */
 class ConnectorScheduler
 {

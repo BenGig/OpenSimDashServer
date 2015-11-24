@@ -79,6 +79,7 @@ Event::Event()
 	trackName.Register();
 	driverName.Register();
 	numberOfLaps.Register();
+	lapDist.Register();
 	session.Register();
 	timeLeft.Register();
 	sectorCount.Register();
@@ -141,7 +142,6 @@ Car::Car()
 	timeBehindLeader.Register();
 	lapsBehindLeader.Register();
 	maxFuel.Register();
-	lapDist.Register();
 	filteredThrottle.Register();
 	filteredBrake.Register();
 	filteredSteering.Register();

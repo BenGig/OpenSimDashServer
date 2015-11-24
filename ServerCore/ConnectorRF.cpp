@@ -2,7 +2,6 @@
 
 ConnectorRF::ConnectorRF()
 {
-	sim = std::string("rFactor");
 	rfVersion = 0;
 
 	RF_SESSION_TYPE[0] = RF_SESSION_TYPE_TESTDAY;
@@ -28,7 +27,6 @@ bool ConnectorRF::Connect()
 		td.Read();
 		rfVersion = td.data.rFactorVersion;
 		Read();
-		sim = "rFactor " + std::to_string(td.data.rFactorVersion);
 
 		return true;
 	}
@@ -47,6 +45,11 @@ int ConnectorRF::Check()
 	}
 	else
 		return 0;
+}
+
+std::wstring * ConnectorRF::SimName()
+{
+	return new std::wstring(L"rFactor " + std::to_wstring(rfVersion));
 }
 
 bool ConnectorRF::Read()
@@ -76,6 +79,7 @@ bool ConnectorRF::Read()
 			sd->event.onPathWetness.flt = td.data.event.onPathWetness;
 			sd->event.offPathWetness.flt = td.data.event.offPathWetness;
 			sd->event.inRealtime.bl = td.data.event.inRealtime;
+			sd->event.lapDist.flt = td.data.event.lapDist;
 
 			sd->telemetry.maxGears.lint = td.data.telemetry.maxGears;
 			sd->telemetry.fuelCapacity.flt = td.data.telemetry.fuelCapacity;
@@ -118,6 +122,8 @@ bool ConnectorRF::Read()
 				sd->scoring[i].vehicleClass.str = std::wstring(converter.from_bytes(td.data.scoring[i].vehicleClass));
 				sd->scoring[i].inPits.bl = td.data.scoring[i].inPits;
 				sd->scoring[i].isPlayer.bl = td.data.scoring[i].isPlayer;
+				if (td.data.scoring[i].isPlayer)
+					sd->ownCar = &sd->scoring[i];
 				sd->scoring[i].pitState.lint = td.data.scoring[i].pitState;
 
 				if (td.data.scoring[i].sector == 0)
@@ -189,7 +195,6 @@ bool ConnectorRF::Read()
 			sd->telemetry.unfilteredClutch.flt = td.data.telemetry.unfilteredClutch;
 
 			sd->telemetry.lapStartTime.flt = td.data.telemetry.lapStartTime;
-			sd->telemetry.lapDist.flt = td.data.event.lapDist;
 			
 			sd->telemetry.filteredThrottle.flt = td.data.telemetry.filteredThrottle;
 			sd->telemetry.filteredBrake.flt = td.data.telemetry.filteredBrake;

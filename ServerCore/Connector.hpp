@@ -5,13 +5,14 @@
 class Connector
 {
 public:
-	std::wstring sim;
+	virtual std::wstring * SimName() { return NULL; };
 	virtual bool Connect() { return false; };	/* Connect (and read) to a sim data provider */
 	virtual int Check() { return 0; };			/* Try connection, return version info or 0 if not available */
 	virtual bool Read();						/* Transfer data from sim internals to SimData elements */
 	virtual void Disconnect() { return; };
 
 	Connector();
+	~Connector();
 
 protected:
 	bool slowReady();

@@ -1,10 +1,9 @@
-// RfMockupSource.cpp : Defines the entry point for the console application.
-//
+// Fake rFactor 2 data provider. Writes shared memory as rF2 would, for testing
 
 #include "stdafx.h"
 UnifiedRfData data;
 
-TelemVect3 wind = { 0.1,0.4,0.2 } , velocity = { 12.1, 14.2,0.4 };
+TelemVect wind = { 0.1,0.4,0.2 } , velocity = { 12.1, 14.2,0.4 };
 
 WheelInfo fl = { 520.0, 0.01, 25.0, 340, 345, 350, 0.1, false, false, 467.9, 5.4, 0.08, 0.43, 783.2 };
 WheelInfo fr = { 510.0, 0.01, 25.0, 341, 346, 351, 0.1, false, false, 467.9, 5.4, 0.08, 0.43, 783.2 };
@@ -55,7 +54,7 @@ int main()
 	data.telemetry.drag = 0.342;
 	data.telemetry.engineMaxRPM = 10000.0;
 	data.telemetry.engineOilTemp = 350;
-	data.telemetry.engineMaxRPM = 7500.0;
+	data.telemetry.engineRPM = 7500.0;
 	data.telemetry.engineTorque = 320.0;
 	data.telemetry.engineWaterTemp = 370.0;
 	data.telemetry.filteredBrake = 0.743;
@@ -155,7 +154,7 @@ int main()
 	data.scoring[4].inPits = 1;
 	data.scoring[9].lapsBehindLeader = 1;
 	data.scoring[9].lapsBehindNext = 1;
-
+	data.scoring[0].isPlayer = true;
 
 
 	HANDLE memMapFile;
@@ -190,17 +189,31 @@ int main()
 		return 1;
 	}
 
-	CopyMemory((PVOID)pBuf, &data, sizeof(data));
-
-
-	int answer;
-
 	std::cout << "Memory mapping ready.\n";
-	std::cin >> answer;
 
-	UnmapViewOfFile(pBuf);
-	CloseHandle(memMapFile);
+	try
+	{
+		for (;;)
+		{
+			CopyMemory((PVOID)pBuf, &data, sizeof(data));
 
-    return 0;
+			Sleep(10);
+
+			if (data.telemetry.engineRPM < data.telemetry.engineMaxRPM)
+				data.telemetry.engineRPM += 100;
+			else
+				data.telemetry.engineRPM = 1500;
+		}
+	}
+	catch ( ... )
+	{
+		UnmapViewOfFile(pBuf);
+		CloseHandle(memMapFile);
+	}
+
+	// int answer;
+	// std::cin >> answer;
+
+	return 0;
 }
 

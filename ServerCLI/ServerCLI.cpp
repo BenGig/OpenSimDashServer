@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 	*address = "8080";
 	if (argc > 1)
 	{
-		strcpy(*address, argv[1]);
+		strcpy_s(*address, 6, argv[1]);
 	}
 
 	launchServer(*address, "dashboards");

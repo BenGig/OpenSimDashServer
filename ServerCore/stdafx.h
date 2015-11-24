@@ -31,5 +31,6 @@
 #include "Connector.hpp"
 #include "ConnectorRF.hpp"
 #include "RetrieverThread.hpp"
+#include "SimRacingToolsAdapter.hpp"
 
 #include "WebServer.hpp"

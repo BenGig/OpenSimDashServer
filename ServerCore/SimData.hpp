@@ -29,6 +29,8 @@ public:
 	SimDataFloating onPathWetness = SimDataFloating(L"onPathWetness", 0);
 	SimDataFloating offPathWetness = SimDataFloating(L"offPathWetness", 0);
 	SimDataBool inRealtime = SimDataBool(L"inRealTime", false);
+
+	SimDataFloating lapDist = SimDataFloating(L"lapDist", 0);
 };
 
 class Session
@@ -178,7 +180,6 @@ public:
 
 	// rF 2
 	SimDataFloating maxFuel = SimDataFloating(L"maxFuel", 0);						// rF2, AC
-	SimDataFloating lapDist = SimDataFloating(L"lapDist", 0);
 	SimDataFloating filteredThrottle = SimDataFloating(L"filteredThrottle", 0);
 	SimDataFloating filteredBrake = SimDataFloating(L"filteredBrake", 0);
 	SimDataFloating filteredSteering = SimDataFloating(L"filteredSteering", 0);
@@ -221,6 +222,7 @@ public:
 	Session session;
 	Car telemetry;
 	Driver scoring[MAX_GRID];
+	Driver * ownCar;
 
 	SimDataElementsManager * elementRegistry;
 

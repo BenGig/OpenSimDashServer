@@ -60,7 +60,6 @@ const signed char RF_PIT_STATE_EXITING = 4;
 class ConnectorRF: public Connector
 {
 public:
-	std::string sim;
 	int rfVersion;
 	SimData * sd = new SimData();
 
@@ -68,6 +67,7 @@ public:
 
 	bool Connect();
 	int Check();
+	std::wstring * SimName();
 	bool Read();
 	void Disconnect();
 
