@@ -155,7 +155,9 @@ int main()
 	data.scoring[9].lapsBehindLeader = 1;
 	data.scoring[9].lapsBehindNext = 1;
 	data.scoring[0].isPlayer = true;
-
+	data.scoring[1].finishStatus = 1;
+	data.scoring[2].finishStatus = 2;
+	data.scoring[3].finishStatus = 3;
 
 	HANDLE memMapFile;
 	LPCTSTR pBuf;
