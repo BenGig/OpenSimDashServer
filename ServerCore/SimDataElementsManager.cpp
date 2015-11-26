@@ -18,9 +18,9 @@ std::wstring * SimDataElementsManager::JsonElements(std::wstring * str)
 	str->append(L"{\"dataDictionary\":[");
 	for (int i = 0; i < counter; i++)
 	{
-		str->append(L"{\"");
+		str->append(L"{\"label\":\"");
 		str->append(elements[i]->label);
-		str->append(L"\":");
+		str->append(L"\", \"id\":");
 		str->append(std::to_wstring(i));
 		str->append(L"},");
 	}

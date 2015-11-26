@@ -137,7 +137,8 @@ std::wstring SimDataTime::String()
 
 std::wstring SimDataTime::Json()
 {
-	return SimDataElement::Json() + std::wstring(L"\"") + String() + std::wstring(L"\"");
+	return SimDataElement::Json() + std::wstring(L"\"") + String() + std::wstring(L"\",\"") +
+		std::wstring(label) + std::wstring(L"Raw\":") + std::to_wstring(flt);
 }
 
 

@@ -20,8 +20,16 @@ static void broadcast(struct mg_connection *nc, const char *msg, size_t len) {
 	}
 }
 
+static void transmit(struct mg_connection *nc, const char *msg, size_t len) {
+	char buf[500];
+
+	snprintf(buf, sizeof(buf), "%p %.*s", nc, (int)len, msg);
+	mg_send_websocket_frame(nc, WEBSOCKET_OP_TEXT, buf, strlen(buf));
+}
+
 static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 	char buf[10024] = { 0 };
+	char msg[1024];
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
 	std::string response;
 	struct http_message *hm = (struct http_message *) p;
@@ -111,11 +119,19 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		break;
 	case MG_EV_WEBSOCKET_HANDSHAKE_DONE:
 		broadcast(nc, "joined", 6);
+		printf("Got handshake.\n");
+
 		break;
 	case MG_EV_WEBSOCKET_FRAME:
+		memcpy(msg, wm->data, wm->size);
+		msg[wm->size] = '\0';
+
+		printf("Got message: %s.\n", msg);
+		transmit(nc, "sent:1", 6);
 		break;
 	case MG_EV_CLOSE:
 		broadcast(nc, "left", 4); break;
+		printf("Connection ended.\n");
 	default:
 		break;
 	}
@@ -194,6 +210,8 @@ void launchServer(char * address, char * document_root)
 	data = new dataServed;
 	data->address = address;
 	data->document_root = document_root;
+//	char debugdir[256] = "C:\\Users\\bgiger\\Documents\\Dokumente\\Projekte\\Entwicklung\\Games\\Dashboard\\webserver\\dashboards\\websocket\\";
+//	data->document_root = debugdir;
 
 	webserverRunning = true;
 
