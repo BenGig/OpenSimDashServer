@@ -30,8 +30,11 @@ static void transmit(struct mg_connection *nc, const char *msg, size_t len) {
 static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 	char buf[10024] = { 0 };
 	char msg[1024];
+	char ws_command[4]; char ws_arg[3];
+
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
 	std::string response;
+
 	struct http_message *hm = (struct http_message *) p;
 	struct websocket_message *wm = (struct websocket_message *) p;
 
@@ -72,6 +75,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			}
 			mg_send_http_chunk(nc, "", 0);
 		}
+		// TODO: remove the rest
 		else if (strstr(buf, "json1"))
 		{
 			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
@@ -118,19 +122,24 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		}
 		break;
 	case MG_EV_WEBSOCKET_HANDSHAKE_DONE:
-		broadcast(nc, "joined", 6);
 		printf("Got handshake.\n");
 
 		break;
 	case MG_EV_WEBSOCKET_FRAME:
 		memcpy(msg, wm->data, wm->size);
 		msg[wm->size] = '\0';
+		memcpy(ws_command, msg, 4);
+		if (strcmp(ws_command, "TELL"))
+		{
+			memcpy(ws_arg, msg + sizeof(ws_command), 3);
+			SimDataElement * sde = sdem.Lookup(std::stoi(ws_arg));
+			if (sde != NULL)
+				transmit(nc, ws_command, 4);
+		}
 
 		printf("Got message: %s.\n", msg);
-		transmit(nc, "sent:1", 6);
 		break;
 	case MG_EV_CLOSE:
-		broadcast(nc, "left", 4); break;
 		printf("Connection ended.\n");
 	default:
 		break;
@@ -210,8 +219,6 @@ void launchServer(char * address, char * document_root)
 	data = new dataServed;
 	data->address = address;
 	data->document_root = document_root;
-//	char debugdir[256] = "C:\\Users\\bgiger\\Documents\\Dokumente\\Projekte\\Entwicklung\\Games\\Dashboard\\webserver\\dashboards\\websocket\\";
-//	data->document_root = debugdir;
 
 	webserverRunning = true;
 
