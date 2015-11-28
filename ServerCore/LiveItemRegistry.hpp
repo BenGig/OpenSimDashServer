@@ -20,8 +20,10 @@ private:
 	LiveItemRegistry * container;
 };
 
-class LiveItemRegistry : public std::vector<LiveItem *> {
+class LiveItemRegistry {
 public:
+	std::vector<LiveItem*> items;
 	std::string * ChangedItemsJSON();
+	void Empty();
 };
 

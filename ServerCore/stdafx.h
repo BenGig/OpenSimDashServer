@@ -19,6 +19,7 @@
 #include <tchar.h>
 #include <winsock.h>
 #include <vector>
+#include <mutex>
 
 
 #include "../DataTransfer.hpp"

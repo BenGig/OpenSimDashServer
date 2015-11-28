@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#define PUSHSLEEP 50  // milliseconds
+
 static struct mg_serve_http_opts server_opts;
 
 struct dataServed
@@ -9,6 +11,9 @@ struct dataServed
 	ConnectorScheduler * simreader = NULL;
 };
 static dataServed * data = NULL;
+static LiveItemRegistry itemRegistry;
+static std::mutex pusherIsRunning;
+static std::mutex pusherShouldEnd;
 
 static void broadcast(struct mg_connection *nc, const char *msg, size_t len) {
 	struct mg_connection *c;
@@ -20,11 +25,51 @@ static void broadcast(struct mg_connection *nc, const char *msg, size_t len) {
 	}
 }
 
-static void transmit(struct mg_connection *nc, const char *msg, size_t len) {
+static bool transmit(struct mg_connection *nc, const char *msg, size_t len) {
 	char buf[500];
 
-	snprintf(buf, sizeof(buf), "%p %.*s", nc, (int)len, msg);
-	mg_send_websocket_frame(nc, WEBSOCKET_OP_TEXT, buf, strlen(buf));
+	if (nc->err == 0)
+	{
+		snprintf(buf, sizeof(buf), "%p %.*s", nc, (int)len, msg);
+		mg_send_websocket_frame(nc, WEBSOCKET_OP_TEXT, buf, strlen(buf));
+		return true;
+	}
+	else
+		return false;
+}
+
+void DataPusher(void *pParam)
+{
+	mg_connection *nc = (mg_connection *)pParam;
+	if (!pusherIsRunning.try_lock())
+		return;
+
+	while (!pusherShouldEnd.try_lock())
+	{
+		if (itemRegistry.items.size() > 0)
+		{
+			std::string * data = itemRegistry.ChangedItemsJSON();
+
+			if (data != nullptr)
+			{
+				if (transmit(nc, data->c_str(), data->length()))
+				{
+					Sleep(PUSHSLEEP);
+				}
+				else
+				{
+					pusherIsRunning.unlock();
+					itemRegistry.Empty();
+					delete data;
+					return;
+				}
+				delete data;
+			} else {
+				Sleep(PUSHSLEEP);
+			}			
+		}
+	}
+	
 }
 
 static void ev_handler(struct mg_connection *nc, int ev, void *p) {
@@ -135,8 +180,21 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		{
 			memcpy(ws_arg, msg + sizeof(ws_command), 3);
 			LiveItem * liveItem = new LiveItem();
-			liveItem->RegisterFor(std::stoi(ws_arg));
-			liveItem->UpdateView(nc);
+			int itemId;
+			try
+			{
+				itemId = std::stoi(ws_arg);
+			}
+			catch (const std::invalid_argument&)
+			{
+				break;
+			}
+			liveItem->RegisterFor(itemId, &itemRegistry);
+			if (pusherIsRunning.try_lock())
+			{
+				pusherIsRunning.unlock();
+				_beginthread(DataPusher, 0, nc);
+			}
 		}
 
 		printf("Got message: %s.\n", msg);
@@ -152,6 +210,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 void server(void *pParam)
 {
 	data = (dataServed*)pParam;
+	pusherShouldEnd.lock();
 
 	ConnectorRF* crf = NULL;
 	// ConnectorAC* cac = NULL;

@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "LiveItemRegistry.hpp"
 
-#define PUSHSLEEP 10  // milliseconds
-
-static HANDLE pRunMutex;
-
 bool LiveItem::RegisterFor(int id, LiveItemRegistry * registry)
 {
 	source = sdem.Lookup(id);
@@ -12,9 +8,9 @@ bool LiveItem::RegisterFor(int id, LiveItemRegistry * registry)
 	{
 		sdem_id = id;
 		container = registry;
-		storedJSON = source->Json();
-		live_id = (int)registry->size();
-		registry->push_back(this);
+		storedJSON = std::wstring(L"");
+		live_id = (int)registry->items.size();
+		registry->items.push_back(this);
 		return true;
 	}
 	return false;
@@ -24,7 +20,7 @@ void LiveItem::Unregister()
 {
 	sdem_id = -1;
 	source = nullptr;
-	container->erase(container->begin() + live_id);
+	container->items.erase(container->items.begin() + live_id);
 	live_id = -1;
 }
 
@@ -32,17 +28,15 @@ std::string * LiveItem::ValueIfChanged()
 {
 	if (source)
 	{
-		std::string * response = new std::string("");
-
 		if (hasChanged())
 		{
+			std::string * response = new std::string();
 			std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
 			*response = cv.to_bytes(source->Json());
+			return response;
 		}
-		return response;
 	}
-	else
-		return nullptr;
+	return nullptr;
 }
 
 bool LiveItem::hasChanged()
@@ -62,11 +56,39 @@ bool LiveItem::hasChanged()
 
 std::string * LiveItemRegistry::ChangedItemsJSON()
 {
-	std::string * response = new std::string();
-	for (int i = 0; i < size(); i++)
+	if (items.size() > 0)
 	{
-		LiveItem * li = this[i];
-		response->append(this[i].ValueIfChanged())
+		std::string * response = new std::string("{");
+		for (int i = 0; i < items.size(); i++)
+		{
+			LiveItem * li = items.at(i);
+			std::string * str = li->ValueIfChanged();
+			if (str != nullptr)
+			{
+				response->append(*str);
+				delete str;
+				response->append(",");
+			}
+		}
+		response->pop_back();
+		response->append("}");
+		if (response->length() > 1)
+			return response;
+		delete response;
+		return nullptr;
 	}
-	return nullptr;
+	else {
+		return nullptr;
+	}
+}
+
+void LiveItemRegistry::Empty()
+{
+	while (items.size() > 0)
+	{
+		LiveItem * li = items.at(0);
+		items.erase(items.begin());
+		delete li;
+	}
+	items.clear();
 }
