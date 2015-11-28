@@ -28,7 +28,7 @@ void SchedulerLaunch(void *pParam)
 				i = i++;
 				if (i==50)
 				{
-					// std::cout << "thread loop (20ms sleep time)" << std::endl;
+					// TODO: remove loop
 					i = 0;
 				}
 				ReleaseMutex(hReadingMutex);

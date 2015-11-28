@@ -286,10 +286,5 @@ void OpenDashPlugin::UpdateScoring(const ScoringInfoV2 &info)
 
 void OpenDashPlugin::WriteDataToMemory()
 {
-	// TODO: remove sizes after debug
-	int size = sizeof(data);
-	int eSize = sizeof(data.event);
-	int tSize = sizeof(data.telemetry);
-	int cSize = sizeof(data.scoring[0]);
 	CopyMemory((PVOID)pBuf, &data, sizeof(data));
 }

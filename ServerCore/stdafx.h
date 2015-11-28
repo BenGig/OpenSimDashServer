@@ -18,9 +18,9 @@
 #include <process.h>
 #include <tchar.h>
 #include <winsock.h>
+#include <vector>
 
 
-// TODO: reference additional headers your program requires here
 #include "../DataTransfer.hpp"
 
 #include "TelemetryData.hpp"
@@ -32,5 +32,6 @@
 #include "ConnectorRF.hpp"
 #include "RetrieverThread.hpp"
 #include "SimRacingToolsAdapter.hpp"
+#include "LiveItemRegistry.hpp"
 
 #include "WebServer.hpp"

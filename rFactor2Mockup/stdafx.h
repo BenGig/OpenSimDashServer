@@ -13,8 +13,6 @@
 
 
 
-// TODO: reference additional headers your program requires here
-
 #include <stdio.h> 
 
 #include "..\DataTransfer.hpp"

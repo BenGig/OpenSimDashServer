@@ -72,7 +72,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -131,9 +131,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Connector.hpp" />
     <ClInclude Include="ConnectorRF.hpp" />
     <ClInclude Include="LiveItemRegistry.hpp" />
@@ -152,10 +149,7 @@
   <ItemGroup>
     <ClCompile Include="Connector.cpp" />
     <ClCompile Include="ConnectorRF.cpp" />
-    <ClCompile Include="mongoose.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="LiveItemRegistry.cpp" />
     <ClCompile Include="RetrieverThread.cpp" />
     <ClCompile Include="SimData.cpp" />
     <ClCompile Include="SimDataElements.cpp" />

@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,9 +45,6 @@
     <ClInclude Include="TelemetryData.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mongoose.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WebServer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -58,6 +52,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LiveItemRegistry.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mongoose.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,13 +83,13 @@
     <ClCompile Include="TelemetryData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mongoose.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WebServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SimRacingToolsAdapter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LiveItemRegistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -129,12 +129,14 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		memcpy(msg, wm->data, wm->size);
 		msg[wm->size] = '\0';
 		memcpy(ws_command, msg, 4);
+
+		// new consumer
 		if (strcmp(ws_command, "TELL"))
 		{
 			memcpy(ws_arg, msg + sizeof(ws_command), 3);
-			SimDataElement * sde = sdem.Lookup(std::stoi(ws_arg));
-			if (sde != NULL)
-				transmit(nc, ws_command, 4);
+			LiveItem * liveItem = new LiveItem();
+			liveItem->RegisterFor(std::stoi(ws_arg));
+			liveItem->UpdateView(nc);
 		}
 
 		printf("Got message: %s.\n", msg);

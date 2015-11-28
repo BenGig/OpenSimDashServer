@@ -1,12 +1,27 @@
 #pragma once
 
+#include "stdafx.h"
+#include "../mongoose/mongoose.h"
+
+class LiveItemRegistry;
+
 class LiveItem {
 public:
-	void RegisterFor(int id);
-	void UnregisterFrom(int id);
-
+	bool RegisterFor(int id, LiveItemRegistry * registry);
+	void Unregister();
+	std::string * ValueIfChanged();
+	bool hasChanged();
 
 private:
-	int SDEMid;
-
+	SimDataElement * source;
+	int sdem_id;
+	int live_id;
+	std::wstring storedJSON;
+	LiveItemRegistry * container;
 };
+
+class LiveItemRegistry : public std::vector<LiveItem *> {
+public:
+	std::string * ChangedItemsJSON();
+};
+
