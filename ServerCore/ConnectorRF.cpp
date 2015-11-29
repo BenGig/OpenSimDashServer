@@ -80,6 +80,7 @@ bool ConnectorRF::Read()
 			sd->event.offPathWetness.flt = td.data.event.offPathWetness;
 			sd->event.inRealtime.bl = td.data.event.inRealtime;
 			sd->event.lapDist.flt = td.data.event.lapDist;
+			sd->session.maxLaps.lint = td.data.event.maxLaps;
 
 			sd->telemetry.maxGears.lint = td.data.telemetry.maxGears;
 			sd->telemetry.fuelCapacity.flt = td.data.telemetry.fuelCapacity;

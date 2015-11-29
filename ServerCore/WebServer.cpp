@@ -120,6 +120,17 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			}
 			mg_send_http_chunk(nc, "", 0);
 		}
+		else if (strstr(buf, "simulation.json"))
+		{
+			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
+			Connector * conn = (Connector *)data->simreader->connector;
+			response.append("\"simName\":\"");
+			response.append(cv.to_bytes(*conn->SimName()));
+			response.append("\"");
+			mg_printf_http_chunk(nc, response.c_str());
+			mg_send_http_chunk(nc, "", 0);
+		}
+
 		// TODO: remove the rest
 		else if (strstr(buf, "json1"))
 		{

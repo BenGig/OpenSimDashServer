@@ -25,6 +25,13 @@ std::wstring * SimData::EventJson()
 	return raceevent;
 }
 
+std::wstring * SimData::PerformanceJson()
+{
+	std::wstring * perf = new std::wstring(L"[");
+	//perf->append()
+	return perf;
+}
+
 std::wstring * SimData::ScoringJson()
 {
 	std::wstring * score = new std::wstring(L"[");
@@ -104,6 +111,7 @@ Session::Session()
 	sectorFlag2.Register();
 	sectorFlag3.Register();
 	startLight.Register();
+	maxLaps.Register();
 }
 
 
