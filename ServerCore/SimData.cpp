@@ -5,9 +5,10 @@ void SimData::Reset()
 	sdem.Reset();
 }
 
-std::wstring * SimData::EventJson()
+std::wstring * SimData::EventJson(std::wstring * simName)
 {
-	std::wstring * raceevent = new std::wstring(L"{");
+	std::wstring * raceevent = new std::wstring(L"{\"simName\":\"");
+	raceevent->append(*simName); raceevent->append(L"\",");
 	raceevent->append(event.trackName.Json()); raceevent->append(L",");
 	raceevent->append(event.numberOfLaps.Json()); raceevent->append(L",");
 	raceevent->append(event.session.Json()); raceevent->append(L",");
@@ -111,7 +112,6 @@ Session::Session()
 	sectorFlag2.Register();
 	sectorFlag3.Register();
 	startLight.Register();
-	maxLaps.Register();
 }
 
 

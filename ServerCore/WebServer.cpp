@@ -93,8 +93,10 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			switch (webserverSim) {
 			case SIM_RF:
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-				response = cv.to_bytes(*conn->sd->EventJson());
+				std::wstring * str = conn->sd->EventJson(conn->SimName());
+				response = cv.to_bytes(*str);
 				mg_printf_http_chunk(nc, response.c_str());
+				delete str;
 			}
 			mg_send_http_chunk(nc, "", 0);
 		}
@@ -104,8 +106,10 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			switch (webserverSim) {
 			case SIM_RF:
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-				response = cv.to_bytes(*conn->sd->ScoringJson());
+				std::wstring * str = conn->sd->ScoringJson();
+				response = cv.to_bytes(*str);
 				mg_printf_http_chunk(nc, response.c_str());
+				delete str;
 			}
 			mg_send_http_chunk(nc, "", 0);
 		}
@@ -115,19 +119,11 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			switch (webserverSim) {
 			case SIM_RF:
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-				response = cv.to_bytes(*conn->sd->elementRegistry->JsonElements(new std::wstring));
+				std::wstring * str = conn->sd->elementRegistry->JsonElements();
+				response = cv.to_bytes(*str);
 				mg_printf_http_chunk(nc, response.c_str());
+				delete str;
 			}
-			mg_send_http_chunk(nc, "", 0);
-		}
-		else if (strstr(buf, "simulation.json"))
-		{
-			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
-			Connector * conn = (Connector *)data->simreader->connector;
-			response.append("\"simName\":\"");
-			response.append(cv.to_bytes(*conn->SimName()));
-			response.append("\"");
-			mg_printf_http_chunk(nc, response.c_str());
 			mg_send_http_chunk(nc, "", 0);
 		}
 
@@ -140,8 +136,8 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
 				std::wstring * str = SimRacingToolsJson1(conn->sd);
 				response = cv.to_bytes(*str);
-				delete str;
 				mg_printf_http_chunk(nc, response.c_str());
+				delete str;
 			}
 			mg_send_http_chunk(nc, "", 0);
 		}
@@ -153,8 +149,8 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
 				std::wstring * str = SimRacingToolsJson1(conn->sd);
 				response = cv.to_bytes(*str);
-				delete str;
 				mg_printf_http_chunk(nc, response.c_str());
+				delete str;
 			}
 			mg_send_http_chunk(nc, "", 0);
 		}
