@@ -22,9 +22,9 @@ int main()
 	data.rFactorVersion = 2;
 
 	// event data
-	data.event.ambientTemp = 310.0;
+	data.event.ambientTemp = 18.0;
 	data.event.currentTime = 13.0;
-	data.event.darkCloud = 0.2;
+	data.event.darkCloud = 0.4;
 	data.event.endTime = 20.0;
 	data.event.gamePhase = 5;
 	data.event.inRealtime = true;
@@ -35,12 +35,12 @@ int main()
 	data.event.offPathWetness = 0.1;
 	data.event.onPathWetness = 0.0;
 	strcpy_s(data.event.playerName, "Max Throttle");
-	data.event.raining = false;
+	data.event.raining = 0.3;
 	memcpy(data.event.sectorFlag, "abc", 3);
 	data.event.session = 1;
 	data.event.startLight = 2;
 	strcpy_s(data.event.trackName, "Klausenpass");
-	data.event.trackTemp = 302;
+	data.event.trackTemp = 20;
 	data.event.wind = wind;
 	data.event.yellowFlagState = 1;
 
