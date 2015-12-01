@@ -13,9 +13,9 @@ void SimDataElementsManager::Register(SimDataElement * sde)
 	sde->isRegistered = true;
 }
 
-std::wstring * SimDataElementsManager::JsonElements(std::wstring * str)
+std::wstring * SimDataElementsManager::JsonElements()
 {
-	str->append(L"{\"dataDictionary\":[");
+	std::wstring * str = new std::wstring(L"{\"dataDictionary\":[");
 	for (int i = 0; i < counter; i++)
 	{
 		str->append(L"{\"label\":\"");

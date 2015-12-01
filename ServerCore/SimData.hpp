@@ -46,7 +46,6 @@ public:
 	SimDataInteger sectorFlag2 = SimDataInteger(L"sectorFlag2", 0);
 	SimDataInteger sectorFlag3 = SimDataInteger(L"sectorFlag3", 0);
 	SimDataInteger startLight = SimDataInteger(L"startLight", 0);
-	SimDataInteger maxLaps = SimDataInteger(L"maxLaps", 0);
 };
 
 class Driver
@@ -231,7 +230,7 @@ public:
 
 	void Reset();
 	std::wstring * ScoringJson();
-	std::wstring * EventJson();
+	std::wstring * EventJson(std::wstring * simName);
 	std::wstring * PerformanceJson();
 
 	SimData();

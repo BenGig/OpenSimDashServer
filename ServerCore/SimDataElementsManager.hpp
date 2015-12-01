@@ -11,7 +11,7 @@ public:
 	SimDataElement * Lookup(int id);
 	void Register(SimDataElement *);
 	void Reset() { counter = 0; };
-	std::wstring * JsonElements(std::wstring *);
+	std::wstring * JsonElements();
 private:
 	int counter = 0;
 	SimDataElement * elements[MAX_ELEMENTS];
