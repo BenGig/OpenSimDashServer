@@ -65,6 +65,22 @@ bool ConnectorRF::Read()
 			sd->event.driverName.str = std::wstring(converter.from_bytes(td.data.event.playerName));
 			sd->event.numberOfLaps.lint = td.data.event.maxLaps;
 			sd->event.session.lint = td.data.event.session;
+			if (sd->event.session.lint == 0)
+			{
+				sd->event.sessionString.str = std::wstring(L"Testday");
+			}
+			else if (sd->event.session.lint <= 4) {
+				sd->event.sessionString.str = std::wstring(L"Practice");
+			}
+			else if (sd->event.session.lint <= 8) {
+				sd->event.sessionString.str = std::wstring(L"Qualify");
+			}
+			else if (sd->event.session.lint <= 9) {
+				sd->event.sessionString.str = std::wstring(L"Warmup");
+			}
+			else {
+				sd->event.sessionString.str = std::wstring(L"Race");
+			}
 			sd->event.timeLeft.flt = td.data.event.endTime - td.data.event.currentTime;
 			sd->event.numRedLights.lint = td.data.event.numRedLights;
 			sd->event.endTime.flt = td.data.event.endTime;
@@ -107,6 +123,23 @@ bool ConnectorRF::Read()
 				sd->scoring[i].driverName.str = std::wstring(converter.from_bytes(td.data.scoring[i].driverName));
 				sd->scoring[i].place.lint = td.data.scoring[i].place;
 				sd->scoring[i].finishStatus.lint = td.data.scoring[i].finishStatus;
+				switch (td.data.scoring[i].finishStatus)
+				{
+				case 0:
+					sd->scoring[i].finishStatusString.str = std::wstring(L"");
+					break;
+				case 1:
+					sd->scoring[i].finishStatusString.str = std::wstring(L"F");
+					break;
+				case 2:
+					sd->scoring[i].finishStatusString.str = std::wstring(L"DNF");
+					break;
+				case 3:
+					sd->scoring[i].finishStatusString.str = std::wstring(L"DQ");
+					break;
+				default:
+					break;
+				}
 				sd->scoring[i].lastTime.flt = td.data.scoring[i].lastLapTime;
 				sd->scoring[i].bestTime.flt = td.data.scoring[i].bestLapTime;
 				sd->scoring[i].lapNumber.lint = td.data.scoring[i].totalLaps;

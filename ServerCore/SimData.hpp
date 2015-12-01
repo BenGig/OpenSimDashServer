@@ -14,6 +14,7 @@ public:
 	SimDataString driverName = SimDataString(L"driverName", L"");
 	SimDataInteger numberOfLaps = SimDataInteger(L"numberOfLaps", 0);
 	SimDataInteger session = SimDataInteger(L"session", 0);
+	SimDataString sessionString = SimDataString(L"sessionString", L"");
 	SimDataTime timeLeft = SimDataTime(L"timeLeft", 0);
 	SimDataInteger sectorCount = SimDataInteger(L"sectorCount", 0); // AC only
 	SimDataTime endTime = SimDataTime(L"endTime", 0);
@@ -55,6 +56,7 @@ public:
 	SimDataString driverName = SimDataString(L"driverName", L"");
 	SimDataInteger place = SimDataInteger(L"place", 0);
 	SimDataInteger finishStatus = SimDataInteger(L"finishStatus", 0); 	// 0=none, 1=finished, 2=dnf, 3=dq
+	SimDataString finishStatusString = SimDataString(L"finishStatusString", L"");
 	SimDataTime lastTime = SimDataTime(L"lastTime", 0);
 	SimDataTime bestTime = SimDataTime(L"bestTime", 0);
 	SimDataInteger lapNumber = SimDataInteger(L"lapNumber", 0);

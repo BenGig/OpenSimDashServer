@@ -11,6 +11,7 @@ std::wstring * SimData::EventJson()
 	raceevent->append(event.trackName.Json()); raceevent->append(L",");
 	raceevent->append(event.numberOfLaps.Json()); raceevent->append(L",");
 	raceevent->append(event.session.Json()); raceevent->append(L",");
+	raceevent->append(event.sessionString.Json()); raceevent->append(L",");
 	raceevent->append(event.timeLeft.Json()); raceevent->append(L",");
 	raceevent->append(event.gamePhase.Json()); raceevent->append(L",");
 	raceevent->append(event.numRedLights.Json()); raceevent->append(L",");
@@ -43,6 +44,7 @@ std::wstring * SimData::ScoringJson()
 		score->append(scoring[i].vehicleName.Json()); score->append(L",");
 		score->append(scoring[i].place.Json()); score->append(L",");
 		score->append(scoring[i].finishStatus.Json()); score->append(L",");
+		score->append(scoring[i].finishStatusString.Json()); score->append(L",");
 		score->append(scoring[i].lastTime.Json()); score->append(L",");
 		score->append(scoring[i].bestTime.Json()); score->append(L",");
 		score->append(scoring[i].lapNumber.Json()); score->append(L",");
@@ -88,6 +90,7 @@ Event::Event()
 	numberOfLaps.Register();
 	lapDist.Register();
 	session.Register();
+	sessionString.Register();
 	timeLeft.Register();
 	sectorCount.Register();
 	endTime.Register();
