@@ -15,6 +15,7 @@ public:
 	SimDataInteger numberOfLaps = SimDataInteger(L"numberOfLaps", 0);
 	SimDataInteger session = SimDataInteger(L"session", 0);
 	SimDataString sessionString = SimDataString(L"sessionString", L"");
+	SimDataTime currentTime = SimDataTime(L"currentTime", 0);
 	SimDataTime timeLeft = SimDataTime(L"timeLeft", 0);
 	SimDataInteger sectorCount = SimDataInteger(L"sectorCount", 0); // AC only
 	SimDataTime endTime = SimDataTime(L"endTime", 0);
@@ -59,7 +60,7 @@ public:
 	SimDataTime lastTime = SimDataTime(L"lastTime", 0);
 	SimDataTime bestTime = SimDataTime(L"bestTime", 0);
 	SimDataInteger lapNumber = SimDataInteger(L"lapNumber", 0);
-	SimDataInteger sector = SimDataInteger(L"sector", 0);
+	SimDataTime lapStartTime = SimDataTime(L"lapStartTime", 0);
 	SimDataTime currentTime = SimDataTime(L"currentTime", 0);
 	SimDataTime bestSector1 = SimDataTime(L"bestSector1", 0);
 	SimDataTime bestSector2 = SimDataTime(L"bestSector2", 0);
@@ -174,7 +175,6 @@ public:
 	SimDataFloating normalizedCarPosition = SimDataFloating(L"normalizedCarPosition", 0);
 	
 	// rFactor
-	SimDataTime lapStartTime = SimDataTime(L"lapStartTime", 0);
 	SimDataTime timeBehindNext = SimDataTime(L"timeBehindNext", 0);
 	SimDataInteger lapsBehindNext = SimDataInteger(L"lapsBehindNext", 0);
 	SimDataTime timeBehindLeader = SimDataTime(L"timeBehindLeader", 0);

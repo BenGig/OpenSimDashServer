@@ -22,7 +22,8 @@ std::wstring * SimData::EventJson(std::wstring * simName)
 	raceevent->append(event.ambientTemp.Json()); raceevent->append(L",");
 	raceevent->append(event.trackTemp.Json()); raceevent->append(L",");
 	raceevent->append(event.onPathWetness.Json()); raceevent->append(L",");
-	raceevent->append(event.offPathWetness.Json());
+	raceevent->append(event.offPathWetness.Json()); raceevent->append(L",");
+	raceevent->append(event.currentTime.Json());
 	raceevent->append(L"}");
 	return raceevent;
 }
@@ -49,8 +50,6 @@ std::wstring * SimData::ScoringJson()
 		score->append(scoring[i].lastTime.Json()); score->append(L",");
 		score->append(scoring[i].bestTime.Json()); score->append(L",");
 		score->append(scoring[i].lapNumber.Json()); score->append(L",");
-		score->append(scoring[i].sector.Json()); score->append(L",");
-		score->append(scoring[i].currentTime.Json()); score->append(L",");
 		score->append(scoring[i].bestSector1.Json()); score->append(L",");
 		score->append(scoring[i].bestSector2.Json()); score->append(L",");
 		score->append(scoring[i].lastSector1.Json()); score->append(L",");
@@ -69,6 +68,8 @@ std::wstring * SimData::ScoringJson()
 		score->append(scoring[i].accel.Json()); score->append(L",");
 		score->append(scoring[i].headlights.Json()); score->append(L",");
 		score->append(scoring[i].qualification.Json()); score->append(L",");
+		score->append(scoring[i].lapStartTime.Json()); score->append(L",");
+		score->append(scoring[i].currentTime.Json()); score->append(L",");
 		score->append(scoring[i].primaryFlag.Json());
 		score->append(L"},");
 	}
@@ -105,6 +106,7 @@ Event::Event()
 	onPathWetness.Register();
 	offPathWetness.Register();
 	inRealtime.Register();
+	currentTime.Register();
 }
 
 Session::Session()
@@ -147,7 +149,6 @@ Car::Car()
 	numberOfTyresOut.Register();
 	distanceTraveled.Register();
 	normalizedCarPosition.Register();
-	lapStartTime.Register();
 	timeBehindNext.Register();
 	lapsBehindNext.Register();
 	timeBehindLeader.Register();

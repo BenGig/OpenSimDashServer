@@ -96,6 +96,7 @@ bool ConnectorRF::Read()
 			sd->event.offPathWetness.flt = td.data.event.offPathWetness;
 			sd->event.inRealtime.bl = td.data.event.inRealtime;
 			sd->event.lapDist.flt = td.data.event.lapDist;
+			sd->event.currentTime.flt = td.data.event.currentTime;
 
 			sd->telemetry.maxGears.lint = td.data.telemetry.maxGears;
 			sd->telemetry.fuelCapacity.flt = td.data.telemetry.fuelCapacity;
@@ -142,7 +143,8 @@ bool ConnectorRF::Read()
 				sd->scoring[i].lastTime.flt = td.data.scoring[i].lastLapTime;
 				sd->scoring[i].bestTime.flt = td.data.scoring[i].bestLapTime;
 				sd->scoring[i].lapNumber.lint = td.data.scoring[i].totalLaps;
-				sd->scoring[i].currentTime.flt = td.data.scoring[i].timeIntoLap;
+				sd->scoring[i].lapStartTime.flt = td.data.scoring[i].lapStartTime;
+				sd->scoring[i].currentTime.flt = td.data.event.currentTime - td.data.scoring[i].lapStartTime;
 				sd->scoring[i].bestSector1.flt = td.data.scoring[i].bestSector1;
 				sd->scoring[i].bestSector2.flt = td.data.scoring[i].bestSector2;
 				sd->scoring[i].lastSector1.flt = td.data.scoring[i].lastSector1;
@@ -226,8 +228,6 @@ bool ConnectorRF::Read()
 			sd->telemetry.unfilteredBrake.flt = td.data.telemetry.unfilteredBrake;
 			sd->telemetry.unfilteredSteering.flt = td.data.telemetry.unfilteredSteering;
 			sd->telemetry.unfilteredClutch.flt = td.data.telemetry.unfilteredClutch;
-
-			sd->telemetry.lapStartTime.flt = td.data.telemetry.lapStartTime;
 			
 			sd->telemetry.filteredThrottle.flt = td.data.telemetry.filteredThrottle;
 			sd->telemetry.filteredBrake.flt = td.data.telemetry.filteredBrake;

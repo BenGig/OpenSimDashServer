@@ -174,7 +174,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		}
 		break;
 	case MG_EV_WEBSOCKET_HANDSHAKE_DONE:
-		printf("Got handshake.\n");
+		//printf("Got handshake.\n");
 
 		break;
 	case MG_EV_WEBSOCKET_FRAME:
@@ -207,7 +207,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		printf("Got message: %s.\n", msg);
 		break;
 	case MG_EV_CLOSE:
-		printf("Connection ended.\n");
+		//printf("Connection ended.\n");
 	default:
 		break;
 	}
