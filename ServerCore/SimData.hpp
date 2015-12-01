@@ -68,6 +68,10 @@ public:
 	SimDataTime lastSector2 = SimDataTime(L"lastSector2", 0);
 	SimDataTime curSector1 = SimDataTime(L"curSector1", 0);
 	SimDataTime curSector2 = SimDataTime(L"curSector2", 0);
+	SimDataTime timeBehindNext = SimDataTime(L"timeBehindNext", 0);
+	SimDataTime lapsBehindNext = SimDataTime(L"lapsBehindNext", 0);
+	SimDataTime timeBehindLeader = SimDataTime(L"timeBehindLeader", 0);
+	SimDataTime lapsBehindLeader = SimDataTime(L"lapsBehindLeader", 0);
 	SimDataInteger numPitstops = SimDataInteger(L"numPitStops", 0);
 	SimDataInteger numPenalties = SimDataInteger(L"numPenalties", 0);
 	SimDataInteger control = SimDataInteger(L"control", 0);		// who's in control: -1=nobody (shouldn't get this), 0=local player, 1=local AI, 2=remote, 3=replay (shouldn't get this)

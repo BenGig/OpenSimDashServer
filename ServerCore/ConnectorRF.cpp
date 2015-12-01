@@ -151,6 +151,10 @@ bool ConnectorRF::Read()
 				sd->scoring[i].lastSector2.flt = td.data.scoring[i].lastSector2;
 				sd->scoring[i].curSector1.flt = td.data.scoring[i].curSector1;
 				sd->scoring[i].curSector2.flt = td.data.scoring[i].curSector2;
+				sd->scoring[i].timeBehindNext.flt = td.data.scoring[i].timeBehindNext;
+				sd->scoring[i].lapsBehindNext.flt = td.data.scoring[i].lapsBehindNext;
+				sd->scoring[i].timeBehindLeader.flt = td.data.scoring[i].timeBehindLeader;
+				sd->scoring[i].lapsBehindLeader.flt = td.data.scoring[i].lapsBehindLeader;
 				sd->scoring[i].numPitstops.lint = td.data.scoring[i].numPitstops;
 				sd->scoring[i].numPenalties.lint = td.data.scoring[i].numPenalties;
 				sd->scoring[i].control.lint = td.data.scoring[i].control;

@@ -56,6 +56,10 @@ std::wstring * SimData::ScoringJson()
 		score->append(scoring[i].lastSector2.Json()); score->append(L",");
 		score->append(scoring[i].curSector1.Json()); score->append(L",");
 		score->append(scoring[i].curSector2.Json()); score->append(L",");
+		score->append(scoring[i].timeBehindNext.Json()); score->append(L",");
+		score->append(scoring[i].lapsBehindNext.Json()); score->append(L",");
+		score->append(scoring[i].timeBehindLeader.Json()); score->append(L",");
+		score->append(scoring[i].lapsBehindLeader.Json()); score->append(L",");
 		score->append(scoring[i].numPitstops.Json()); score->append(L",");
 		score->append(scoring[i].numPenalties.Json()); score->append(L",");
 		score->append(scoring[i].control.Json()); score->append(L",");
