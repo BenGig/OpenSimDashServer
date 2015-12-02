@@ -220,6 +220,7 @@ public:
 	SimDataInteger antiStallActivated = SimDataInteger(L"antiStallActivated", 0);       // whether (hard) anti-stall is activated
 	SimDataFloating rearBrakeBias = SimDataFloating(L"rearBrakeBias", 0);                   // fraction of brakes on rear
 	SimDataFloating turboBoostPressure = SimDataFloating(L"turboBoostPressure", 0);              // current turbo boost pressure if available
+	SimDataString flagShown = SimDataString(L"flagShown", L"");
 };
 
 class SimData {

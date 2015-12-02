@@ -23,6 +23,7 @@ std::wstring * SimData::EventJson(std::wstring * simName)
 	raceevent->append(event.trackTemp.Json()); raceevent->append(L",");
 	raceevent->append(event.onPathWetness.Json()); raceevent->append(L",");
 	raceevent->append(event.offPathWetness.Json()); raceevent->append(L",");
+	raceevent->append(telemetry.flagShown.Json()); raceevent->append(L",");
 	raceevent->append(event.currentTime.Json());
 	raceevent->append(L"}");
 	return raceevent;
@@ -73,8 +74,7 @@ std::wstring * SimData::ScoringJson()
 		score->append(scoring[i].headlights.Json()); score->append(L",");
 		score->append(scoring[i].qualification.Json()); score->append(L",");
 		score->append(scoring[i].lapStartTime.Json()); score->append(L",");
-		score->append(scoring[i].currentTime.Json()); score->append(L",");
-		score->append(scoring[i].primaryFlag.Json());
+		score->append(scoring[i].currentTime.Json());
 		score->append(L"},");
 	}
 	score->pop_back();

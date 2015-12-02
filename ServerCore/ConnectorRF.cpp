@@ -260,6 +260,14 @@ bool ConnectorRF::Read()
 			sd->telemetry.antiStallActivated.lint = td.data.telemetry.antiStallActivated;
 			sd->telemetry.rearBrakeBias.flt = td.data.telemetry.rearBrakeBias;
 			sd->telemetry.turboBoostPressure.flt = td.data.telemetry.rearBrakeBias;
+			if (sd->ownCar->primaryFlag.lint == 6)
+				sd->telemetry.flagShown.str = std::wstring(L"blue");
+			else if (td.data.event.sectorFlag[sd->ownCar->currentSector.lint] > 0) 
+				sd->telemetry.flagShown.str = std::wstring(L"yellow");
+			else if (td.data.event.sectorFlag[0] > 0 && sd->ownCar->currentSector.lint == 3)
+				sd->telemetry.flagShown.str = std::wstring(L"yellow");
+			else
+				sd->telemetry.flagShown.str = std::wstring(L"");
 		}
 
 		return true;
