@@ -10,6 +10,7 @@ class Event
 public:
 	Event();
 
+	SimDataBool raceOver = SimDataBool(L"raceOver", false);
 	SimDataString trackName = SimDataString(L"trackName", L""); 
 	SimDataString driverName = SimDataString(L"driverName", L"");
 	SimDataInteger numberOfLaps = SimDataInteger(L"numberOfLaps", 0);

@@ -51,6 +51,43 @@ std::wstring * ConnectorRF::SimName()
 {
 	return new std::wstring(L"rFactor " + std::to_wstring(rfVersion));
 }
+void ConnectorRF::sessionToStr() {
+	if (rfVersion == 1) {
+		if (sd->event.session.lint == 0)
+		{
+			sd->event.sessionString.str = std::wstring(L"Testday");
+		}
+		else if (sd->event.session.lint <= 4) {
+			sd->event.sessionString.str = std::wstring(L"Practice");
+		}
+		else if (sd->event.session.lint <= 5) {
+			sd->event.sessionString.str = std::wstring(L"Qualify");
+		}
+		else if (sd->event.session.lint <= 6) {
+			sd->event.sessionString.str = std::wstring(L"Warmup");
+		}
+		else
+			sd->event.sessionString.str = std::wstring(L"Race");
+	}
+	else {
+	 if (sd->event.session.lint == 0)
+	 {
+		 sd->event.sessionString.str = std::wstring(L"Testday");
+	 }
+	 else if (sd->event.session.lint <= 4) {
+		 sd->event.sessionString.str = std::wstring(L"Practice");
+	 }
+	 else if (sd->event.session.lint <= 8) {
+		 sd->event.sessionString.str = std::wstring(L"Qualify");
+	 }
+	 else if (sd->event.session.lint <= 9) {
+		 sd->event.sessionString.str = std::wstring(L"Warmup");
+	 }
+	 else
+		 sd->event.sessionString.str = std::wstring(L"Race");
+	}
+}
+
 
 bool ConnectorRF::Read()
 {
@@ -61,30 +98,21 @@ bool ConnectorRF::Read()
 		if (slowReady())
 		{
 			// event info
+			rfVersion = td.data.rFactorVersion; 
 			sd->event.trackName.str = std::wstring(converter.from_bytes(td.data.event.trackName));
 			sd->event.driverName.str = std::wstring(converter.from_bytes(td.data.event.playerName));
 			sd->event.numberOfLaps.lint = td.data.event.maxLaps;
 			sd->event.session.lint = td.data.event.session;
-			if (sd->event.session.lint == 0)
-			{
-				sd->event.sessionString.str = std::wstring(L"Testday");
-			}
-			else if (sd->event.session.lint <= 4) {
-				sd->event.sessionString.str = std::wstring(L"Practice");
-			}
-			else if (sd->event.session.lint <= 8) {
-				sd->event.sessionString.str = std::wstring(L"Qualify");
-			}
-			else if (sd->event.session.lint <= 9) {
-				sd->event.sessionString.str = std::wstring(L"Warmup");
-			}
-			else {
-				sd->event.sessionString.str = std::wstring(L"Race");
-			}
-			sd->event.timeLeft.flt = td.data.event.endTime - td.data.event.currentTime;
+			sessionToStr();
+			if (sd->event.gamePhase.lint == 0)
+				sd->event.timeLeft.flt = -1;
+			else
+				sd->event.timeLeft.flt = td.data.event.endTime - td.data.event.currentTime;
 			sd->event.numRedLights.lint = td.data.event.numRedLights;
 			sd->event.endTime.flt = td.data.event.endTime;
 			sd->event.gamePhase.lint = td.data.event.gamePhase;
+			if (sd->event.gamePhase.lint == 8)
+				sd->event.raceOver.bl = true;
 			sd->event.darkCloud.flt = td.data.event.darkCloud;
 			sd->event.raining.flt = td.data.event.raining;
 			sd->event.ambientTemp.flt = td.data.event.ambientTemp;
@@ -232,7 +260,7 @@ bool ConnectorRF::Read()
 			sd->telemetry.unfilteredBrake.flt = td.data.telemetry.unfilteredBrake;
 			sd->telemetry.unfilteredSteering.flt = td.data.telemetry.unfilteredSteering;
 			sd->telemetry.unfilteredClutch.flt = td.data.telemetry.unfilteredClutch;
-			
+
 			sd->telemetry.filteredThrottle.flt = td.data.telemetry.filteredThrottle;
 			sd->telemetry.filteredBrake.flt = td.data.telemetry.filteredBrake;
 			sd->telemetry.filteredSteering.flt = td.data.telemetry.filteredSteering;
@@ -260,16 +288,36 @@ bool ConnectorRF::Read()
 			sd->telemetry.antiStallActivated.lint = td.data.telemetry.antiStallActivated;
 			sd->telemetry.rearBrakeBias.flt = td.data.telemetry.rearBrakeBias;
 			sd->telemetry.turboBoostPressure.flt = td.data.telemetry.rearBrakeBias;
-			if (sd->ownCar->primaryFlag.lint == 6)
-				sd->telemetry.flagShown.str = std::wstring(L"blue");
-			else if (td.data.event.sectorFlag[sd->ownCar->currentSector.lint] > 0) 
-				sd->telemetry.flagShown.str = std::wstring(L"yellow");
-			else if (td.data.event.sectorFlag[0] > 0 && sd->ownCar->currentSector.lint == 3)
-				sd->telemetry.flagShown.str = std::wstring(L"yellow");
-			else
-				sd->telemetry.flagShown.str = std::wstring(L"");
-		}
 
+
+			if (rfVersion == 1)
+			{
+				if (td.data.event.sectorFlag[sd->ownCar->currentSector.lint] > 0)
+					sd->telemetry.flagShown.str = std::wstring(L"yellow");
+				else if (sd->ownCar->currentSector.lint == 3 && td.data.event.sectorFlag[0] > 0)
+					sd->telemetry.flagShown.str = std::wstring(L"yellow");
+				else
+				{
+					sd->telemetry.flagShown.str = std::wstring(L""); 
+				
+					if (sd->ownCar->primaryFlag.lint == 6)
+						sd->telemetry.flagShown.str = std::wstring(L"blue");
+				}
+
+			}
+			if (rfVersion == 2)
+			{
+				if ((int)td.data.event.sectorFlag[sd->ownCar->currentSector.lint-1] == 1)
+					sd->telemetry.flagShown.str = std::wstring(L"yellow");
+				else
+				{
+					sd->telemetry.flagShown.str = std::wstring(L"");
+					if (sd->ownCar->primaryFlag.lint == 6)
+						sd->telemetry.flagShown.str = std::wstring(L"blue");
+				}
+			}
+
+		}
 		return true;
 	}
 	else

@@ -36,13 +36,15 @@ int main()
 	data.event.onPathWetness = 0.0;
 	strcpy_s(data.event.playerName, "Max Throttle");
 	data.event.raining = 0.3;
-	memcpy(data.event.sectorFlag, "abc", 3);
+	data.event.sectorFlag[0] = 0;
+	data.event.sectorFlag[1] = 0;
+	data.event.sectorFlag[2] = 0;
 	data.event.session = 1;
 	data.event.startLight = 2;
 	strcpy_s(data.event.trackName, "Klausenpass");
 	data.event.trackTemp = 20;
 	data.event.wind = wind;
-	data.event.yellowFlagState = 1;
+	data.event.yellowFlagState = 0;
 
 	// telemetry data
 	data.telemetry.antiStallActivated = false;

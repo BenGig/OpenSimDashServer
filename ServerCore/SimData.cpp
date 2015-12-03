@@ -9,6 +9,7 @@ std::wstring * SimData::EventJson(std::wstring * simName)
 {
 	std::wstring * raceevent = new std::wstring(L"{\"simName\":\"");
 	raceevent->append(*simName); raceevent->append(L"\",");
+	raceevent->append(event.raceOver.Json()); raceevent->append(L",");
 	raceevent->append(event.trackName.Json()); raceevent->append(L",");
 	raceevent->append(event.numberOfLaps.Json()); raceevent->append(L",");
 	raceevent->append(event.session.Json()); raceevent->append(L",");
@@ -24,6 +25,7 @@ std::wstring * SimData::EventJson(std::wstring * simName)
 	raceevent->append(event.onPathWetness.Json()); raceevent->append(L",");
 	raceevent->append(event.offPathWetness.Json()); raceevent->append(L",");
 	raceevent->append(telemetry.flagShown.Json()); raceevent->append(L",");
+	raceevent->append(event.inRealtime.Json()); raceevent->append(L",");
 	raceevent->append(event.currentTime.Json());
 	raceevent->append(L"}");
 	return raceevent;
