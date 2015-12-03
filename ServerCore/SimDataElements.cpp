@@ -110,8 +110,8 @@ SimDataTime::SimDataTime(std::wstring name, double f)
 
 std::wstring SimDataTime::String()
 {
-	if (flt == -1.0)
-		return std::wstring(L"N/A");
+	if (flt < .0)
+		return std::wstring(L"0");
 #pragma warning(push)
 #pragma warning(disable:4244)
 	long hours = flt / 3600;

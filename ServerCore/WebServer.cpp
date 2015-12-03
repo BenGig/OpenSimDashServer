@@ -10,10 +10,12 @@ struct dataServed
 	char * document_root = NULL;
 	ConnectorScheduler * simreader = NULL;
 };
+
 static dataServed * data = NULL;
 static LiveItemRegistry itemRegistry;
 static std::mutex pusherIsRunning;
 static std::mutex pusherShouldEnd;
+static bool webserverRunning = false;						// to signal end of execution
 
 static void broadcast(struct mg_connection *nc, const char *msg, size_t len) {
 	struct mg_connection *c;
@@ -58,9 +60,9 @@ void DataPusher(void *pParam)
 				}
 				else
 				{
-					pusherIsRunning.unlock();
 					itemRegistry.Empty();
 					delete data;
+					pusherIsRunning.unlock();
 					return;
 				}
 				delete data;
@@ -241,6 +243,8 @@ void server(void *pParam)
 		// should we quit?
 		if (webserverRunning == false)
 		{
+			pusherShouldEnd.unlock();
+			pusherIsRunning.lock();
 			if (data->simreader != NULL)
 			{
 				data->simreader->connector->Disconnect(); data->simreader->connector = NULL;
@@ -292,5 +296,9 @@ void launchServer(char * address, char * document_root)
 
 	_beginthread(server, 0, data);
 
+}
+
+void stopServer() {
+	webserverRunning = false;
 }
 

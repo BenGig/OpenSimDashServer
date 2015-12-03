@@ -1,6 +1,5 @@
 #pragma once
 
-#include "mongoose.h"
 #include "stdafx.h"
 
 
@@ -9,6 +8,6 @@
 
 static std::wstring * webserverSimName = NULL;	// for UI output
 static int webserverSim = 0;								// SIM_RF, SIM_AC...
-static bool webserverRunning = false;						// to signal end of execution
 
 void launchServer(char * address, char * document_root);
+void stopServer();
