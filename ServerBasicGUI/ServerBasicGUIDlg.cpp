@@ -58,12 +58,7 @@ BEGIN_MESSAGE_MAP(CServerBasicGUIDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_RUNSERVER, &CServerBasicGUIDlg::OnBnClickedRunServer)
-//	ON_WM_CLOSE()
 	ON_WM_DESTROY()
-//	ON_EN_CHANGE(IDC_PORTNUMBER, &CServerBasicGUIDlg::OnEnChangePortnumber)
-//ON_EN_CHANGE(IDC_PORTNUMBER, &CServerBasicGUIDlg::OnEnChangePortnumber)
-//ON_EN_UPDATE(IDC_PORTNUMBER, &CServerBasicGUIDlg::OnUpdatePortnumber)
-//ON_EN_CHANGE(IDC_PORTNUMBER, &CServerBasicGUIDlg::OnChangePortnumber)
 ON_EN_CHANGE(IDC_PORTNUMBER, &CServerBasicGUIDlg::OnChangePortnumber)
 END_MESSAGE_MAP()
 
@@ -130,8 +125,6 @@ HCURSOR CServerBasicGUIDlg::OnQueryDragIcon()
 
 void CServerBasicGUIDlg::OnBnClickedRunServer()
 {
-	// TODO: Add your control notification handler code here
-
 	if (runServer.GetCheck())
 	{
 		portNumber.SetReadOnly(true);
