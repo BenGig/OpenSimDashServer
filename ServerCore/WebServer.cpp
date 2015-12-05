@@ -248,11 +248,13 @@ void server(void *pParam)
 			if (data->simreader != NULL)
 			{
 				data->simreader->connector->Disconnect(); data->simreader->connector = NULL;
-				delete webserverSimName; webserverSimName = NULL;
 				webserverSim = 0;
 			}
 			// end webserver thread
 			mg_mgr_free(&mgr);
+			// give DataPusher time to relax
+			Sleep(1000);
+			pusherIsRunning.unlock();
 			return;
 		}
 
@@ -264,14 +266,12 @@ void server(void *pParam)
 
 			if (data->simreader->connector != NULL)
 			{
-				webserverSimName = data->simreader->connector->SimName();
 				webserverSim = SIM_RF;
-				_tprintf(TEXT("Connected to %s.\n"), webserverSimName->c_str());
+				_tprintf(TEXT("Connected to %s.\n"), data->simreader->connector->SimName());
 				goto connected;
 			}
 			else
 			{
-				delete webserverSimName;  webserverSimName = NULL;
 				webserverSim = 0;
 				delete data->simreader; data->simreader = NULL;
 			}
@@ -302,3 +302,12 @@ void stopServer() {
 	webserverRunning = false;
 }
 
+std::wstring * webserverSimName()
+{
+	if (data != NULL && data->simreader != NULL && data->simreader->connector != NULL && data->simreader->connector->SimName() != NULL)
+	{
+		return data->simreader->connector->SimName();
+	}
+	else
+		return NULL;
+}
