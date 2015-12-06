@@ -61,7 +61,6 @@ class ConnectorRF: public Connector
 {
 public:
 	int rfVersion;
-	SimData * sd = new SimData();
 
 	ConnectorRF();
 

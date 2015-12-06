@@ -145,6 +145,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TelemetryData.hpp" />
     <ClInclude Include="WebServer.hpp" />
+    <ClInclude Include="WSProtocol.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Connector.cpp" />
@@ -163,6 +164,7 @@
     </ClCompile>
     <ClCompile Include="TelemetryData.cpp" />
     <ClCompile Include="WebServer.cpp" />
+    <ClCompile Include="WSProtocol.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

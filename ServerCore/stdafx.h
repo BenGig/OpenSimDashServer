@@ -19,6 +19,7 @@
 #include <tchar.h>
 #include <winsock.h>
 #include <vector>
+#include <map>
 #include <mutex>
 
 
@@ -34,5 +35,6 @@
 #include "RetrieverThread.hpp"
 #include "SimRacingToolsAdapter.hpp"
 #include "LiveItemRegistry.hpp"
+#include "WSProtocol.hpp"
 
 #include "WebServer.hpp"

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #define PUSHSLEEP 50  // milliseconds
+const char * WS_CMD = "TELL";
 
 static struct mg_serve_http_opts server_opts;
 
@@ -17,16 +18,7 @@ static std::mutex pusherIsRunning;
 static std::mutex pusherShouldEnd;
 static bool webserverRunning = false;						// to signal end of execution
 
-static void broadcast(struct mg_connection *nc, const char *msg, size_t len) {
-	struct mg_connection *c;
-	char buf[500];
-
-	snprintf(buf, sizeof(buf), "%p %.*s", nc, (int)len, msg);
-	for (c = mg_next(nc->mgr, NULL); c != NULL; c = mg_next(nc->mgr, c)) {
-		mg_send_websocket_frame(c, WEBSOCKET_OP_TEXT, buf, strlen(buf));
-	}
-}
-
+/*
 static bool transmit(struct mg_connection *nc, const char *msg, size_t len) {
 	char buf[500];
 
@@ -34,6 +26,7 @@ static bool transmit(struct mg_connection *nc, const char *msg, size_t len) {
 	{
 		snprintf(buf, sizeof(buf), "%p %.*s", nc, (int)len, msg);
 		mg_send_websocket_frame(nc, WEBSOCKET_OP_TEXT, buf, strlen(buf));
+
 		return true;
 	}
 	else
@@ -73,11 +66,13 @@ void DataPusher(void *pParam)
 	}
 	
 }
+*/
 
 static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 	char buf[10024] = { 0 };
-	char msg[1024];
-	char ws_command[4]; char ws_arg[3];
+	int msg[4];
+	WSRequest * wsReq;
+//	char ws_command[5]; char ws_arg[3];
 
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
 	std::string response;
@@ -180,14 +175,24 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 
 		break;
 	case MG_EV_WEBSOCKET_FRAME:
+		// Prepare and process request payload
 		memcpy(msg, wm->data, wm->size);
-		msg[wm->size] = '\0';
+
+		// Can be new client or registration for a data value
+		wsReq = new WSRequest(msg, nc);
+		delete wsReq;
+		break;
+
+/*
 		memcpy(ws_command, msg, 4);
+		ws_command[4] = '\0';
+		printf("Comparing command '%s' with '%s'\n", ws_command, WS_CMD);
 
 		// new consumer
-		if (strcmp(ws_command, "TELL"))
+		if (strcmp(ws_command, WS_CMD) == 0)
 		{
-			memcpy(ws_arg, msg + sizeof(ws_command), 3);
+			printf("Pusher starting? %s\n", ws_command);
+			memcpy(ws_arg, msg + strlen(ws_command), 3);
 			LiveItem * liveItem = new LiveItem();
 			int itemId;
 			try
@@ -196,11 +201,16 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			}
 			catch (const std::invalid_argument&)
 			{
+				printf("Not a number: %s\n", ws_arg);
 				break;
 			}
 			liveItem->RegisterFor(itemId, &itemRegistry);
+			printf("Registered for %d\n", itemId);
+
+
 			if (pusherIsRunning.try_lock())
 			{
+
 				pusherIsRunning.unlock();
 				_beginthread(DataPusher, 0, nc);
 			}
@@ -208,8 +218,9 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 
 		printf("Got message: %s.\n", msg);
 		break;
+*/
 	case MG_EV_CLOSE:
-		//printf("Connection ended.\n");
+		printf("Connection ended.\n");
 	default:
 		break;
 	}
@@ -267,13 +278,14 @@ void server(void *pParam)
 			if (data->simreader->connector != NULL)
 			{
 				webserverSim = SIM_RF;
-				_tprintf(TEXT("Connected to %s.\n"), data->simreader->connector->SimName());
+				_tprintf(TEXT("Connected to %s.\n"), data->simreader->connector->SimName()->c_str());
 				goto connected;
 			}
 			else
 			{
 				webserverSim = 0;
 				delete data->simreader; data->simreader = NULL;
+				Sleep(1000);
 			}
 			
 			// TODO try to connect to Assetto Corsa

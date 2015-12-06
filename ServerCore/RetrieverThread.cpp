@@ -48,7 +48,7 @@ void SchedulerLaunch(void *pParam)
 
 ConnectorScheduler::ConnectorScheduler(int sim)
 {
-	ConnectorRF* crf; //= new ConnectorRF(); delete crf;
+	ConnectorRF* crf; 
 
 	td = new threadData;
 	td->sim = sim;
@@ -66,12 +66,14 @@ ConnectorScheduler::ConnectorScheduler(int sim)
 			return;
 		}
 		delete crf; connector = NULL;
-		return;
+		break;
 
 	default:
 		crf = NULL;
 		break;
 	}
+	delete td;
+	sdem.Reset();
 }
 
 ConnectorScheduler::~ConnectorScheduler()
