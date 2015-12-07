@@ -21,6 +21,7 @@
 #include <vector>
 #include <map>
 #include <mutex>
+#include <shlobj.h>
 
 
 #include "../DataTransfer.hpp"

@@ -220,7 +220,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		break;
 */
 	case MG_EV_CLOSE:
-		printf("Connection ended.\n");
+		break;
 	default:
 		break;
 	}
@@ -300,8 +300,24 @@ void server(void *pParam)
 
 void launchServer(char * address, char * document_root)
 {
+	
 	data = new dataServed;
 	data->address = address;
+
+
+	/* TODO: for distribution use $HOME/Documents/My Games/OpenSimDash
+	char path[MAX_PATH];
+	if (SHGetFolderPathA(NULL, CSIDL_PROFILE, NULL, 0, path) != S_OK)
+	{
+		std::cout << "I could not retrieve the user's home directory!\n";
+	}
+	else
+	{
+
+		
+	}
+	*/
+
 	data->document_root = document_root;
 
 	webserverRunning = true;
