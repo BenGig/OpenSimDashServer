@@ -8,10 +8,10 @@
 class SimDataElementsManager
 {
 public:
-	SimDataElement * Lookup(int id);
-	void Register(SimDataElement *);
-	void Reset() { counter = 0; };
-	std::wstring * JsonElements();
+	SimDataElement * lookup(int id);
+	void registerElement(SimDataElement *);
+	void reset() { counter = 0; };
+	std::wstring * jsonElements();
 private:
 	int counter = 0;
 	SimDataElement * elements[MAX_ELEMENTS];

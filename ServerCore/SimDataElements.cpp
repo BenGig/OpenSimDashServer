@@ -4,12 +4,12 @@
 
 SimDataElementsManager sdem;
 
-void SimDataElement::Register()
+void SimDataElement::registerMe()
 {
-	sdem.Register(this);
+	sdem.registerElement(this);
 }
 
-std::wstring SimDataElement::Json()
+std::wstring SimDataElement::json()
 {
 	return std::wstring(L"\"") + label + std::wstring(L"\":");
 }
@@ -27,7 +27,7 @@ SimDataBool::SimDataBool(std::wstring name, bool isTrue)
 	bl = isTrue;
 }
 
-std::wstring SimDataBool::String()
+std::wstring SimDataBool::toString()
 {
 	if (bl)
 	{
@@ -39,26 +39,26 @@ std::wstring SimDataBool::String()
 	}
 }
 
-std::wstring SimDataBool::Json()
+std::wstring SimDataBool::json()
 {
-	std::wstring buf = SimDataElement::Json();
+	std::wstring buf = SimDataElement::json();
 
 	if (bl)
 	{
-		buf.append(String());
+		buf.append(toString());
 	}
 	else
 	{
-		buf.append(String());
+		buf.append(toString());
 	}
 	return buf;
 }
 
-std::wstring SimDataNumber::Json()
+std::wstring SimDataNumber::json()
 {
 	return
-		SimDataElement::Json() +
-		String();
+		SimDataElement::json() +
+		toString();
 }
 
 // Integer type (long)
@@ -74,7 +74,7 @@ SimDataInteger::SimDataInteger(std::wstring name, long l)
 	label = name;
 }
 
-std::wstring SimDataInteger::String()
+std::wstring SimDataInteger::toString()
 {
 	return std::wstring(std::to_wstring(lint));
 }
@@ -93,7 +93,7 @@ SimDataFloating::SimDataFloating(std::wstring name, double f)
 	flt = f;
 }
 
-std::wstring SimDataFloating::String()
+std::wstring SimDataFloating::toString()
 {
 	return std::wstring(std::to_wstring(flt));
 }
@@ -108,7 +108,7 @@ SimDataTime::SimDataTime(std::wstring name, double f)
 	flt = f;
 }
 
-std::wstring SimDataTime::String()
+std::wstring SimDataTime::toString()
 {
 	if (flt < .0)
 		return std::wstring(L"0");
@@ -135,9 +135,9 @@ std::wstring SimDataTime::String()
 			return std::wstring(std::to_wstring(seconds_f));
 }
 
-std::wstring SimDataTime::Json()
+std::wstring SimDataTime::json()
 {
-	return SimDataElement::Json() + std::wstring(L"\"") + String() + std::wstring(L"\",\"") +
+	return SimDataElement::json() + std::wstring(L"\"") + toString() + std::wstring(L"\",\"") +
 		std::wstring(label) + std::wstring(L"Raw\":") + std::to_wstring(flt);
 }
 
@@ -156,17 +156,17 @@ SimDataString::SimDataString(std::wstring name, std::wstring s)
 	str = s;
 }
 
-std::wstring SimDataString::String()
+std::wstring SimDataString::toString()
 {
 	return str;
 }
 
-std::wstring SimDataString::Json()
+std::wstring SimDataString::json()
 {
 	return
-		SimDataElement::Json() +
+		SimDataElement::json() +
 		std::wstring(L"\"") +
-		String() +
+		toString() +
 		std::wstring(L"\"");
 }
 
@@ -186,10 +186,10 @@ SimDataVector::SimDataVector(std::wstring name, double xi, double yi, double zi)
 	z = zi;
 }
 
-std::wstring SimDataVector::Json()
+std::wstring SimDataVector::json()
 {
 	return
-		SimDataElement::Json() +
+		SimDataElement::json() +
 		std::wstring(L"[{\"x\":") + std::to_wstring(x) +
 		std::wstring(L"},{\"y\":") + std::to_wstring(y) +
 		std::wstring(L"},{\"z\":") + std::to_wstring(z) +
@@ -221,12 +221,12 @@ SimDataVector SimDataVector::Mul(double factor, std::wstring resultName)
 		z * factor);
 }
 
-double SimDataVector::Scalar(SimDataVector v)
+double SimDataVector::scalar(SimDataVector v)
 {
 	return x*v.x + y*v.y + z*v.z;
 }
 
-double SimDataVector::Length()
+double SimDataVector::length()
 {
 	return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 }

@@ -10,7 +10,7 @@ public:
 
 	~TelemetryData();
 
-	bool Connect();
-	bool Read();
-	void Disconnect();
+	bool connect();
+	bool read();
+	void disconnect();
 };

@@ -4,7 +4,7 @@ HANDLE hMapFile;
 LPCTSTR pBuf = NULL;
 UnifiedRfData data;
 
-bool TelemetryData::Connect()
+bool TelemetryData::connect()
 {
 	if (pBuf == NULL)
 	{
@@ -41,11 +41,11 @@ bool TelemetryData::Connect()
 
 TelemetryData::~TelemetryData()
 {
-	Disconnect();
+	disconnect();
 }
 
 
-bool TelemetryData::Read()
+bool TelemetryData::read()
 {
 	if (pBuf != NULL)
 	{
@@ -54,7 +54,7 @@ bool TelemetryData::Read()
 			memcpy(&data, pBuf, sizeof(data));
 		}
 		catch(...) { 
-			Disconnect();
+			disconnect();
 			return false;
 		}
 	}
@@ -66,7 +66,7 @@ bool TelemetryData::Read()
 	return true;
 }
 
-void TelemetryData::Disconnect()
+void TelemetryData::disconnect()
 {
 	UnmapViewOfFile(pBuf); pBuf = NULL;
 	CloseHandle(hMapFile);

@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "LiveItemRegistry.hpp"
 
-bool LiveItem::RegisterFor(int id, LiveItemRegistry * registry)
+bool LiveItem::registerFor(int id, LiveItemRegistry * registry)
 {
-	source = sdem.Lookup(id);
+	source = sdem.lookup(id);
 	if (source)
 	{
 		sdem_id = id;
@@ -16,7 +16,7 @@ bool LiveItem::RegisterFor(int id, LiveItemRegistry * registry)
 	return false;
 }
 
-void LiveItem::Unregister()
+void LiveItem::unregister()
 {
 	sdem_id = -1;
 	source = nullptr;
@@ -24,7 +24,7 @@ void LiveItem::Unregister()
 	live_id = -1;
 }
 
-std::string * LiveItem::ValueIfChanged()
+std::string * LiveItem::valueIfChanged()
 {
 	if (source)
 	{
@@ -32,7 +32,7 @@ std::string * LiveItem::ValueIfChanged()
 		{
 			std::string * response = new std::string();
 			std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
-			*response = cv.to_bytes(source->Json());
+			*response = cv.to_bytes(source->json());
 			return response;
 		}
 	}
@@ -43,18 +43,18 @@ bool LiveItem::hasChanged()
 {
 	if (source)
 	{
-		if (storedJSON.length() == source->Json().length() && storedJSON == source->Json())
+		if (storedJSON.length() == source->json().length() && storedJSON == source->json())
 			return false;
 		else
 		{
-			storedJSON = source->Json();
+			storedJSON = source->json();
 			return true;
 		}
 	}
 	return false;
 }
 
-std::string * LiveItemRegistry::ChangedItemsJSON()
+std::string * LiveItemRegistry::changedItemsJSON()
 {
 	if (items.size() > 0)
 	{
@@ -62,7 +62,7 @@ std::string * LiveItemRegistry::ChangedItemsJSON()
 		for (int i = 0; i < items.size(); i++)
 		{
 			LiveItem * li = items.at(i);
-			std::string * str = li->ValueIfChanged();
+			std::string * str = li->valueIfChanged();
 			if (str != nullptr)
 			{
 				response->append(*str);
@@ -82,7 +82,7 @@ std::string * LiveItemRegistry::ChangedItemsJSON()
 	}
 }
 
-void LiveItemRegistry::Empty()
+void LiveItemRegistry::clear()
 {
 	while (items.size() > 0)
 	{

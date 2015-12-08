@@ -20,34 +20,34 @@ ConnectorRF::ConnectorRF()
 	RF_SESSION_TYPE[13] = RF_SESSION_TYPE_RACE;
 }
 
-bool ConnectorRF::Connect()
+bool ConnectorRF::connect()
 {
-	if (td.Connect())
+	if (td.connect())
 	{
-		td.Read();
+		td.read();
 		rfVersion = td.data.rFactorVersion;
-		Read();
+		read();
 
 		return true;
 	}
 	return false;
 }
 
-int ConnectorRF::Check()
+int ConnectorRF::check()
 {
-	if (td.Connect())
+	if (td.connect())
 	{
-		td.Read();
+		td.read();
 		int rfVer = td.data.rFactorVersion;
-		td.Disconnect();
-		sd->Reset();
+		td.disconnect();
+		sd->reset();
 		return rfVer;
 	}
 	else
 		return 0;
 }
 
-std::wstring * ConnectorRF::SimName()
+std::wstring * ConnectorRF::simName()
 {
 	return new std::wstring(L"rFactor " + std::to_wstring(rfVersion));
 }
@@ -89,9 +89,9 @@ void ConnectorRF::sessionToStr() {
 }
 
 
-bool ConnectorRF::Read()
+bool ConnectorRF::read()
 {
-	if (td.Read())
+	if (td.read())
 	{
 		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
@@ -326,8 +326,8 @@ bool ConnectorRF::Read()
 	}
 }
 
-void ConnectorRF::Disconnect()
+void ConnectorRF::disconnect()
 {
-	td.Disconnect();
-	sd->Reset();
+	td.disconnect();
+	sd->reset();
 }

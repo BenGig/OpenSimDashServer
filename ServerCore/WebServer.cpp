@@ -70,7 +70,7 @@ void DataPusher(void *pParam)
 
 static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 	char buf[10024] = { 0 };
-	int msg[4];
+	unsigned char msg[4];
 	WSRequest * wsReq;
 //	char ws_command[5]; char ws_arg[3];
 
@@ -90,7 +90,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			switch (webserverSim) {
 			case SIM_RF:
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-				std::wstring * str = conn->sd->EventJson(conn->SimName());
+				std::wstring * str = conn->sd->eventJson(conn->SimName());
 				response = cv.to_bytes(*str);
 				mg_printf_http_chunk(nc, response.c_str());
 				delete str;
@@ -103,7 +103,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			switch (webserverSim) {
 			case SIM_RF:
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-				std::wstring * str = conn->sd->ScoringJson();
+				std::wstring * str = conn->sd->scoringJson();
 				response = cv.to_bytes(*str);
 				mg_printf_http_chunk(nc, response.c_str());
 				delete str;
@@ -116,7 +116,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			switch (webserverSim) {
 			case SIM_RF:
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-				std::wstring * str = conn->sd->elementRegistry->JsonElements();
+				std::wstring * str = conn->sd->elementRegistry->jsonElements();
 				response = cv.to_bytes(*str);
 				mg_printf_http_chunk(nc, response.c_str());
 				delete str;
@@ -258,7 +258,7 @@ void server(void *pParam)
 			pusherIsRunning.lock();
 			if (data->simreader != NULL)
 			{
-				data->simreader->connector->Disconnect(); data->simreader->connector = NULL;
+				data->simreader->connector->disconnect(); data->simreader->connector = NULL;
 				webserverSim = 0;
 			}
 			// end webserver thread

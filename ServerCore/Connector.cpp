@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-bool Connector::Read()
+bool Connector::read()
 {
 	return false;
 }
@@ -16,7 +16,7 @@ Connector::Connector()
 
 Connector::~Connector()
 {
-	sdem.Reset();
+	sdem.reset();
 	delete sd;
 }
 

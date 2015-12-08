@@ -15,7 +15,7 @@ void SchedulerLaunch(void *pParam)
 	{
 	case SIM_RF:
 		crf = (ConnectorRF*)td->connector;
-		if (crf->Connect())
+		if (crf->connect())
 		{
 			// Connect fetched data, so we can sleep
 			Sleep(interval);
@@ -23,7 +23,7 @@ void SchedulerLaunch(void *pParam)
 
 			int i = 0;
 			// transfer data and check for stop signal
-			while (crf->Read() && WaitForSingleObject(hRunMutex, 0L) == WAIT_TIMEOUT)
+			while (crf->read() && WaitForSingleObject(hRunMutex, 0L) == WAIT_TIMEOUT)
 			{
 				i = i++;
 				if (i==50)
@@ -56,7 +56,7 @@ ConnectorScheduler::ConnectorScheduler(int sim)
 	{
 	case SIM_RF:
 		crf = new ConnectorRF();
-		if (crf != NULL && crf->Connect())
+		if (crf != NULL && crf->connect())
 		{
 			td->connector = (Connector*)crf;	// Pointer for thread
 			connector = (Connector*)crf;		// for main program
@@ -73,15 +73,15 @@ ConnectorScheduler::ConnectorScheduler(int sim)
 		break;
 	}
 	delete td;
-	sdem.Reset();
+	sdem.reset();
 }
 
 ConnectorScheduler::~ConnectorScheduler()
 {
-	Stop();
+	stop();
 }
 
-void ConnectorScheduler::Stop()
+void ConnectorScheduler::stop()
 {
 	if (connector)
 	{
@@ -93,6 +93,6 @@ void ConnectorScheduler::Stop()
 		//Sleep(100);
 		delete (ConnectorRF*)connector; connector = nullptr;
 		delete td;
-		sdem.Reset();
+		sdem.reset();
 	}
 }

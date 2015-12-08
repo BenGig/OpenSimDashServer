@@ -17,12 +17,12 @@ class WSRequest
 {
 public:
 	WSRequest() {};
-	WSRequest(int msg[4], mg_connection * nc);
+	WSRequest(unsigned char msg[4], mg_connection * nc);
 
-	int clientId;
-	int command;
-	int argument;
-	int option;
+	unsigned char clientId;
+	unsigned char command;
+	unsigned char argument;
+	unsigned char option;
 
 private:
 
@@ -31,10 +31,10 @@ private:
 class WSSession
 {
 public:
-	WSSession(int clientId, mg_connection * nc);
+	WSSession(unsigned char clientId, mg_connection * nc);
 	~WSSession();
 
-	int id;
+	unsigned char id;
 private:
 	LiveItemRegistry registry;
 	mg_connection * connection;

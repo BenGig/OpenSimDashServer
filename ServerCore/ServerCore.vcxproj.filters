@@ -58,7 +58,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WSProtocol.hpp">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

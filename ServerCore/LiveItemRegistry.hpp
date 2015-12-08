@@ -7,9 +7,9 @@ class LiveItemRegistry;
 
 class LiveItem {
 public:
-	bool RegisterFor(int id, LiveItemRegistry * registry);
-	void Unregister();
-	std::string * ValueIfChanged();
+	bool registerFor(int id, LiveItemRegistry * registry);
+	void unregister();
+	std::string * valueIfChanged();
 	bool hasChanged();
 
 private:
@@ -23,7 +23,7 @@ private:
 class LiveItemRegistry {
 public:
 	std::vector<LiveItem*> items;
-	std::string * ChangedItemsJSON();
-	void Empty();
+	std::string * changedItemsJSON();
+	void clear();
 };
 

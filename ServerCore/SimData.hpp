@@ -96,7 +96,7 @@ private:
 	int numElements = 0;
 public:
 	Wheel();
-	void SetPosition(wchar_t * position);
+	void setPosition(wchar_t * position);
 
 	SimDataElement * elements[MAX_WHEEL_PARAMS];
 
@@ -234,12 +234,12 @@ public:
 
 	SimDataElementsManager * elementRegistry;
 
-	void Reset();
-	std::wstring * ScoringJson();
-	std::wstring * EventJson(std::wstring * simName);
-	std::wstring * PerformanceJson();
+	void reset();
+	std::wstring * scoringJson();
+	std::wstring * eventJson(std::wstring * simName);
+	std::wstring * performanceJson();
 
 	SimData();
-	~SimData() { Reset(); };
+	~SimData() { reset(); };
 };
 

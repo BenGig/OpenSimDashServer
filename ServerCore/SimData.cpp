@@ -1,82 +1,82 @@
 #include "stdafx.h"
 
-void SimData::Reset()
+void SimData::reset()
 {
-	sdem.Reset();
+	sdem.reset();
 }
 
-std::wstring * SimData::EventJson(std::wstring * simName)
+std::wstring * SimData::eventJson(std::wstring * simName)
 {
 	std::wstring * raceevent = new std::wstring(L"{\"simName\":\"");
 	raceevent->append(*simName); raceevent->append(L"\",");
-	raceevent->append(event.raceOver.Json()); raceevent->append(L",");
-	raceevent->append(event.trackName.Json()); raceevent->append(L",");
-	raceevent->append(event.numberOfLaps.Json()); raceevent->append(L",");
-	raceevent->append(event.session.Json()); raceevent->append(L",");
-	raceevent->append(event.sessionString.Json()); raceevent->append(L",");
-	raceevent->append(event.timeLeft.Json()); raceevent->append(L",");
-	raceevent->append(event.gamePhase.Json()); raceevent->append(L",");
-	raceevent->append(event.numRedLights.Json()); raceevent->append(L",");
-	raceevent->append(session.startLight.Json()); raceevent->append(L",");
-	raceevent->append(event.darkCloud.Json()); raceevent->append(L",");
-	raceevent->append(event.raining.Json()); raceevent->append(L",");
-	raceevent->append(event.ambientTemp.Json()); raceevent->append(L",");
-	raceevent->append(event.trackTemp.Json()); raceevent->append(L",");
-	raceevent->append(event.onPathWetness.Json()); raceevent->append(L",");
-	raceevent->append(event.offPathWetness.Json()); raceevent->append(L",");
-	raceevent->append(telemetry.flagShown.Json()); raceevent->append(L",");
-	raceevent->append(event.inRealtime.Json()); raceevent->append(L",");
-	raceevent->append(event.currentTime.Json());
+	raceevent->append(event.raceOver.json()); raceevent->append(L",");
+	raceevent->append(event.trackName.json()); raceevent->append(L",");
+	raceevent->append(event.numberOfLaps.json()); raceevent->append(L",");
+	raceevent->append(event.session.json()); raceevent->append(L",");
+	raceevent->append(event.sessionString.json()); raceevent->append(L",");
+	raceevent->append(event.timeLeft.json()); raceevent->append(L",");
+	raceevent->append(event.gamePhase.json()); raceevent->append(L",");
+	raceevent->append(event.numRedLights.json()); raceevent->append(L",");
+	raceevent->append(session.startLight.json()); raceevent->append(L",");
+	raceevent->append(event.darkCloud.json()); raceevent->append(L",");
+	raceevent->append(event.raining.json()); raceevent->append(L",");
+	raceevent->append(event.ambientTemp.json()); raceevent->append(L",");
+	raceevent->append(event.trackTemp.json()); raceevent->append(L",");
+	raceevent->append(event.onPathWetness.json()); raceevent->append(L",");
+	raceevent->append(event.offPathWetness.json()); raceevent->append(L",");
+	raceevent->append(telemetry.flagShown.json()); raceevent->append(L",");
+	raceevent->append(event.inRealtime.json()); raceevent->append(L",");
+	raceevent->append(event.currentTime.json());
 	raceevent->append(L"}");
 	return raceevent;
 }
 
-std::wstring * SimData::PerformanceJson()
+std::wstring * SimData::performanceJson()
 {
 	std::wstring * perf = new std::wstring(L"[");
 	//perf->append()
 	return perf;
 }
 
-std::wstring * SimData::ScoringJson()
+std::wstring * SimData::scoringJson()
 {
 	std::wstring * score = new std::wstring(L"[");
 	for (int i = 0; i < session.numCars.lint; i++)
 	{
 		score->append(L"{");
-		score->append(scoring[i].driverName.Json()); score->append(L",");
-		score->append(scoring[i].vehicleClass.Json()); score->append(L",");
-		score->append(scoring[i].vehicleName.Json()); score->append(L",");
-		score->append(scoring[i].place.Json()); score->append(L",");
-		score->append(scoring[i].finishStatus.Json()); score->append(L",");
-		score->append(scoring[i].finishStatusString.Json()); score->append(L",");
-		score->append(scoring[i].lastTime.Json()); score->append(L",");
-		score->append(scoring[i].bestTime.Json()); score->append(L",");
-		score->append(scoring[i].lapNumber.Json()); score->append(L",");
-		score->append(scoring[i].bestSector1.Json()); score->append(L",");
-		score->append(scoring[i].bestSector2.Json()); score->append(L",");
-		score->append(scoring[i].lastSector1.Json()); score->append(L",");
-		score->append(scoring[i].lastSector2.Json()); score->append(L",");
-		score->append(scoring[i].curSector1.Json()); score->append(L",");
-		score->append(scoring[i].curSector2.Json()); score->append(L",");
-		score->append(scoring[i].timeBehindNext.Json()); score->append(L",");
-		score->append(scoring[i].lapsBehindNext.Json()); score->append(L",");
-		score->append(scoring[i].timeBehindLeader.Json()); score->append(L",");
-		score->append(scoring[i].lapsBehindLeader.Json()); score->append(L",");
-		score->append(scoring[i].numPitstops.Json()); score->append(L",");
-		score->append(scoring[i].numPenalties.Json()); score->append(L",");
-		score->append(scoring[i].control.Json()); score->append(L",");
-		score->append(scoring[i].inPits.Json()); score->append(L",");
-		score->append(scoring[i].pitState.Json()); score->append(L",");
-		score->append(scoring[i].isPlayer.Json()); score->append(L",");
-		score->append(scoring[i].currentSector.Json()); score->append(L",");
-		score->append(scoring[i].position.Json()); score->append(L",");
-		score->append(scoring[i].velocity.Json()); score->append(L",");
-		score->append(scoring[i].accel.Json()); score->append(L",");
-		score->append(scoring[i].headlights.Json()); score->append(L",");
-		score->append(scoring[i].qualification.Json()); score->append(L",");
-		score->append(scoring[i].lapStartTime.Json()); score->append(L",");
-		score->append(scoring[i].currentTime.Json());
+		score->append(scoring[i].driverName.json()); score->append(L",");
+		score->append(scoring[i].vehicleClass.json()); score->append(L",");
+		score->append(scoring[i].vehicleName.json()); score->append(L",");
+		score->append(scoring[i].place.json()); score->append(L",");
+		score->append(scoring[i].finishStatus.json()); score->append(L",");
+		score->append(scoring[i].finishStatusString.json()); score->append(L",");
+		score->append(scoring[i].lastTime.json()); score->append(L",");
+		score->append(scoring[i].bestTime.json()); score->append(L",");
+		score->append(scoring[i].lapNumber.json()); score->append(L",");
+		score->append(scoring[i].bestSector1.json()); score->append(L",");
+		score->append(scoring[i].bestSector2.json()); score->append(L",");
+		score->append(scoring[i].lastSector1.json()); score->append(L",");
+		score->append(scoring[i].lastSector2.json()); score->append(L",");
+		score->append(scoring[i].curSector1.json()); score->append(L",");
+		score->append(scoring[i].curSector2.json()); score->append(L",");
+		score->append(scoring[i].timeBehindNext.json()); score->append(L",");
+		score->append(scoring[i].lapsBehindNext.json()); score->append(L",");
+		score->append(scoring[i].timeBehindLeader.json()); score->append(L",");
+		score->append(scoring[i].lapsBehindLeader.json()); score->append(L",");
+		score->append(scoring[i].numPitstops.json()); score->append(L",");
+		score->append(scoring[i].numPenalties.json()); score->append(L",");
+		score->append(scoring[i].control.json()); score->append(L",");
+		score->append(scoring[i].inPits.json()); score->append(L",");
+		score->append(scoring[i].pitState.json()); score->append(L",");
+		score->append(scoring[i].isPlayer.json()); score->append(L",");
+		score->append(scoring[i].currentSector.json()); score->append(L",");
+		score->append(scoring[i].position.json()); score->append(L",");
+		score->append(scoring[i].velocity.json()); score->append(L",");
+		score->append(scoring[i].accel.json()); score->append(L",");
+		score->append(scoring[i].headlights.json()); score->append(L",");
+		score->append(scoring[i].qualification.json()); score->append(L",");
+		score->append(scoring[i].lapStartTime.json()); score->append(L",");
+		score->append(scoring[i].currentTime.json());
 		score->append(L"},");
 	}
 	score->pop_back();
@@ -93,102 +93,102 @@ SimData::SimData()
 
 Event::Event()
 {
-	trackName.Register();
-	driverName.Register();
-	numberOfLaps.Register();
-	lapDist.Register();
-	session.Register();
-	sessionString.Register();
-	timeLeft.Register();
-	sectorCount.Register();
-	endTime.Register();
-	gamePhase.Register();
-	numRedLights.Register();
-	darkCloud.Register();
-	raining.Register();
-	ambientTemp.Register();
-	trackTemp.Register();
-	wind.Register();
-	onPathWetness.Register();
-	offPathWetness.Register();
-	inRealtime.Register();
-	currentTime.Register();
+	trackName.registerMe();
+	driverName.registerMe();
+	numberOfLaps.registerMe();
+	lapDist.registerMe();
+	session.registerMe();
+	sessionString.registerMe();
+	timeLeft.registerMe();
+	sectorCount.registerMe();
+	endTime.registerMe();
+	gamePhase.registerMe();
+	numRedLights.registerMe();
+	darkCloud.registerMe();
+	raining.registerMe();
+	ambientTemp.registerMe();
+	trackTemp.registerMe();
+	wind.registerMe();
+	onPathWetness.registerMe();
+	offPathWetness.registerMe();
+	inRealtime.registerMe();
+	currentTime.registerMe();
 }
 
 Session::Session()
 {
-	numCars.Register();
-	yellowFlagState.Register();
-	sectorFlag1.Register();
-	sectorFlag2.Register();
-	sectorFlag3.Register();
-	startLight.Register();
+	numCars.registerMe();
+	yellowFlagState.registerMe();
+	sectorFlag1.registerMe();
+	sectorFlag2.registerMe();
+	sectorFlag3.registerMe();
+	startLight.registerMe();
 }
 
 
 
 Car::Car()
 {	
-	wheels[0].SetPosition(L"FL");
-	wheels[1].SetPosition(L"FR");
-	wheels[2].SetPosition(L"RL");
-	wheels[3].SetPosition(L"RR");
+	wheels[0].setPosition(L"FL");
+	wheels[1].setPosition(L"FR");
+	wheels[2].setPosition(L"RL");
+	wheels[3].setPosition(L"RR");
 
-	maxRPM.Register();
-	fuel.Register();
-	gear.Register();
-	engineRPM.Register();
-	speed.Register();
-	unfilteredThrottle.Register();
-	unfilteredBrake.Register();
-	unfilteredClutch.Register();
-	unfilteredSteering.Register();
-	maxTorque.Register();
-	maxPower.Register();
-	abs.Register();
-	drs.Register();
-	tc.Register();
-	heading.Register();
-	pitch.Register();
-	roll.Register();
-	cgHeight.Register();
-	numberOfTyresOut.Register();
-	distanceTraveled.Register();
-	normalizedCarPosition.Register();
-	timeBehindNext.Register();
-	lapsBehindNext.Register();
-	timeBehindLeader.Register();
-	lapsBehindLeader.Register();
-	maxFuel.Register();
-	filteredThrottle.Register();
-	filteredBrake.Register();
-	filteredSteering.Register();
-	filteredClutch.Register();
-	front3rdDeflection.Register();
-	rear3rdDeflection.Register();
-	frontWingHeight.Register();
-	frontRideHeight.Register();
-	rearRideHeight.Register();
-	drag.Register();
-	frontDownforce.Register();
-	rearDownforce.Register();
-	engineTorque.Register();
-	headlights.Register();
-	speedLimiter.Register();
-	maxGears.Register();
-	frontTireCompoundIndex.Register();
-	rearTireCompoundIndex.Register();
-	fuelCapacity.Register();
-	frontFlapActivated.Register();
-	rearFlapActivated.Register();
-	rearFlapLegalStatus.Register();
-	ignitionStarter.Register();
-	frontTireCompoundName.Register();
-	rearTireCompoundName.Register();
-	speedLimiterAvailable.Register();
-	antiStallActivated.Register();
-	rearBrakeBias.Register();
-	turboBoostPressure.Register();
+	maxRPM.registerMe();
+	fuel.registerMe();
+	gear.registerMe();
+	engineRPM.registerMe();
+	speed.registerMe();
+	unfilteredThrottle.registerMe();
+	unfilteredBrake.registerMe();
+	unfilteredClutch.registerMe();
+	unfilteredSteering.registerMe();
+	maxTorque.registerMe();
+	maxPower.registerMe();
+	abs.registerMe();
+	drs.registerMe();
+	tc.registerMe();
+	heading.registerMe();
+	pitch.registerMe();
+	roll.registerMe();
+	cgHeight.registerMe();
+	numberOfTyresOut.registerMe();
+	distanceTraveled.registerMe();
+	normalizedCarPosition.registerMe();
+	timeBehindNext.registerMe();
+	lapsBehindNext.registerMe();
+	timeBehindLeader.registerMe();
+	lapsBehindLeader.registerMe();
+	maxFuel.registerMe();
+	filteredThrottle.registerMe();
+	filteredBrake.registerMe();
+	filteredSteering.registerMe();
+	filteredClutch.registerMe();
+	front3rdDeflection.registerMe();
+	rear3rdDeflection.registerMe();
+	frontWingHeight.registerMe();
+	frontRideHeight.registerMe();
+	rearRideHeight.registerMe();
+	drag.registerMe();
+	frontDownforce.registerMe();
+	rearDownforce.registerMe();
+	engineTorque.registerMe();
+	headlights.registerMe();
+	speedLimiter.registerMe();
+	maxGears.registerMe();
+	frontTireCompoundIndex.registerMe();
+	rearTireCompoundIndex.registerMe();
+	fuelCapacity.registerMe();
+	frontFlapActivated.registerMe();
+	rearFlapActivated.registerMe();
+	rearFlapLegalStatus.registerMe();
+	ignitionStarter.registerMe();
+	frontTireCompoundName.registerMe();
+	rearTireCompoundName.registerMe();
+	speedLimiterAvailable.registerMe();
+	antiStallActivated.registerMe();
+	rearBrakeBias.registerMe();
+	turboBoostPressure.registerMe();
 }
 
 Wheel::Wheel()
@@ -226,7 +226,7 @@ Wheel::Wheel()
 	elements[30] = &tireInnerLayerOuterTemp;
 };
 
-void Wheel::SetPosition(wchar_t * p)
+void Wheel::setPosition(wchar_t * p)
 {
 	std::wstring * pos = new std::wstring(p);
 	pos->append(L"_");
@@ -235,7 +235,7 @@ void Wheel::SetPosition(wchar_t * p)
 	{
 		if (elements[i] != NULL)
 		{
-			elements[i]->label.insert(0, *pos); elements[i]->Register();
+			elements[i]->label.insert(0, *pos); elements[i]->registerMe();
 		}
 	}
 }

@@ -64,11 +64,11 @@ public:
 
 	ConnectorRF();
 
-	bool Connect();
-	int Check();
-	std::wstring * SimName();
-	bool Read();
-	void Disconnect();
+	bool connect();
+	int check();
+	std::wstring * simName();
+	bool read();
+	void disconnect();
 
 
 private:

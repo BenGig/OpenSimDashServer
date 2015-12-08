@@ -19,7 +19,7 @@ public:
 	ConnectorScheduler(int sim);
 	~ConnectorScheduler();
 
-	void Stop();
+	void stop();
 
 	Connector * connector;
 

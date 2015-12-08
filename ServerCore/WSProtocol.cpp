@@ -32,7 +32,7 @@ void DataPusher(void *pParam)
 	{
 		if (pData->itemRegistry->items.size() > 0)
 		{
-			std::string * data = pData->itemRegistry->ChangedItemsJSON();
+			std::string * data = pData->itemRegistry->changedItemsJSON();
 
 			if (data != nullptr)
 			{
@@ -51,7 +51,7 @@ void DataPusher(void *pParam)
 }
 
 
-WSRequest::WSRequest(int msg[4], mg_connection * nc)
+WSRequest::WSRequest(unsigned char msg[4], mg_connection * nc)
 {
 	WSSession * session;
 	LiveItem * liveItem;
@@ -70,7 +70,7 @@ WSRequest::WSRequest(int msg[4], mg_connection * nc)
 		if (it == sessions.end())
 		{
 			// new client
-			int id = rand();
+			unsigned char id = rand() % 256;
 			session = new WSSession(id, nc);
 			sessions[id] = session;
 			// tell client its connection id
@@ -82,7 +82,7 @@ WSRequest::WSRequest(int msg[4], mg_connection * nc)
 		session = sessions.at(clientId);
 		
 		liveItem = new LiveItem();
-		liveItem->RegisterFor(argument, &session->registry);
+		liveItem->registerFor(argument, &session->registry);
 
 		break;
 	default:
@@ -93,7 +93,7 @@ WSRequest::WSRequest(int msg[4], mg_connection * nc)
 };
 
 
-WSSession::WSSession(int clientId, mg_connection * nc)
+WSSession::WSSession(unsigned char clientId, mg_connection * nc)
 {
 	connection = nc;
 	id = clientId;
@@ -113,6 +113,6 @@ WSSession::~WSSession()
 	while (!pData.pusherIsRunning.try_lock())
 		Sleep(100);
 	
-	registry.Empty();
+	registry.clear();
 	sessions.erase(id);
 }

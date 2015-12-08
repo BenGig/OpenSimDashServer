@@ -1,19 +1,19 @@
 #include "stdafx.h"
 
 // Manager
-void SimDataElementsManager::Register(SimDataElement * sde)
+void SimDataElementsManager::registerElement(SimDataElement * sde)
 {
 	if (sde->isRegistered)
 		return;
 
 	elements[counter] = sde;
-	sde->SetId(counter);
+	sde->setId(counter);
 	counter++;
 	_ASSERTE(counter < MAX_ELEMENTS);
 	sde->isRegistered = true;
 }
 
-std::wstring * SimDataElementsManager::JsonElements()
+std::wstring * SimDataElementsManager::jsonElements()
 {
 	std::wstring * str = new std::wstring(L"{\"dataDictionary\":[");
 	for (int i = 0; i < counter; i++)
@@ -29,7 +29,7 @@ std::wstring * SimDataElementsManager::JsonElements()
 	return str;
 }
 
-SimDataElement * SimDataElementsManager::Lookup(int i)
+SimDataElement * SimDataElementsManager::lookup(int i)
 {
 	return elements[i];
 }

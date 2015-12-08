@@ -12,13 +12,13 @@ public:
 
 	std::wstring label;
 	
-	void Register();
+	void registerMe();
 	bool isRegistered;
 
 	int Id() { return id; };
-	void SetId(int i) { id = i; };
-	virtual std::wstring String() { return L""; };
-	virtual std::wstring Json();
+	void setId(int i) { id = i; };
+	virtual std::wstring toString() { return L""; };
+	virtual std::wstring json();
 private:
 	int id;
 };
@@ -26,7 +26,7 @@ private:
 class SimDataNumber : public SimDataElement
 {
 public:
-	std::wstring Json();
+	std::wstring json();
 };
 
 class SimDataBool : public SimDataElement
@@ -37,8 +37,8 @@ public:
 
 	bool bl;
 
-	std::wstring String();
-	std::wstring Json();
+	std::wstring toString();
+	std::wstring json();
 };
 
 class SimDataInteger : public SimDataNumber
@@ -49,7 +49,7 @@ public:
 
 	long lint;
 
-	std::wstring String();
+	std::wstring toString();
 };
 
 // Floating point values
@@ -61,7 +61,7 @@ public:
 
 	double flt;
 
-	std::wstring String();
+	std::wstring toString();
 };
 
 
@@ -73,8 +73,8 @@ public:
 	SimDataTime(std::wstring label, double);
 
 	double flt;
-	std::wstring String();
-	std::wstring Json();
+	std::wstring toString();
+	std::wstring json();
 };
 
 
@@ -87,8 +87,8 @@ public:
 
 	std::wstring str;
 
-	std::wstring String();
-	std::wstring Json();
+	std::wstring toString();
+	std::wstring json();
 };
 
 // Vector: contains 3 floating numbers
@@ -101,12 +101,12 @@ public:
 	SimDataVector(std::wstring name);
 	SimDataVector(std::wstring name, double x, double y, double z);
 
-	std::wstring Json();
+	std::wstring json();
 
 	SimDataVector Add(SimDataVector, std::wstring resultName); // Vector addition
 	SimDataVector Mul(double factor, std::wstring resultName); // Multiplication with scalar
 	SimDataVector Cross(SimDataVector, std::wstring resultName); // Cross product
-	double Scalar(SimDataVector v); // Scalar product; dot product
-	double Length(); 
+	double scalar(SimDataVector v); // Scalar product; dot product
+	double length(); 
 };
 
