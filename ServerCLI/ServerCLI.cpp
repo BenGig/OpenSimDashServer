@@ -7,15 +7,21 @@ char * address[64];
 
 int main(int argc, char *argv[])
 {
-	*address = "8080";
-	if (argc > 1)
-	{
-		strcpy_s(*address, 6, argv[1]);
-	}
+	// command line parsing
+	TCLAP::CmdLine cmd("OpenSimDashServer", ' ', "0.1");
+	TCLAP::ValueArg<std::string> portArg("p", "port", "Network port", false, "8080", "string");
+	cmd.add(portArg);
+	TCLAP::ValueArg<std::string> dashpathArg("d", "document_root", "Webserver starting point", false, "dashboards", "string");
+	cmd.add(dashpathArg);
 
-	launchServer(*address, "dashboards");
+	cmd.parse(argc, argv);
+	std::string path = dashpathArg.getValue();
+	std::string port = portArg.getValue();
 
-	printf("Running on port %s, press CTRL-C to abort.\n", *address);
+//	int j = getchar();
+	launchServer(port, path);
+
+	printf("Running on port %s, press CTRL-C to abort.\n", port.c_str());
 	int i = getchar();
 
 	return 0;

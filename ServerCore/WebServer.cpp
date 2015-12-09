@@ -7,10 +7,11 @@ static struct mg_serve_http_opts server_opts;
 
 struct dataServed
 {
-	char * address = NULL;
-	char * document_root = NULL;
+	char address[6];
+	char document_root[MAX_PATH];
 	ConnectorScheduler * simreader = NULL;
 };
+static char path[MAX_PATH];
 
 static dataServed * data = NULL;
 static LiveItemRegistry itemRegistry;
@@ -298,28 +299,26 @@ void server(void *pParam)
 	webserverRunning = false;
 }
 
-void launchServer(char * address, char * document_root)
+void launchServer(std::string address, std::string document_root)
 {
 	
 	data = new dataServed;
-	data->address = address;
+	strcpy_s(data->address, address.c_str());
 
-
-	/* TODO: for distribution use $HOME/Documents/My Games/OpenSimDash
-	char path[MAX_PATH];
-	if (SHGetFolderPathA(NULL, CSIDL_PROFILE, NULL, 0, path) != S_OK)
+	if (document_root.length()>0)
 	{
-		std::cout << "I could not retrieve the user's home directory!\n";
+		strcpy_s(data->document_root, document_root.c_str());
 	}
 	else
 	{
-
-		
+		if (SHGetFolderPathA(NULL, CSIDL_PROFILE, NULL, 0, path) != S_OK)
+		{
+			std::cout << "I could not retrieve the user's home directory!\n";
+		}
+		else
+			strcat(path, "\\My Games\\OpenSimDash\\dashboards");
 	}
-	*/
-
-	data->document_root = document_root;
-
+	
 	webserverRunning = true;
 
 	_beginthread(server, 0, data);

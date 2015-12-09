@@ -127,7 +127,7 @@ void CServerBasicGUIDlg::OnBnClickedRunServer()
 	if (runServer.GetCheck())
 	{
 		portNumber.SetReadOnly(true);
-		launchServer(address, "dashboards");
+		launchServer(std::string(address), std::string("dashboards"));
 	}
 	else
 	{
