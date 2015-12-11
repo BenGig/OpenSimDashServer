@@ -26,9 +26,11 @@ bool ConnectorRF::connect()
 	{
 		td.read();
 		rfVersion = td.data.rFactorVersion;
-		read();
-
-		return true;
+		if (rfVersion > 0)
+		{
+			read();
+			return true;
+		}
 	}
 	return false;
 }

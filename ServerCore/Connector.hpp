@@ -5,7 +5,7 @@
 class Connector
 {
 public:
-	virtual std::wstring * SimName() { return NULL; };
+	virtual std::wstring * simName() { return NULL; };
 	virtual bool connect() { return false; };	/* Connect (and read) to a sim data provider */
 	virtual int check() { return 0; };			/* Try connection, return version info or 0 if not available */
 	virtual bool read();						/* Transfer data from sim internals to SimData elements */

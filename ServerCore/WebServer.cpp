@@ -20,55 +20,8 @@ static std::mutex pusherShouldEnd;
 static bool webserverRunning = false;						// to signal end of execution
 
 /*
-static bool transmit(struct mg_connection *nc, const char *msg, size_t len) {
-	char buf[500];
-
-	if (nc->err == 0)
-	{
-		snprintf(buf, sizeof(buf), "%p %.*s", nc, (int)len, msg);
-		mg_send_websocket_frame(nc, WEBSOCKET_OP_TEXT, buf, strlen(buf));
-
-		return true;
-	}
-	else
-		return false;
-}
-
-void DataPusher(void *pParam)
-{
-	mg_connection *nc = (mg_connection *)pParam;
-	if (!pusherIsRunning.try_lock())
-		return;
-
-	while (!pusherShouldEnd.try_lock())
-	{
-		if (itemRegistry.items.size() > 0)
-		{
-			std::string * data = itemRegistry.ChangedItemsJSON();
-
-			if (data != nullptr)
-			{
-				if (transmit(nc, data->c_str(), data->length()))
-				{
-					Sleep(PUSHSLEEP);
-				}
-				else
-				{
-					itemRegistry.Empty();
-					delete data;
-					pusherIsRunning.unlock();
-					return;
-				}
-				delete data;
-			} else {
-				Sleep(PUSHSLEEP);
-			}			
-		}
-	}
-	
-}
+Event handler for any incoming requests.
 */
-
 static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 	char buf[10024] = { 0 };
 	unsigned char msg[4];
@@ -91,7 +44,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			switch (webserverSim) {
 			case SIM_RF:
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-				std::wstring * str = conn->sd->eventJson(conn->SimName());
+				std::wstring * str = conn->sd->eventJson(conn->simName());
 				response = cv.to_bytes(*str);
 				mg_printf_http_chunk(nc, response.c_str());
 				delete str;
@@ -183,43 +136,6 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		wsReq = new WSRequest(msg, nc);
 		delete wsReq;
 		break;
-
-/*
-		memcpy(ws_command, msg, 4);
-		ws_command[4] = '\0';
-		printf("Comparing command '%s' with '%s'\n", ws_command, WS_CMD);
-
-		// new consumer
-		if (strcmp(ws_command, WS_CMD) == 0)
-		{
-			printf("Pusher starting? %s\n", ws_command);
-			memcpy(ws_arg, msg + strlen(ws_command), 3);
-			LiveItem * liveItem = new LiveItem();
-			int itemId;
-			try
-			{
-				itemId = std::stoi(ws_arg);
-			}
-			catch (const std::invalid_argument&)
-			{
-				printf("Not a number: %s\n", ws_arg);
-				break;
-			}
-			liveItem->RegisterFor(itemId, &itemRegistry);
-			printf("Registered for %d\n", itemId);
-
-
-			if (pusherIsRunning.try_lock())
-			{
-
-				pusherIsRunning.unlock();
-				_beginthread(DataPusher, 0, nc);
-			}
-		}
-
-		printf("Got message: %s.\n", msg);
-		break;
-*/
 	case MG_EV_CLOSE:
 		break;
 	default:
@@ -279,7 +195,7 @@ void server(void *pParam)
 			if (data->simreader->connector != NULL)
 			{
 				webserverSim = SIM_RF;
-				_tprintf(TEXT("Connected to %s.\n"), data->simreader->connector->SimName()->c_str());
+				_tprintf(TEXT("Connected to %s.\n"), data->simreader->connector->simName()->c_str());
 				goto connected;
 			}
 			else
@@ -299,6 +215,9 @@ void server(void *pParam)
 	webserverRunning = false;
 }
 
+/*
+Start server to serve a directory on a given network address [host:]port
+*/
 void launchServer(std::string address, std::string document_root)
 {
 	
@@ -311,12 +230,15 @@ void launchServer(std::string address, std::string document_root)
 	}
 	else
 	{
-		if (SHGetFolderPathA(NULL, CSIDL_PROFILE, NULL, 0, path) != S_OK)
+		if (SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path) != S_OK)
 		{
-			std::cout << "I could not retrieve the user's home directory!\n";
+			std::cout << "I could not retrieve the user's local appdata directory!\n";
 		}
 		else
-			strcat(path, "\\My Games\\OpenSimDash\\dashboards");
+		{
+			strcat(path, "\\OpenSimDash\\dashboards");
+			strcpy(data->document_root, path);
+		}
 	}
 	
 	webserverRunning = true;
@@ -331,9 +253,9 @@ void stopServer() {
 
 std::wstring * webserverSimName()
 {
-	if (data != NULL && data->simreader != NULL && data->simreader->connector != NULL && data->simreader->connector->SimName() != NULL)
+	if (data != NULL && data->simreader != NULL && data->simreader->connector != NULL && data->simreader->connector->simName() != NULL)
 	{
-		return data->simreader->connector->SimName();
+		return data->simreader->connector->simName();
 	}
 	else
 		return NULL;
