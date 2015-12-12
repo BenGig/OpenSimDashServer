@@ -2,6 +2,9 @@
 
 #include "stdafx.h"
 
+// convert 8 bit strings to wstring
+void convertFrom8bit(char * str, std::wstring * wstr);
+
 class Connector
 {
 public:

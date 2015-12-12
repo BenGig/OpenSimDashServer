@@ -1,5 +1,11 @@
 #include "stdafx.h"
 
+void convertFrom8bit(char * str, std::wstring * wstr) {
+	wchar_t wbuf[64]; // max length rFactor provides
+	MultiByteToWideChar(CP_ACP, 0, str, -1, wbuf, 64);
+	wstr->assign(wbuf);
+}
+
 bool Connector::read()
 {
 	return false;

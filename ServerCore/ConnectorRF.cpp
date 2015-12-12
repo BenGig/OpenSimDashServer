@@ -90,19 +90,16 @@ void ConnectorRF::sessionToStr() {
 	}
 }
 
-
 bool ConnectorRF::read()
 {
 	if (td.read())
 	{
-		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-
 		if (slowReady())
 		{
 			// event info
 			rfVersion = td.data.rFactorVersion; 
-			sd->event.trackName.str = std::wstring(converter.from_bytes(td.data.event.trackName));
-			sd->event.driverName.str = std::wstring(converter.from_bytes(td.data.event.playerName));
+			convertFrom8bit(td.data.event.trackName, &sd->event.trackName.str);
+			convertFrom8bit(td.data.event.playerName, &sd->event.driverName.str);
 			sd->event.numberOfLaps.lint = td.data.event.maxLaps;
 			sd->event.session.lint = td.data.event.session;
 			sessionToStr();
@@ -130,8 +127,8 @@ bool ConnectorRF::read()
 
 			sd->telemetry.maxGears.lint = td.data.telemetry.maxGears;
 			sd->telemetry.fuelCapacity.flt = td.data.telemetry.fuelCapacity;
-			sd->telemetry.frontTireCompoundName.str = std::wstring(converter.from_bytes(td.data.telemetry.frontTireCompoundName));
-			sd->telemetry.rearTireCompoundName.str = std::wstring(converter.from_bytes(td.data.telemetry.rearTireCompoundName));
+			convertFrom8bit(td.data.telemetry.frontTireCompoundName, &sd->telemetry.frontTireCompoundName.str);
+			convertFrom8bit(td.data.telemetry.rearTireCompoundName, &sd->telemetry.rearTireCompoundName.str);
 
 			slowFetched();
 		}
@@ -149,8 +146,9 @@ bool ConnectorRF::read()
 			// scoring
 			for (int i = 0; i < sd->session.numCars.lint; i++)
 			{
-				sd->scoring[i].vehicleName.str = std::wstring(converter.from_bytes(td.data.scoring[i].vehicleName));
-				sd->scoring[i].driverName.str = std::wstring(converter.from_bytes(td.data.scoring[i].driverName));
+				convertFrom8bit(td.data.scoring[i].vehicleName, &sd->scoring[i].vehicleName.str);
+				convertFrom8bit(td.data.scoring[i].driverName, &sd->scoring[i].driverName.str);
+
 				sd->scoring[i].place.lint = td.data.scoring[i].place;
 				sd->scoring[i].finishStatus.lint = td.data.scoring[i].finishStatus;
 				switch (td.data.scoring[i].finishStatus)
@@ -188,7 +186,7 @@ bool ConnectorRF::read()
 				sd->scoring[i].numPitstops.lint = td.data.scoring[i].numPitstops;
 				sd->scoring[i].numPenalties.lint = td.data.scoring[i].numPenalties;
 				sd->scoring[i].control.lint = td.data.scoring[i].control;
-				sd->scoring[i].vehicleClass.str = std::wstring(converter.from_bytes(td.data.scoring[i].vehicleClass));
+				convertFrom8bit(td.data.scoring[i].vehicleClass, &sd->scoring[i].vehicleClass.str);
 				sd->scoring[i].inPits.bl = td.data.scoring[i].inPits;
 				sd->scoring[i].isPlayer.bl = td.data.scoring[i].isPlayer;
 				if (td.data.scoring[i].isPlayer)
@@ -309,13 +307,18 @@ bool ConnectorRF::read()
 			}
 			if (rfVersion == 2)
 			{
-				if ((int)td.data.event.sectorFlag[sd->ownCar->currentSector.lint-1] == 1)
-					sd->telemetry.flagShown.str = std::wstring(L"yellow");
-				else
+				// During launch of rFactor, event is valid but telemetry not yet
+				if (sd->ownCar != NULL)
 				{
-					sd->telemetry.flagShown.str = std::wstring(L"");
-					if (sd->ownCar->primaryFlag.lint == 6)
-						sd->telemetry.flagShown.str = std::wstring(L"blue");
+					if ((int)td.data.event.sectorFlag[sd->ownCar->currentSector.lint - 1] == 1)
+						sd->telemetry.flagShown.str = std::wstring(L"yellow");
+					else
+					{
+						sd->telemetry.flagShown.str = std::wstring(L"");
+						if (sd->ownCar->primaryFlag.lint == 6)
+							sd->telemetry.flagShown.str = std::wstring(L"blue");
+					}
+
 				}
 			}
 
