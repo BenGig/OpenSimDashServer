@@ -154,9 +154,7 @@ public:
 	Car();
 
 	SimDataFloating maxRPM = SimDataFloating(L"maxRPM", 0);
-	SimDataFloating fuel = SimDataFloating(L"fuel", 0);
-	SimDataInteger gear = SimDataInteger(L"gear", 0);
-	SimDataFloating engineRPM = SimDataFloating(L"engineRPM", 0);
+	SimDataString gear = SimDataString(L"gear", L"");
 	SimDataFloating speed = SimDataFloating(L"speed", 0);
 
 	SimDataFloating unfilteredThrottle = SimDataFloating(L"unfilteredThrottle", 0);
@@ -210,7 +208,6 @@ public:
 	SimDataInteger maxGears = SimDataInteger(L"maxGears", 0);       // maximum forward gears
 	SimDataInteger frontTireCompoundIndex = SimDataInteger(L"frontTireCompoundIndex", 0);   // index within brand
 	SimDataInteger rearTireCompoundIndex = SimDataInteger(L"rearTireCompoundIndex", 0);    // index within brand
-	SimDataFloating fuelCapacity = SimDataFloating(L"fuelCapacity", 0);          // capacity in liters
 	SimDataInteger frontFlapActivated = SimDataInteger(L"frontFlapActivated", 0);       // whether front flap is activated
 	SimDataInteger rearFlapActivated = SimDataInteger(L"rearFlapActivated", 0);        // whether rear flap is activated
 	SimDataInteger rearFlapLegalStatus = SimDataInteger(L"rearFlapLegalStatus", 0);      // 0=disallowed, 1=criteria detected but not allowed quite yet, 2=allowed
@@ -222,6 +219,10 @@ public:
 	SimDataFloating rearBrakeBias = SimDataFloating(L"rearBrakeBias", 0);                   // fraction of brakes on rear
 	SimDataFloating turboBoostPressure = SimDataFloating(L"turboBoostPressure", 0);              // current turbo boost pressure if available
 	SimDataString flagShown = SimDataString(L"flagShown", L"");
+
+	// Values with references to other values (additional relative output)
+	SimDataFloating fuel = SimDataFloating(L"fuel", 0);
+	SimDataFloating engineRPM = SimDataFloating(L"engineRPM", 0);
 };
 
 class SimData {

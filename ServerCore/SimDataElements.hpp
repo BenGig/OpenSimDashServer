@@ -7,8 +7,8 @@
 class SimDataElement
 {
 public:
-	//SimDataElement() : label(std::wstring(L"unnamed")) { Register(); };
-//	SimDataElement();
+	SimDataElement(std::wstring name);
+	SimDataElement();
 
 	std::wstring label;
 	
@@ -26,6 +26,9 @@ private:
 class SimDataNumber : public SimDataElement
 {
 public:
+	SimDataNumber() {};
+	SimDataNumber(std::wstring name);
+
 	std::wstring json();
 };
 
@@ -63,7 +66,6 @@ public:
 
 	std::wstring toString();
 };
-
 
 // Time, a floating number with particular output
 class SimDataTime : public SimDataFloating

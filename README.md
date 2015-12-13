@@ -11,7 +11,7 @@ Open telemetry and scoring server for racing simulations, beginning with rFactor
 ## Javascript
 
  * sprintf (BSD) https://github.com/alexei/sprintf.js
- * jquery (MIT) https://jquery.org/
+ * jQuery (MIT) https://jquery.org/
  * EventDispatcher (MIT) https://github.com/mrdoob/eventdispatcher.js
  * paperjs (MIT) http://paperjs.org/
 

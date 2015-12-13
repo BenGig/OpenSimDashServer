@@ -126,7 +126,6 @@ bool ConnectorRF::read()
 			sd->event.currentTime.flt = td.data.event.currentTime;
 
 			sd->telemetry.maxGears.lint = td.data.telemetry.maxGears;
-			sd->telemetry.fuelCapacity.flt = td.data.telemetry.fuelCapacity;
 			convertFrom8bit(td.data.telemetry.frontTireCompoundName, &sd->telemetry.frontTireCompoundName.str);
 			convertFrom8bit(td.data.telemetry.rearTireCompoundName, &sd->telemetry.rearTireCompoundName.str);
 
@@ -252,7 +251,10 @@ bool ConnectorRF::read()
 			}
 			sd->telemetry.maxRPM.flt = td.data.telemetry.engineMaxRPM;
 			sd->telemetry.fuel.flt = td.data.telemetry.fuel;
-			sd->telemetry.gear.lint = td.data.telemetry.gear;
+			if (td.data.telemetry.gear < 0)
+				sd->telemetry.gear.str = L"R";
+			else
+				sd->telemetry.gear.str = std::to_wstring(td.data.telemetry.gear);
 			sd->telemetry.engineRPM.flt = td.data.telemetry.engineRPM;
 			sd->telemetry.speed.flt = 3.6 * sqrt(pow(td.data.telemetry.localVel.x, 2) + pow(td.data.telemetry.localVel.y, 2) + pow(td.data.telemetry.localVel.z, 2));
 

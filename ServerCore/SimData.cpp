@@ -26,7 +26,9 @@ std::wstring * SimData::eventJson(std::wstring * simName)
 	raceevent->append(event.offPathWetness.json()); raceevent->append(L",");
 	raceevent->append(telemetry.flagShown.json()); raceevent->append(L",");
 	raceevent->append(event.inRealtime.json()); raceevent->append(L",");
-	raceevent->append(event.currentTime.json());
+	raceevent->append(event.currentTime.json()); raceevent->append(L",");
+	raceevent->append(telemetry.maxFuel.json()); raceevent->append(L",");
+	raceevent->append(telemetry.maxRPM.json()); raceevent->append(L",");
 	raceevent->append(L"}");
 	return raceevent;
 }
@@ -178,7 +180,6 @@ Car::Car()
 	maxGears.registerMe();
 	frontTireCompoundIndex.registerMe();
 	rearTireCompoundIndex.registerMe();
-	fuelCapacity.registerMe();
 	frontFlapActivated.registerMe();
 	rearFlapActivated.registerMe();
 	rearFlapLegalStatus.registerMe();

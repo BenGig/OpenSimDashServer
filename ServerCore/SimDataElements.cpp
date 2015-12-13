@@ -4,6 +4,16 @@
 
 SimDataElementsManager sdem;
 
+SimDataElement::SimDataElement()
+{
+	label = std::wstring(L"unnamed");
+}
+
+SimDataElement::SimDataElement(std::wstring name)
+{
+	label = name;
+}
+
 void SimDataElement::registerMe()
 {
 	sdem.registerElement(this);
@@ -17,13 +27,13 @@ std::wstring SimDataElement::json()
 // Bool type
 
 SimDataBool::SimDataBool()
+	: SimDataElement()
 {
-	label = std::wstring(L"unnamed");
 	bl = false;
 }
 SimDataBool::SimDataBool(std::wstring name, bool isTrue)
+	: SimDataElement(name)
 {
-	label = name;
 	bl = isTrue;
 }
 
@@ -54,6 +64,13 @@ std::wstring SimDataBool::json()
 	return buf;
 }
 
+// Numbers
+
+SimDataNumber::SimDataNumber(std::wstring name)
+	: SimDataElement(name)
+{
+}
+
 std::wstring SimDataNumber::json()
 {
 	return
@@ -66,12 +83,11 @@ std::wstring SimDataNumber::json()
 SimDataInteger::SimDataInteger()
 {
 	lint = 0;
-	label = std::wstring(L"unnamed");
 }
 SimDataInteger::SimDataInteger(std::wstring name, long l)
+	: SimDataNumber(name)
 {
 	lint = l;
-	label = name;
 }
 
 std::wstring SimDataInteger::toString()
@@ -81,15 +97,14 @@ std::wstring SimDataInteger::toString()
 // Floating point type data
 
 SimDataFloating::SimDataFloating()
+	: SimDataNumber()
 {
-	label = L"unnamed";
-	flt = 0;
 }
 
 
 SimDataFloating::SimDataFloating(std::wstring name, double f)
+	: SimDataNumber(name)
 {
-	label = name;
 	flt = f;
 }
 
@@ -97,8 +112,6 @@ std::wstring SimDataFloating::toString()
 {
 	return std::wstring(std::to_wstring(flt));
 }
-
-
 
 // Time, a floating number with particular output
 
