@@ -19,10 +19,10 @@ public:
 	WSRequest() {};
 	WSRequest(unsigned char msg[4], mg_connection * nc);
 
-	unsigned char clientId;
-	unsigned char command;
-	unsigned char argument;
-	unsigned char option;
+	unsigned int clientId;
+	unsigned int command;
+	unsigned int argument;
+	unsigned int option;
 
 private:
 
