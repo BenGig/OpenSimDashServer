@@ -40,7 +40,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		memcpy(buf, hm->uri.p, hm->uri.len);
 		if (strstr(buf, "event.json"))
 		{
-			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
+			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n");
 			switch (webserverSim) {
 			case SIM_RF:
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
@@ -53,7 +53,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		}
 		else if (strstr(buf, "scoring.json"))
 		{
-			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
+			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n");
 			switch (webserverSim) {
 			case SIM_RF:
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
@@ -66,7 +66,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		}
 		else if (strstr(buf, "dictionary.json"))
 		{
-			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
+			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n");
 			switch (webserverSim) {
 			case SIM_RF:
 				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
