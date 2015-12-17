@@ -113,6 +113,25 @@ std::wstring SimDataFloating::toString()
 	return std::wstring(std::to_wstring(flt));
 }
 
+SimDataFloatingLimited::SimDataFloatingLimited()
+	: SimDataFloating()
+{
+}
+SimDataFloatingLimited::SimDataFloatingLimited(std::wstring name, double f, double limit)
+	: SimDataFloating(name, f)
+{
+	max = limit;
+}
+
+std::wstring SimDataFloatingLimited::toString()
+{
+	return L"{\"cur\":" +
+		std::to_wstring(flt) +
+		L",\"max\":" +
+		std::to_wstring(max) +
+		L"}";
+}
+
 // Time, a floating number with particular output
 
 SimDataTime::SimDataTime(std::wstring name, double f)

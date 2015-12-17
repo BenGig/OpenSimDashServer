@@ -153,7 +153,8 @@ public:
 
 	Car();
 
-	SimDataFloating maxRPM = SimDataFloating(L"maxRPM", 0);
+//	max values are now combined with actual values
+//	SimDataFloating maxRPM = SimDataFloating(L"maxRPM", 0); 
 	SimDataString gear = SimDataString(L"gear", L"");
 	SimDataFloating speed = SimDataFloating(L"speed", 0);
 
@@ -184,7 +185,7 @@ public:
 	SimDataInteger lapsBehindLeader = SimDataInteger(L"lapsBehindLeader", 0);
 
 	// rF 2
-	SimDataFloating maxFuel = SimDataFloating(L"maxFuel", 0);						// rF2, AC
+//	SimDataFloating maxFuel = SimDataFloating(L"maxFuel", 0);						// rF2, AC
 	SimDataFloating filteredThrottle = SimDataFloating(L"filteredThrottle", 0);
 	SimDataFloating filteredBrake = SimDataFloating(L"filteredBrake", 0);
 	SimDataFloating filteredSteering = SimDataFloating(L"filteredSteering", 0);
@@ -221,8 +222,8 @@ public:
 	SimDataString flagShown = SimDataString(L"flagShown", L"");
 
 	// Values with references to other values (additional relative output)
-	SimDataFloating fuel = SimDataFloating(L"fuel", 0);
-	SimDataFloating engineRPM = SimDataFloating(L"engineRPM", 0);
+	SimDataFloatingLimited fuel = SimDataFloatingLimited(L"fuel", 0, -1);
+	SimDataFloatingLimited engineRPM = SimDataFloatingLimited(L"engineRPM", 0, -1);
 };
 
 class SimData {

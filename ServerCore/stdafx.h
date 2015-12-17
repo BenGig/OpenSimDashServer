@@ -34,7 +34,7 @@
 #include "Connector.hpp"
 #include "ConnectorRF.hpp"
 #include "RetrieverThread.hpp"
-#include "SimRacingToolsAdapter.hpp"
+//#include "SimRacingToolsAdapter.hpp"
 #include "LiveItemRegistry.hpp"
 #include "WSProtocol.hpp"
 

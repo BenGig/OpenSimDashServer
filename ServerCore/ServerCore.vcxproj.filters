@@ -89,9 +89,6 @@
     <ClCompile Include="WebServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SimRacingToolsAdapter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LiveItemRegistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

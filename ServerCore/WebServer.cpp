@@ -78,6 +78,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			mg_send_http_chunk(nc, "", 0);
 		}
 
+/*
 		// TODO: remove the rest
 		else if (strstr(buf, "json1"))
 		{
@@ -119,6 +120,8 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 			}
 			mg_send_http_chunk(nc, "", 0);
 		}
+		*/
+
 		else
 		{
 			mg_serve_http(nc, hm, server_opts); // serve file from disk

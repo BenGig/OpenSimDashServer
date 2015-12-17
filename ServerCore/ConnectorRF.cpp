@@ -249,13 +249,18 @@ bool ConnectorRF::read()
 					sd->telemetry.wheels[i].tireTempOutside.flt = td.data.telemetry.wheel[i].temperature[0] - 273.16;
 				}
 			}
-			sd->telemetry.maxRPM.flt = td.data.telemetry.engineMaxRPM;
+//			sd->telemetry.maxRPM.flt = td.data.telemetry.engineMaxRPM;
 			sd->telemetry.fuel.flt = td.data.telemetry.fuel;
+			if (rfVersion == 2)
+				sd->telemetry.fuel.max = td.data.telemetry.fuelCapacity;
+
 			if (td.data.telemetry.gear < 0)
 				sd->telemetry.gear.str = L"R";
 			else
 				sd->telemetry.gear.str = std::to_wstring(td.data.telemetry.gear);
+
 			sd->telemetry.engineRPM.flt = td.data.telemetry.engineRPM;
+			sd->telemetry.engineRPM.max = td.data.telemetry.engineMaxRPM;
 			sd->telemetry.speed.flt = 3.6 * sqrt(pow(td.data.telemetry.localVel.x, 2) + pow(td.data.telemetry.localVel.y, 2) + pow(td.data.telemetry.localVel.z, 2));
 
 			sd->telemetry.unfilteredThrottle.flt = td.data.telemetry.unfilteredThrottle;

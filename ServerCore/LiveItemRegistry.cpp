@@ -6,6 +6,15 @@ bool LiveItem::registerFor(int id, LiveItemRegistry * registry)
 	source = sdem.lookup(id);
 	if (source)
 	{
+		// already registered?
+		for (int i = 0; i < registry->items.size(); i++)
+		{
+			LiveItem * li = registry->items.at(i);
+			if (li->sdem_id == id)
+				return true;
+
+		}
+
 		sdem_id = id;
 		container = registry;
 		storedJSON = std::wstring(L"");

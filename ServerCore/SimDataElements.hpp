@@ -67,6 +67,18 @@ public:
 	std::wstring toString();
 };
 
+// Floating points with a maximum value (i.e. RPM, fuel)
+class SimDataFloatingLimited : public SimDataFloating
+{
+public:
+	SimDataFloatingLimited();
+	SimDataFloatingLimited(std::wstring label, double value, double limit);
+
+	double flt, max;
+
+	std::wstring toString();
+};
+
 // Time, a floating number with particular output
 class SimDataTime : public SimDataFloating
 {
