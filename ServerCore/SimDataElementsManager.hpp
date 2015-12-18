@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-#define MAX_ELEMENTS 1000 // Size of lookup table for SimDataElementsManager
+#define MAX_ELEMENTS 2000 // Size of lookup table for SimDataElementsManager
 
 // Track and provide lookup access to a list of SimDataElements
 class SimDataElementsManager

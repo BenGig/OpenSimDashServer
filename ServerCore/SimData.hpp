@@ -53,6 +53,8 @@ public:
 class Driver
 {
 public:
+	void registerDriver(); // register OWN car only to data dictionary for websockets
+
 	SimDataString vehicleName = SimDataString(L"vehicleName", L"");
 	SimDataString driverName = SimDataString(L"driverName", L"");
 	SimDataInteger place = SimDataInteger(L"place", 0);
@@ -232,6 +234,7 @@ public:
 	Session session;
 	Car telemetry;
 	Driver scoring[MAX_GRID];
+
 	Driver * ownCar;
 
 	SimDataElementsManager * elementRegistry;

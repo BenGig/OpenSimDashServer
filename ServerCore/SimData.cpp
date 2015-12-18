@@ -27,8 +27,6 @@ std::wstring * SimData::eventJson(std::wstring * simName)
 	raceevent->append(telemetry.flagShown.json()); raceevent->append(L",");
 	raceevent->append(event.inRealtime.json()); raceevent->append(L",");
 	raceevent->append(event.currentTime.json());
-	// raceevent->append(telemetry.maxFuel.json()); raceevent->append(L",");
-	// raceevent->append(telemetry.maxRPM.json()); raceevent->append(L",");
 	raceevent->append(L"}");
 	return raceevent;
 }
@@ -127,7 +125,42 @@ Session::Session()
 	startLight.registerMe();
 }
 
-
+void Driver::registerDriver()
+{
+	vehicleName.registerMe();
+	place.registerMe();
+	finishStatus.registerMe();
+	finishStatusString.registerMe();
+	lastTime.registerMe();
+	bestTime.registerMe();
+	lapNumber.registerMe();
+	lapStartTime.registerMe();
+	currentTime.registerMe();
+	bestSector1.registerMe();
+	bestSector2.registerMe();
+	lastSector1.registerMe();
+	lastSector2.registerMe();
+	curSector1.registerMe();
+	curSector2.registerMe();
+	timeBehindNext.registerMe();
+	lapsBehindNext.registerMe();
+	timeBehindLeader.registerMe();
+	lapsBehindLeader.registerMe();
+	numPitstops.registerMe();
+	numPenalties.registerMe();
+	control.registerMe();
+	vehicleClass.registerMe();
+	inPits.registerMe();
+	pitState.registerMe();
+	isPlayer.registerMe();
+	currentSector.registerMe();
+	position.registerMe();
+	velocity.registerMe();
+	accel.registerMe();
+	headlights.registerMe();
+	qualification.registerMe();
+	primaryFlag.registerMe();
+}
 
 Car::Car()
 {	
@@ -136,7 +169,6 @@ Car::Car()
 	wheels[2].setPosition(L"RL");
 	wheels[3].setPosition(L"RR");
 
-//	maxRPM.registerMe();
 	fuel.registerMe();
 	gear.registerMe();
 	engineRPM.registerMe();
@@ -161,7 +193,6 @@ Car::Car()
 	lapsBehindNext.registerMe();
 	timeBehindLeader.registerMe();
 	lapsBehindLeader.registerMe();
-//	maxFuel.registerMe();
 	filteredThrottle.registerMe();
 	filteredBrake.registerMe();
 	filteredSteering.registerMe();

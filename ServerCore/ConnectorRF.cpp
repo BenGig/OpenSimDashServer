@@ -188,8 +188,10 @@ bool ConnectorRF::read()
 				convertFrom8bit(td.data.scoring[i].vehicleClass, &sd->scoring[i].vehicleClass.str);
 				sd->scoring[i].inPits.bl = td.data.scoring[i].inPits;
 				sd->scoring[i].isPlayer.bl = td.data.scoring[i].isPlayer;
-				if (td.data.scoring[i].isPlayer)
+				if (td.data.scoring[i].isPlayer) {
 					sd->ownCar = &sd->scoring[i];
+					sd->ownCar->registerDriver();
+				}
 				sd->scoring[i].pitState.lint = td.data.scoring[i].pitState;
 
 				if (td.data.scoring[i].sector == 0)
