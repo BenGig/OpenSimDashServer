@@ -186,7 +186,9 @@ void OpenDashPlugin::UpdateTelemetry(const TelemInfoV2 &info)
 		data.telemetry.wheel[i].flat = info.mWheel[i].mFlat;
 		data.telemetry.wheel[i].gripFract = info.mWheel[i].mGripFract;
 		data.telemetry.wheel[i].pressure = info.mWheel[i].mPressure;
-		memcpy(data.telemetry.wheel[i].temperature, info.mWheel[i].mTemperature, sizeof(info.mWheel[i].mTemperature));
+		data.telemetry.wheel[i].temperature[0] = info.mWheel[i].mTemperature[0];
+		data.telemetry.wheel[i].temperature[1] = info.mWheel[i].mTemperature[1];
+		data.telemetry.wheel[i].temperature[2] = info.mWheel[i].mTemperature[2];
 		data.telemetry.wheel[i].tireLoad = info.mWheel[i].mTireLoad;
 		data.telemetry.wheel[i].wear = info.mWheel[i].mWear;
 		data.telemetry.wheel[i].rotation = info.mWheel[i].mRotation;

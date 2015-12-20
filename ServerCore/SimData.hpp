@@ -114,7 +114,7 @@ public:
 	SimDataFloating brakeTemp = SimDataFloating(L"brakeTemp", 0);			// Celsius
 	SimDataFloating wheelRotation = SimDataFloating(L"wheelRotation", 0);			// radians/sec
 	SimDataFloating suspensionDeflection = SimDataFloating(L"suspensionDeflection", 0); // meters
-	SimDataFloating tempAvg = SimDataFloating(L"tempAvg", 0);				// rough average of temperature samples from carcass (Kelvin)
+	SimDataFloating tempAvg = SimDataFloating(L"tempAvg", 0);				// rough average of temperature samples from carcass
 
 	SimDataFloating camber = SimDataFloating(L"camber", 0);								// AC, rF2
 																						// rF2: radians (positive is left for left-side wheels, right for right-side wheels)
@@ -141,7 +141,7 @@ public:
 	SimDataFloating verticalTireDeflection = SimDataFloating(L"verticalTireDeflection", 0);// how much is tire deflected from its (speed-sensitive) radius
 	SimDataFloating wheelYLocation = SimDataFloating(L"wheelYLocation", 0);        // wheel's y location relative to vehicle y location
 	SimDataFloating toe = SimDataFloating(L"toe", 0);                   // current toe angle w.r.t. the vehicle
-	SimDataFloating tireInnerLayerInnerTemp = SimDataFloating(L"tireInnerLayerInnerTemp", 0); // rough average of temperature samples from innermost layer of rubber (before carcass) (Kelvin)
+	SimDataFloating tireInnerLayerInnerTemp = SimDataFloating(L"tireInnerLayerInnerTemp", 0); // rough average of temperature samples from innermost layer of rubber (before carcass)
 	SimDataFloating tireInnerLayerMidTemp = SimDataFloating(L"tireInnerLayerMidTemp", 0);
 	SimDataFloating tireInnerLayerOuterTemp = SimDataFloating(L"tireInnerLayerOuterTemp", 0);
 
