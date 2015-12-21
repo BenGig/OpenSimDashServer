@@ -264,6 +264,9 @@ bool ConnectorRF::read()
 			sd->telemetry.engineRPM.flt = td.data.telemetry.engineRPM;
 			sd->telemetry.engineRPM.max = td.data.telemetry.engineMaxRPM;
 			sd->telemetry.speed.flt = 3.6 * sqrt(pow(td.data.telemetry.localVel.x, 2) + pow(td.data.telemetry.localVel.y, 2) + pow(td.data.telemetry.localVel.z, 2));
+			sd->telemetry.overheating.bl = td.data.telemetry.overheating;
+			sd->telemetry.waterTemp.flt = td.data.telemetry.engineWaterTemp;
+			sd->telemetry.oilTemp.flt = td.data.telemetry.engineOilTemp;
 
 			sd->telemetry.unfilteredThrottle.flt = td.data.telemetry.unfilteredThrottle;
 			sd->telemetry.unfilteredBrake.flt = td.data.telemetry.unfilteredBrake;

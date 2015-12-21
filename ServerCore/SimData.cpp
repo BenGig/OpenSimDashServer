@@ -221,6 +221,9 @@ Car::Car()
 	antiStallActivated.registerMe();
 	rearBrakeBias.registerMe();
 	turboBoostPressure.registerMe();
+	overheating.registerMe();
+	oilTemp.registerMe();
+	waterTemp.registerMe();
 }
 
 Wheel::Wheel()

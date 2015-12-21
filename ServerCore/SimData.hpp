@@ -207,6 +207,10 @@ public:
 	SimDataFloating engineTorque = SimDataFloating(L"tireInnerLayerOuterTemp", 0);          // current engine torque (including additive torque)
 	SimDataBool headlights = SimDataBool(L"headlights", false);
 
+	SimDataBool overheating = SimDataBool(L"overheating", false);
+	SimDataFloating waterTemp = SimDataFloating(L"waterTemp", 0);
+	SimDataFloating oilTemp = SimDataFloating(L"oilTemp", 0);
+
 	SimDataInteger speedLimiter = SimDataInteger(L"speedLimiter", 0);   // whether speed limiter is on
 	SimDataInteger maxGears = SimDataInteger(L"maxGears", 0);       // maximum forward gears
 	SimDataInteger frontTireCompoundIndex = SimDataInteger(L"frontTireCompoundIndex", 0);   // index within brand
