@@ -231,6 +231,7 @@ bool ConnectorRF::read()
 				sd->telemetry.wheels[i].tirePressure.flt = td.data.telemetry.wheel[i].pressure;
 				sd->telemetry.wheels[i].tireWear.flt = td.data.telemetry.wheel[i].wear;
 				sd->telemetry.wheels[i].wheelRotation.flt = td.data.telemetry.wheel[i].rotation;
+				sd->telemetry.wheels[i].tempAvg.flt = td.data.telemetry.wheel[i].tireCarcassTemperature - 273.16;
 
 				if (i == 1 || i == 3)
 				{
