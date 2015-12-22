@@ -10,6 +10,7 @@ class Event
 public:
 	Event();
 
+	SimDataString simName = SimDataString(L"simName", L"");
 	SimDataBool raceOver = SimDataBool(L"raceOver", false);
 	SimDataString trackName = SimDataString(L"trackName", L""); 
 	SimDataString driverName = SimDataString(L"driverName", L"");
@@ -72,9 +73,9 @@ public:
 	SimDataTime curSector1 = SimDataTime(L"curSector1", 0);
 	SimDataTime curSector2 = SimDataTime(L"curSector2", 0);
 	SimDataTime timeBehindNext = SimDataTime(L"timeBehindNext", 0);
-	SimDataTime lapsBehindNext = SimDataTime(L"lapsBehindNext", 0);
+	SimDataInteger lapsBehindNext = SimDataInteger(L"lapsBehindNext", 0);
 	SimDataTime timeBehindLeader = SimDataTime(L"timeBehindLeader", 0);
-	SimDataTime lapsBehindLeader = SimDataTime(L"lapsBehindLeader", 0);
+	SimDataInteger lapsBehindLeader = SimDataInteger(L"lapsBehindLeader", 0);
 	SimDataInteger numPitstops = SimDataInteger(L"numPitStops", 0);
 	SimDataInteger numPenalties = SimDataInteger(L"numPenalties", 0);
 	SimDataInteger control = SimDataInteger(L"control", 0);		// who's in control: -1=nobody (shouldn't get this), 0=local player, 1=local AI, 2=remote, 3=replay (shouldn't get this)
@@ -89,6 +90,11 @@ public:
 	SimDataInteger headlights = SimDataInteger(L"headlights", 0);
 	SimDataInteger qualification = SimDataInteger(L"qualification", 0);	
 	SimDataInteger primaryFlag = SimDataInteger(L"primaryFlag", 0);	// currently only 0=green or 6=blue
+
+	// calculated values
+	SimDataString gapPrevious = SimDataString(L"gapPrevious", L"");
+	SimDataString gapNext = SimDataString(L"gapNext", L"");
+
 };
 
 class Wheel
@@ -238,12 +244,15 @@ public:
 	Session session;
 	Car telemetry;
 	Driver scoring[MAX_GRID];
+//	std::vector<Driver> scoring;
 
 	Driver * ownCar;
 
 	SimDataElementsManager * elementRegistry;
 
 	void reset();
+	void sortScoring();
+	void deriveValues(); // calculate values derived from basic sim values
 	std::wstring * scoringJson();
 	std::wstring * eventJson(std::wstring * simName);
 	std::wstring * performanceJson();

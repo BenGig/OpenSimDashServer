@@ -4,6 +4,8 @@
 
 #define STRLEN 64	// current maximum length of sim provided strings
 
+std::wstring timeToString(double, bool);
+
 class SimDataElement
 {
 public:
@@ -85,8 +87,10 @@ class SimDataTime : public SimDataFloating
 public:
 	SimDataTime() {};
 	SimDataTime(std::wstring label, double);
+	SimDataTime(std::wstring label, double, bool omitLeadingZeros);
 
 	double flt;
+	bool omitLeadingZeros;
 	std::wstring toString();
 	std::wstring json();
 };
