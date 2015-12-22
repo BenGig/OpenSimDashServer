@@ -246,11 +246,12 @@ public:
 	Driver scoring[MAX_GRID];
 //	std::vector<Driver> scoring;
 
-	Driver * ownCar;
+	Driver ownCar;
 
 	SimDataElementsManager * elementRegistry;
 
 	void reset();
+	void markOwnCar();
 	void sortScoring();
 	void deriveValues(); // calculate values derived from basic sim values
 	std::wstring * scoringJson();

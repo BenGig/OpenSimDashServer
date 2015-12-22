@@ -1,8 +1,92 @@
 #include "stdafx.h"
 
+SimData::SimData()
+{
+	elementRegistry = &sdem;
+}
+
 void SimData::reset()
 {
 	sdem.reset();
+}
+
+void SimData::markOwnCar()
+{
+	for (int i = 0; i < session.numCars.lint; i++)
+	{
+		if (scoring[i].isPlayer.bl) {
+			memcpy(&ownCar, &scoring[i], sizeof(Driver));
+			ownCar.registerDriver();
+			return;
+		}
+	}
+
+}
+
+int compareScoring(const void * par1, const void * par2)
+{
+	Driver * sc1 = (Driver *)par1; Driver * sc2 = (Driver *)par2;
+	if (sc1->place.lint > sc2->place.lint)
+		return 1;
+	else
+		return -1;
+	// no equality in ranking
+}
+
+void SimData::sortScoring()
+{
+	std::qsort(&scoring, session.numCars.lint, sizeof(Driver), compareScoring);
+}
+
+std::wstring formatGap(double gap, long myLaps, long otherLaps)
+{
+	if (myLaps == otherLaps)
+		return timeToString(gap, true);
+
+	std::wstring str = std::to_wstring(abs(myLaps - otherLaps));
+	str.append(L" Lap");
+	if (abs(myLaps - otherLaps) > 1)
+		str.append(L"s");
+	return str;
+}
+
+void SimData::deriveValues()
+{
+	int i = 0;
+	while (! scoring[i].isPlayer.bl)
+		i += 1;
+
+	// Gaps to previous and next. Compose complete string (time or lap, lap or laps)
+	if (i == 0)
+	{
+		// we are first
+		ownCar.gapPrevious.str = L"-";
+		if (event.sessionString.str == L"Race")
+			ownCar.gapNext.str = formatGap(scoring[i + 1].timeBehindNext.flt, ownCar.lapNumber.lint, scoring[i + 1].lapNumber.lint);
+		else
+			ownCar.gapNext.str = timeToString(abs(ownCar.bestTime.flt - scoring[i + 1].bestTime.flt), true);
+		return;
+	}
+	if (i == session.numCars.lint - 1)
+	{
+		// we are last
+		if (event.sessionString.str == L"Race")
+			ownCar.gapPrevious.str = formatGap(ownCar.timeBehindNext.flt, scoring[i - 1].lapNumber.lint, ownCar.lapNumber.lint);
+		else
+			ownCar.gapPrevious.str = timeToString(abs(ownCar.bestTime.flt - scoring[i - 1].bestTime.flt), true);
+		ownCar.gapNext.str = L"-";
+		return;
+	}
+	if (event.sessionString.str == L"Race")
+	{
+		ownCar.gapPrevious.str = formatGap(ownCar.timeBehindNext.flt, scoring[i - 1].lapNumber.lint, ownCar.lapNumber.lint);
+		ownCar.gapNext.str = formatGap(scoring[i + 1].timeBehindNext.flt, ownCar.lapNumber.lint, scoring[i + 1].lapNumber.lint);
+	}
+	else
+	{
+		ownCar.gapPrevious.str = timeToString(abs(ownCar.bestTime.flt - scoring[i - 1].bestTime.flt), true);
+		ownCar.gapNext.str = timeToString(abs(ownCar.bestTime.flt - scoring[i + 1].bestTime.flt), true);
+	}
 }
 
 std::wstring * SimData::eventJson(std::wstring * simName)
@@ -86,74 +170,6 @@ std::wstring * SimData::scoringJson()
 	return score;
 }
 
-int compareScoring(const void * par1, const void * par2)
-{
-	Driver * sc1 = (Driver *)par1; Driver * sc2 = (Driver *)par2;
-	if (sc1->place.lint > sc2->place.lint)
-		return 1;
-	else
-		return -1;
-	// no equality in ranking
-}
-
-void SimData::sortScoring()
-{
-	std::qsort(&scoring, session.numCars.lint, sizeof(Driver), compareScoring);
-
-	for (int i = 0; i < session.numCars.lint; i++)
-	{
-		if (scoring[i].isPlayer.bl) {
-			ownCar = &scoring[i];
-			ownCar->registerDriver();
-			return;
-		}
-	}
-
-}
-
-std::wstring formatGap(double gap, long myLaps, long otherLaps)
-{
-	if (myLaps == otherLaps)
-		return timeToString(gap, true);
-
-	std::wstring str = std::to_wstring(abs(myLaps - otherLaps));
-	str.append(L" Lap");
-	if (abs(myLaps - otherLaps) > 1)
-		str.append(L"s");
-	return str;
-}
-
-void SimData::deriveValues()
-{
-	int i = 0;
-	double gap = 0;
-	while (ownCar != &scoring[i])
-		i += 1;
-
-	// Gaps to previous and next. Compose complete string (time or lap, lap or laps)
-	if (i == 0)
-	{
-		// we are first
-		ownCar->gapPrevious.str = L"-";
-		ownCar->gapNext.str = formatGap(scoring[i + 1].timeBehindNext.flt, ownCar->lapNumber.lint, scoring[i + 1].lapNumber.lint);
-		return;
-	}
-	if (i == session.numCars.lint - 1)
-	{
-		// we are last
-		ownCar->gapPrevious.str = formatGap(ownCar->timeBehindNext.flt, scoring[i-1].lapNumber.lint, ownCar->lapNumber.lint);
-		ownCar->gapNext.str = L"-";
-		return;
-	}
-	ownCar->gapPrevious.str = formatGap(ownCar->timeBehindNext.flt, scoring[i - 1].lapNumber.lint, ownCar->lapNumber.lint);
-	ownCar->gapNext.str = formatGap(scoring[i + 1].timeBehindNext.flt, ownCar->lapNumber.lint, scoring[i + 1].lapNumber.lint);
-}
-
-SimData::SimData()
-{
-	elementRegistry = &sdem;
-}
-
 Event::Event()
 {
 	simName.registerMe();
@@ -192,6 +208,7 @@ Session::Session()
 void Driver::registerDriver()
 {
 	vehicleName.registerMe();
+	driverName.registerMe();
 	place.registerMe();
 	finishStatus.registerMe();
 	finishStatusString.registerMe();
