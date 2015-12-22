@@ -134,37 +134,49 @@ std::wstring SimDataFloatingLimited::toString()
 
 // Time, a floating number with particular output
 
+// Formatter from floating point time to string
+std::wstring timeToString(double time, bool omitLeadingZeros)
+{
+	if (time < 0)
+	{
+		return std::wstring(L"0.000");
+	}
+#pragma warning(push)
+#pragma warning(disable:4244)
+	long hours = time / 3600;
+	double num_hours = time - (3600 * hours);
+	int minutes = num_hours / 60;
+#pragma warning(pop)
+	double seconds_f = num_hours - (minutes * 60);
+
+	wchar_t buf[30];
+	if ((hours > 0 && minutes > 0) || ! omitLeadingZeros)
+		swprintf(buf, sizeof(buf), L"%d:%02d:%02.3f", hours, minutes, seconds_f);
+	else if (hours == 0 && minutes > 0)
+		swprintf(buf, sizeof(buf), L"%2d:%02.3f", minutes, seconds_f);
+	else if (hours == 0 && minutes == 0)
+		swprintf(buf, sizeof(buf), L"%02.3f", seconds_f);
+	return std::wstring(buf);
+}
+
 SimDataTime::SimDataTime(std::wstring name, double f)
 {
 	label = name;
 	flt = f;
+	omitLeadingZeros = true;
+}
+SimDataTime::SimDataTime(std::wstring name, double f, bool omitZeros)
+{
+	label = name;
+	flt = f;
+	omitLeadingZeros = omitZeros;
 }
 
 std::wstring SimDataTime::toString()
 {
-	if (flt < .0)
-		return std::wstring(L"0");
-#pragma warning(push)
-#pragma warning(disable:4244)
-	long hours = flt / 3600;
-	double no_hours = flt - (3600 * hours);
-	int minutes = no_hours / 60;
-#pragma warning(pop)
-	double seconds_f = no_hours - (minutes * 60);
-
-	if (hours > 0)
-		if (minutes < 10)
-			return std::wstring(std::to_wstring(hours) + L":0" + std::to_wstring(minutes) + L"" + std::to_wstring(seconds_f));
-		else
-			return std::wstring( std::to_wstring(hours) + L":" + std::to_wstring(minutes) + L"" + std::to_wstring(seconds_f));
-	else
-		if (minutes > 0)
-			if (seconds_f < 10)
-				return std::wstring(std::to_wstring(minutes) + L":0" + std::to_wstring(seconds_f));
-			else
-				return std::wstring(std::to_wstring(minutes) + L":" + std::to_wstring(seconds_f));
-		else
-			return std::wstring(std::to_wstring(seconds_f));
+	std::wstring str;
+	return timeToString(flt, omitLeadingZeros);
+	return str; 
 }
 
 std::wstring SimDataTime::json()

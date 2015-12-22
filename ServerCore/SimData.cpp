@@ -86,6 +86,69 @@ std::wstring * SimData::scoringJson()
 	return score;
 }
 
+int compareScoring(const void * par1, const void * par2)
+{
+	Driver * sc1 = (Driver *)par1; Driver * sc2 = (Driver *)par2;
+	if (sc1->place.lint > sc2->place.lint)
+		return 1;
+	else
+		return -1;
+	// no equality in ranking
+}
+
+void SimData::sortScoring()
+{
+	std::qsort(&scoring, session.numCars.lint, sizeof(Driver), compareScoring);
+
+	for (int i = 0; i < session.numCars.lint; i++)
+	{
+		if (scoring[i].isPlayer.bl) {
+			ownCar = &scoring[i];
+			ownCar->registerDriver();
+			return;
+		}
+	}
+
+}
+
+std::wstring formatGap(double gap, long myLaps, long otherLaps)
+{
+	if (myLaps == otherLaps)
+		return timeToString(gap, true);
+
+	std::wstring str = std::to_wstring(abs(myLaps - otherLaps));
+	str.append(L" Lap");
+	if (abs(myLaps - otherLaps) > 1)
+		str.append(L"s");
+	return str;
+}
+
+void SimData::deriveValues()
+{
+	int i = 0;
+	double gap = 0;
+	while (ownCar != &scoring[i])
+		i += 1;
+
+	// Gaps to previous and next. Compose complete string (time or lap, lap or laps)
+	if (i == 0)
+	{
+		// we are first
+		ownCar->gapPrevious.str = L"-";
+		ownCar->gapNext.str = formatGap(scoring[i + 1].timeBehindNext.flt, ownCar->lapNumber.lint, scoring[i + 1].lapNumber.lint);
+		return;
+	}
+	if (i == session.numCars.lint - 1)
+	{
+		// we are last
+		ownCar->gapPrevious.str = formatGap(ownCar->timeBehindNext.flt, scoring[i-1].lapNumber.lint, ownCar->lapNumber.lint);
+		ownCar->gapNext.str = L"-";
+		return;
+	}
+	ownCar->gapPrevious.str = formatGap(ownCar->timeBehindNext.flt, scoring[i - 1].lapNumber.lint, ownCar->lapNumber.lint);
+	ownCar->gapNext.str = formatGap(scoring[i + 1].timeBehindNext.flt, ownCar->lapNumber.lint, scoring[i + 1].lapNumber.lint);
+}
+
 SimData::SimData()
 {
 	elementRegistry = &sdem;
@@ -93,6 +156,7 @@ SimData::SimData()
 
 Event::Event()
 {
+	simName.registerMe();
 	trackName.registerMe();
 	driverName.registerMe();
 	numberOfLaps.registerMe();
@@ -144,6 +208,8 @@ void Driver::registerDriver()
 	curSector2.registerMe();
 	timeBehindNext.registerMe();
 	lapsBehindNext.registerMe();
+	gapPrevious.registerMe();
+	gapNext.registerMe();
 	timeBehindLeader.registerMe();
 	lapsBehindLeader.registerMe();
 	numPitstops.registerMe();

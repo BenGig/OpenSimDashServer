@@ -28,6 +28,7 @@ bool ConnectorRF::connect()
 		rfVersion = td.data.rFactorVersion;
 		if (rfVersion > 0)
 		{
+			sd->event.simName.str = std::wstring(L"rFactor " + std::to_wstring(rfVersion));
 			read();
 			return true;
 		}
@@ -52,6 +53,8 @@ int ConnectorRF::check()
 std::wstring * ConnectorRF::simName()
 {
 	return new std::wstring(L"rFactor " + std::to_wstring(rfVersion));
+	// might not be ready in time (written in receiver thread)
+	// return &sd->event.simName.str; 
 }
 void ConnectorRF::sessionToStr() {
 	if (rfVersion == 1) {
@@ -179,9 +182,9 @@ bool ConnectorRF::read()
 				sd->scoring[i].curSector1.flt = td.data.scoring[i].curSector1;
 				sd->scoring[i].curSector2.flt = td.data.scoring[i].curSector2;
 				sd->scoring[i].timeBehindNext.flt = td.data.scoring[i].timeBehindNext;
-				sd->scoring[i].lapsBehindNext.flt = td.data.scoring[i].lapsBehindNext;
+				sd->scoring[i].lapsBehindNext.lint = td.data.scoring[i].lapsBehindNext;
 				sd->scoring[i].timeBehindLeader.flt = td.data.scoring[i].timeBehindLeader;
-				sd->scoring[i].lapsBehindLeader.flt = td.data.scoring[i].lapsBehindLeader;
+				sd->scoring[i].lapsBehindLeader.lint = td.data.scoring[i].lapsBehindLeader;
 				sd->scoring[i].numPitstops.lint = td.data.scoring[i].numPitstops;
 				sd->scoring[i].numPenalties.lint = td.data.scoring[i].numPenalties;
 				sd->scoring[i].control.lint = td.data.scoring[i].control;
@@ -207,6 +210,8 @@ bool ConnectorRF::read()
 				sd->scoring[i].qualification.lint = td.data.scoring[i].qualification;
 				sd->scoring[i].primaryFlag.lint = td.data.scoring[i].primaryFlag;
 			}
+			// sort scoring according to standings
+			sd->sortScoring();
 
 			// telemetry
 			for (int i = 0; i < 4; i++)
@@ -336,6 +341,7 @@ bool ConnectorRF::read()
 			}
 
 		}
+		sd->deriveValues();
 		return true;
 	}
 	else
