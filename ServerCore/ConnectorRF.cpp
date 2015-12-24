@@ -133,6 +133,24 @@ bool ConnectorRF::read()
 			convertFrom8bit(td.data.telemetry.frontTireCompoundName, &sd->telemetry.frontTireCompoundName.str);
 			convertFrom8bit(td.data.telemetry.rearTireCompoundName, &sd->telemetry.rearTireCompoundName.str);
 
+			if (sd->ownCar != NULL)
+			{
+				// time or lap limited?
+				sd->event.durationLeft.str = L"";
+				if (sd->event.numberOfLaps.lint < 2147483647)
+				{	// lap limited
+					sd->event.durationLeft.str.append(L"Laps: ");
+					sd->event.durationLeft.str.append(std::to_wstring(sd->event.numberOfLaps.lint - sd->ownCar->lapNumber.lint));
+				}
+				if (sd->event.timeLeft.flt > -2147483647)
+				{	// time limited
+					if (sd->event.durationLeft.str.length() > 0)
+						sd->event.durationLeft.str.append(L" ");
+					sd->event.durationLeft.str.append(L"Time: ");
+					sd->event.durationLeft.str.append(timeToString(sd->event.timeLeft.flt, false));
+				}
+
+			}
 			slowFetched();
 		}
 		
@@ -192,6 +210,9 @@ bool ConnectorRF::read()
 				convertFrom8bit(td.data.scoring[i].vehicleClass, &sd->scoring[i].vehicleClass.str);
 				sd->scoring[i].inPits.bl = td.data.scoring[i].inPits;
 				sd->scoring[i].isPlayer.bl = td.data.scoring[i].isPlayer;
+				if (sd->scoring[i].isPlayer.bl)
+					sd->ownCar = &sd->scoring[i];
+
 				sd->scoring[i].pitState.lint = td.data.scoring[i].pitState;
 
 				if (td.data.scoring[i].sector == 0)
@@ -207,11 +228,8 @@ bool ConnectorRF::read()
 				sd->scoring[i].qualification.lint = td.data.scoring[i].qualification;
 				sd->scoring[i].primaryFlag.lint = td.data.scoring[i].primaryFlag;
 
-				// save own data, will move when array gets sorted
-				if (td.data.scoring[i].isPlayer) {
-					memcpy(&sd->ownCar, &sd->scoring[i], sizeof(Driver));
-				}
-
+				// Pointer to driver object for sorting
+				sd->ranking[i] = &sd->scoring[i];
 			}
 			// sort scoring according to standings
 			sd->sortScoring();
@@ -313,15 +331,15 @@ bool ConnectorRF::read()
 
 			if (rfVersion == 1)
 			{
-				if (td.data.event.sectorFlag[sd->ownCar.currentSector.lint] > 0)
+				if (td.data.event.sectorFlag[sd->ownCar->currentSector.lint] > 0)
 					sd->telemetry.flagShown.str = std::wstring(L"yellow");
-				else if (sd->ownCar.currentSector.lint == 3 && td.data.event.sectorFlag[0] > 0)
+				else if (sd->ownCar->currentSector.lint == 3 && td.data.event.sectorFlag[0] > 0)
 					sd->telemetry.flagShown.str = std::wstring(L"yellow");
 				else
 				{
 					sd->telemetry.flagShown.str = std::wstring(L""); 
 				
-					if (sd->ownCar.primaryFlag.lint == 6)
+					if (sd->ownCar->primaryFlag.lint == 6)
 						sd->telemetry.flagShown.str = std::wstring(L"blue");
 				}
 
@@ -331,12 +349,12 @@ bool ConnectorRF::read()
 				// During launch of rFactor, event is valid but telemetry not yet
 				if (td.data.event.numVehicles > 0)
 				{
-					if ((int)td.data.event.sectorFlag[sd->ownCar.currentSector.lint - 1] == 1)
+					if ((int)td.data.event.sectorFlag[sd->ownCar->currentSector.lint - 1] == 1)
 						sd->telemetry.flagShown.str = std::wstring(L"yellow");
 					else
 					{
 						sd->telemetry.flagShown.str = std::wstring(L"");
-						if (sd->ownCar.primaryFlag.lint == 6)
+						if (sd->ownCar->primaryFlag.lint == 6)
 							sd->telemetry.flagShown.str = std::wstring(L"blue");
 					}
 

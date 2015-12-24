@@ -138,9 +138,7 @@ std::wstring SimDataFloatingLimited::toString()
 std::wstring timeToString(double time, bool omitLeadingZeros)
 {
 	if (time < 0)
-	{
-		return std::wstring(L"0.000");
-	}
+		time = 0;
 #pragma warning(push)
 #pragma warning(disable:4244)
 	long hours = time / 3600;
@@ -154,7 +152,7 @@ std::wstring timeToString(double time, bool omitLeadingZeros)
 		swprintf(buf, sizeof(buf), L"%d:%02d:%02.3f", hours, minutes, seconds_f);
 	else if (hours == 0 && minutes > 0)
 		swprintf(buf, sizeof(buf), L"%2d:%02.3f", minutes, seconds_f);
-	else if (hours == 0 && minutes == 0)
+	else
 		swprintf(buf, sizeof(buf), L"%02.3f", seconds_f);
 	return std::wstring(buf);
 }
@@ -174,9 +172,7 @@ SimDataTime::SimDataTime(std::wstring name, double f, bool omitZeros)
 
 std::wstring SimDataTime::toString()
 {
-	std::wstring str;
 	return timeToString(flt, omitLeadingZeros);
-	return str; 
 }
 
 std::wstring SimDataTime::json()

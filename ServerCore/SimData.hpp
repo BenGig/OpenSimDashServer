@@ -22,6 +22,7 @@ public:
 	SimDataInteger sectorCount = SimDataInteger(L"sectorCount", 0); // AC only
 	SimDataTime endTime = SimDataTime(L"endTime", 0);
 	SimDataInteger gamePhase = SimDataInteger(L"gamePhase", 0);
+	SimDataString durationLeft = SimDataString(L"durationLeft", L""); // either lap or time or both
 
 	// rFactor
 	SimDataInteger numRedLights = SimDataInteger(L"numRedLights", 0);
@@ -244,9 +245,9 @@ public:
 	Session session;
 	Car telemetry;
 	Driver scoring[MAX_GRID];
-//	std::vector<Driver> scoring;
+	Driver * ranking[MAX_GRID];
 
-	Driver ownCar;
+	Driver * ownCar;
 
 	SimDataElementsManager * elementRegistry;
 

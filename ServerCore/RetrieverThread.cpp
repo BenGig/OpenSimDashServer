@@ -15,9 +15,10 @@ void SchedulerLaunch(void *pParam)
 	{
 	case SIM_RF:
 		crf = (ConnectorRF*)td->connector;
-		if (crf->connect())
+//		if (crf->connect())
+		if (true)
 		{
-			// Connect fetched data, so we can sleep
+			// Connect fetched data first, so we can sleep
 			Sleep(interval);
 			//WaitForSingleObject(hReadingMutex, INFINITE);
 

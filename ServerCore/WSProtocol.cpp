@@ -6,7 +6,7 @@ static std::map<int, WSSession*> sessions;
 static std::map<int, WSSession*>::iterator it;
 
 static bool transmit(struct mg_connection *nc, const char *msg, size_t len) {
-	char buf[500];
+	char buf[500]; memset(&buf, 0, 500);
 
 	if (nc->err == 0)
 	{

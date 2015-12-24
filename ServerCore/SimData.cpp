@@ -15,8 +15,7 @@ void SimData::markOwnCar()
 	for (int i = 0; i < session.numCars.lint; i++)
 	{
 		if (scoring[i].isPlayer.bl) {
-			memcpy(&ownCar, &scoring[i], sizeof(Driver));
-			ownCar.registerDriver();
+			ownCar->registerDriver();
 			return;
 		}
 	}
@@ -25,22 +24,25 @@ void SimData::markOwnCar()
 
 int compareScoring(const void * par1, const void * par2)
 {
-	Driver * sc1 = (Driver *)par1; Driver * sc2 = (Driver *)par2;
-	if (sc1->place.lint > sc2->place.lint)
+	// Sort array of pointers to Driver objects. Sort routine hands over
+	// pointers to array elements: pointer to pointer 
+	Driver ** sc1 = (Driver **)par1; Driver ** sc2 = (Driver **)par2;
+	Driver * s1 = *sc1; Driver * s2 = *sc2;
+	if (s1->place.lint > s2->place.lint)
 		return 1;
 	else
 		return -1;
-	// no equality in ranking
 }
 
 void SimData::sortScoring()
 {
-	std::qsort(&scoring, session.numCars.lint, sizeof(Driver), compareScoring);
+	std::qsort(&ranking, session.numCars.lint, sizeof(Driver*), compareScoring);
 }
 
+// Show time or laps, if lapped
 std::wstring formatGap(double gap, long myLaps, long otherLaps)
 {
-	if (myLaps == otherLaps)
+	if (abs(myLaps - otherLaps) <= 1)
 		return timeToString(gap, true);
 
 	std::wstring str = std::to_wstring(abs(myLaps - otherLaps));
@@ -50,42 +52,43 @@ std::wstring formatGap(double gap, long myLaps, long otherLaps)
 	return str;
 }
 
+// generally available values calculated based on raw values
 void SimData::deriveValues()
 {
 	int i = 0;
-	while (! scoring[i].isPlayer.bl)
-		i += 1;
+	while (!ranking[i]->isPlayer.bl)
+		i += 1; // our driver record
 
 	// Gaps to previous and next. Compose complete string (time or lap, lap or laps)
 	if (i == 0)
 	{
 		// we are first
-		ownCar.gapPrevious.str = L"-";
+		ownCar->gapPrevious.str = L"-";
 		if (event.sessionString.str == L"Race")
-			ownCar.gapNext.str = formatGap(scoring[i + 1].timeBehindNext.flt, ownCar.lapNumber.lint, scoring[i + 1].lapNumber.lint);
+			ownCar->gapNext.str = formatGap(ranking[i + 1]->timeBehindNext.flt, ownCar->lapNumber.lint, ranking[i + 1]->lapNumber.lint);
 		else
-			ownCar.gapNext.str = timeToString(abs(ownCar.bestTime.flt - scoring[i + 1].bestTime.flt), true);
+			ownCar->gapNext.str = timeToString(abs(ownCar->bestTime.flt - ranking[i + 1]->bestTime.flt), true);
 		return;
 	}
 	if (i == session.numCars.lint - 1)
 	{
 		// we are last
 		if (event.sessionString.str == L"Race")
-			ownCar.gapPrevious.str = formatGap(ownCar.timeBehindNext.flt, scoring[i - 1].lapNumber.lint, ownCar.lapNumber.lint);
+			ownCar->gapPrevious.str = formatGap(ownCar->timeBehindNext.flt, ranking[i - 1]->lapNumber.lint, ownCar->lapNumber.lint);
 		else
-			ownCar.gapPrevious.str = timeToString(abs(ownCar.bestTime.flt - scoring[i - 1].bestTime.flt), true);
-		ownCar.gapNext.str = L"-";
+			ownCar->gapPrevious.str = timeToString(abs(ownCar->bestTime.flt - ranking[i - 1]->bestTime.flt), true);
+		ownCar->gapNext.str = L"-";
 		return;
 	}
 	if (event.sessionString.str == L"Race")
 	{
-		ownCar.gapPrevious.str = formatGap(ownCar.timeBehindNext.flt, scoring[i - 1].lapNumber.lint, ownCar.lapNumber.lint);
-		ownCar.gapNext.str = formatGap(scoring[i + 1].timeBehindNext.flt, ownCar.lapNumber.lint, scoring[i + 1].lapNumber.lint);
+		ownCar->gapPrevious.str = formatGap(ownCar->timeBehindNext.flt, ranking[i - 1]->lapNumber.lint, ownCar->lapNumber.lint);
+		ownCar->gapNext.str = formatGap(ranking[i + 1]->timeBehindNext.flt, ownCar->lapNumber.lint, ranking[i + 1]->lapNumber.lint);
 	}
 	else
 	{
-		ownCar.gapPrevious.str = timeToString(abs(ownCar.bestTime.flt - scoring[i - 1].bestTime.flt), true);
-		ownCar.gapNext.str = timeToString(abs(ownCar.bestTime.flt - scoring[i + 1].bestTime.flt), true);
+		ownCar->gapPrevious.str = timeToString(abs(ownCar->bestTime.flt - ranking[i - 1]->bestTime.flt), true);
+		ownCar->gapNext.str = timeToString(abs(ownCar->bestTime.flt - ranking[i + 1]->bestTime.flt), true);
 	}
 }
 
@@ -110,6 +113,7 @@ std::wstring * SimData::eventJson(std::wstring * simName)
 	raceevent->append(event.offPathWetness.json()); raceevent->append(L",");
 	raceevent->append(telemetry.flagShown.json()); raceevent->append(L",");
 	raceevent->append(event.inRealtime.json()); raceevent->append(L",");
+	raceevent->append(event.durationLeft.json()); raceevent->append(L",");
 	raceevent->append(event.currentTime.json());
 	raceevent->append(L"}");
 	return raceevent;
@@ -193,6 +197,7 @@ Event::Event()
 	offPathWetness.registerMe();
 	inRealtime.registerMe();
 	currentTime.registerMe();
+	durationLeft.registerMe();
 }
 
 Session::Session()
