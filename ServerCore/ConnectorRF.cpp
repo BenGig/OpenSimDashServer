@@ -147,7 +147,7 @@ bool ConnectorRF::read()
 					if (sd->event.durationLeft.str.length() > 0)
 						sd->event.durationLeft.str.append(L" ");
 					sd->event.durationLeft.str.append(L"Time: ");
-					sd->event.durationLeft.str.append(timeToString(sd->event.timeLeft.flt, false));
+					sd->event.durationLeft.str.append(timeToString(sd->event.timeLeft.flt, false, true));
 				}
 
 			}
@@ -238,7 +238,7 @@ bool ConnectorRF::read()
 			for (int i = 0; i < 4; i++)
 			{
 				sd->telemetry.wheels[i].brakePressure.flt = td.data.telemetry.wheel[i].brakePressure;
-				sd->telemetry.wheels[i].brakeTemp.flt = td.data.telemetry.wheel[i].brakeTemp;
+				sd->telemetry.wheels[i].brakeTemp.flt = td.data.telemetry.wheel[i].brakeTemp - 273.16;
 				sd->telemetry.wheels[i].camber.flt = td.data.telemetry.wheel[i].camber;
 				sd->telemetry.wheels[i].detached.bl = td.data.telemetry.wheel[i].detached;
 				sd->telemetry.wheels[i].flat.bl = td.data.telemetry.wheel[i].flat;

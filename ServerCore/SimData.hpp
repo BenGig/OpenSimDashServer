@@ -17,10 +17,10 @@ public:
 	SimDataInteger numberOfLaps = SimDataInteger(L"numberOfLaps", 0);
 	SimDataInteger session = SimDataInteger(L"session", 0);
 	SimDataString sessionString = SimDataString(L"sessionString", L"");
-	SimDataTime currentTime = SimDataTime(L"currentTime", 0);
-	SimDataTime timeLeft = SimDataTime(L"timeLeft", 0);
+	SimDataTime currentTime = SimDataTime(L"currentTime", 0, false, true);
+	SimDataTime timeLeft = SimDataTime(L"timeLeft", 0, false, true);
 	SimDataInteger sectorCount = SimDataInteger(L"sectorCount", 0); // AC only
-	SimDataTime endTime = SimDataTime(L"endTime", 0);
+	SimDataTime endTime = SimDataTime(L"endTime", 0, false, true);
 	SimDataInteger gamePhase = SimDataInteger(L"gamePhase", 0);
 	SimDataString durationLeft = SimDataString(L"durationLeft", L""); // either lap or time or both
 

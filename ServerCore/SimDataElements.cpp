@@ -135,7 +135,7 @@ std::wstring SimDataFloatingLimited::toString()
 // Time, a floating number with particular output
 
 // Formatter from floating point time to string
-std::wstring timeToString(double time, bool omitLeadingZeros)
+std::wstring timeToString(double time, bool omitLeadingZeros, bool omitMillis)
 {
 	if (time < 0)
 		time = 0;
@@ -146,15 +146,27 @@ std::wstring timeToString(double time, bool omitLeadingZeros)
 	int minutes = num_hours / 60;
 #pragma warning(pop)
 	double seconds_f = num_hours - (minutes * 60);
+	int seconds;
+	if (omitMillis)
+		seconds = round(seconds_f);
+	else
+		seconds = trunc(seconds_f);
 
 	wchar_t buf[30];
 	if ((hours > 0 && minutes > 0) || ! omitLeadingZeros)
-		swprintf(buf, sizeof(buf), L"%d:%02d:%02.3f", hours, minutes, seconds_f);
+		swprintf(buf, sizeof(buf), L"%d:%02d:%02d", hours, minutes, seconds);
 	else if (hours == 0 && minutes > 0)
-		swprintf(buf, sizeof(buf), L"%2d:%02.3f", minutes, seconds_f);
+		swprintf(buf, sizeof(buf), L"%2d:%02d", minutes, seconds);
 	else
-		swprintf(buf, sizeof(buf), L"%02.3f", seconds_f);
-	return std::wstring(buf);
+		swprintf(buf, sizeof(buf), L"%d", seconds);
+	std::wstring str = std::wstring(buf);
+	if (!omitMillis)
+	{
+		std::wstring millis = std::to_wstring(seconds_f - trunc(seconds_f));
+		str.append(millis.erase(0, 1));
+		str.erase(str.find_first_of(L".", 0)+4, str.length());
+	}
+	return str;
 }
 
 SimDataTime::SimDataTime(std::wstring name, double f)
@@ -162,17 +174,27 @@ SimDataTime::SimDataTime(std::wstring name, double f)
 	label = name;
 	flt = f;
 	omitLeadingZeros = true;
+	omitMillis = false;
 }
 SimDataTime::SimDataTime(std::wstring name, double f, bool omitZeros)
 {
 	label = name;
 	flt = f;
 	omitLeadingZeros = omitZeros;
+	omitMillis = false;
+}
+
+SimDataTime::SimDataTime(std::wstring name, double f, bool omitZeros, bool omitMilliseconds)
+{
+	label = name;
+	flt = f;
+	omitLeadingZeros = omitZeros;
+	omitMillis = omitMilliseconds;
 }
 
 std::wstring SimDataTime::toString()
 {
-	return timeToString(flt, omitLeadingZeros);
+	return timeToString(flt, omitLeadingZeros, omitMillis);
 }
 
 std::wstring SimDataTime::json()

@@ -43,7 +43,7 @@ void SimData::sortScoring()
 std::wstring formatGap(double gap, long myLaps, long otherLaps)
 {
 	if (abs(myLaps - otherLaps) <= 1)
-		return timeToString(gap, true);
+		return timeToString(gap, true, false);
 
 	std::wstring str = std::to_wstring(abs(myLaps - otherLaps));
 	str.append(L" Lap");
@@ -67,7 +67,7 @@ void SimData::deriveValues()
 		if (event.sessionString.str == L"Race")
 			ownCar->gapNext.str = formatGap(ranking[i + 1]->timeBehindNext.flt, ownCar->lapNumber.lint, ranking[i + 1]->lapNumber.lint);
 		else
-			ownCar->gapNext.str = timeToString(abs(ownCar->bestTime.flt - ranking[i + 1]->bestTime.flt), true);
+			ownCar->gapNext.str = timeToString(abs(ownCar->bestTime.flt - ranking[i + 1]->bestTime.flt), true, false);
 		return;
 	}
 	if (i == session.numCars.lint - 1)
@@ -76,7 +76,7 @@ void SimData::deriveValues()
 		if (event.sessionString.str == L"Race")
 			ownCar->gapPrevious.str = formatGap(ownCar->timeBehindNext.flt, ranking[i - 1]->lapNumber.lint, ownCar->lapNumber.lint);
 		else
-			ownCar->gapPrevious.str = timeToString(abs(ownCar->bestTime.flt - ranking[i - 1]->bestTime.flt), true);
+			ownCar->gapPrevious.str = timeToString(abs(ownCar->bestTime.flt - ranking[i - 1]->bestTime.flt), true, false);
 		ownCar->gapNext.str = L"-";
 		return;
 	}
@@ -87,8 +87,8 @@ void SimData::deriveValues()
 	}
 	else
 	{
-		ownCar->gapPrevious.str = timeToString(abs(ownCar->bestTime.flt - ranking[i - 1]->bestTime.flt), true);
-		ownCar->gapNext.str = timeToString(abs(ownCar->bestTime.flt - ranking[i + 1]->bestTime.flt), true);
+		ownCar->gapPrevious.str = timeToString(abs(ownCar->bestTime.flt - ranking[i - 1]->bestTime.flt), true, false);
+		ownCar->gapNext.str = timeToString(abs(ownCar->bestTime.flt - ranking[i + 1]->bestTime.flt), true, false);
 	}
 }
 
