@@ -55,6 +55,9 @@ std::wstring formatGap(double gap, long myLaps, long otherLaps)
 // generally available values calculated based on raw values
 void SimData::deriveValues()
 {
+	// may not be ready when launching
+	if (session.numCars.lint <= 1)
+		return;
 	int i = 0;
 	while (!ranking[i]->isPlayer.bl)
 		i += 1; // our driver record
@@ -219,6 +222,7 @@ void Driver::registerDriver()
 	finishStatusString.registerMe();
 	lastTime.registerMe();
 	bestTime.registerMe();
+	split.registerMe();
 	lapNumber.registerMe();
 	lapStartTime.registerMe();
 	currentTime.registerMe();

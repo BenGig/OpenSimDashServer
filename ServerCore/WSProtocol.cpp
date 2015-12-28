@@ -6,12 +6,12 @@ static std::map<int, WSSession*> sessions;
 static std::map<int, WSSession*>::iterator it;
 
 static bool transmit(struct mg_connection *nc, const char *msg, size_t len) {
-	char buf[500]; memset(&buf, 0, 500);
+	char buf[10000]; memset(&buf, 0, 10000);
 
 	if (nc->err == 0)
 	{
 		snprintf(buf, sizeof(buf), "%p %.*s", nc, (int)len, msg);
-		mg_send_websocket_frame(nc, WEBSOCKET_OP_TEXT, buf, strlen(buf));
+		mg_send_websocket_frame(nc, WEBSOCKET_OP_BINARY, buf, strlen(buf));
 
 		return true;
 	}
@@ -24,6 +24,9 @@ void DataPusher(void *pParam)
 {
 	pusherEnv * pData = (pusherEnv *)pParam;
 	mg_connection *nc = pData->nc;
+	time_t lastFullPush = 0;
+	std::string * data;
+
 	if (!pData->pusherIsRunning.try_lock())
 		return; // already running
 
@@ -32,7 +35,15 @@ void DataPusher(void *pParam)
 	{
 		if (pData->itemRegistry->items.size() > 0)
 		{
-			std::string * data = pData->itemRegistry->changedItemsJSON();
+			if (time(NULL) - lastFullPush > 1)
+			{
+				// send complete data set every full second
+				data = pData->itemRegistry->allItemsJSON();
+				lastFullPush = time(NULL);
+			}
+			else
+				// standard is to send only changed data
+				data = pData->itemRegistry->changedItemsJSON();
 
 			if (data != nullptr)
 			{

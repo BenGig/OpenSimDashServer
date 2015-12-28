@@ -91,6 +91,7 @@ public:
 	SimDataTime(std::wstring label, double, bool omitLeadingZeros, bool omitMillis);
 
 	double flt;
+	std::wstring * str; // AC provides string
 	bool omitLeadingZeros;
 	bool omitMillis;
 	std::wstring toString();

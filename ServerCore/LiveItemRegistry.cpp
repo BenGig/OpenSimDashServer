@@ -48,6 +48,17 @@ std::string * LiveItem::valueIfChanged()
 	return nullptr;
 }
 
+std::string * LiveItem::value()
+{
+	if (source)
+	{
+		std::string * response = new std::string();
+		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
+		*response = cv.to_bytes(source->json());
+		return response;
+	}
+	return nullptr;
+}
 bool LiveItem::hasChanged()
 {
 	if (source)
@@ -72,6 +83,34 @@ std::string * LiveItemRegistry::changedItemsJSON()
 		{
 			LiveItem * li = items.at(i);
 			std::string * str = li->valueIfChanged();
+			if (str != nullptr)
+			{
+				response->append(*str);
+				delete str;
+				response->append(",");
+			}
+		}
+		response->pop_back();
+		response->append("}");
+		if (response->length() > 1)
+			return response;
+		delete response;
+		return nullptr;
+	}
+	else {
+		return nullptr;
+	}
+}
+
+std::string * LiveItemRegistry::allItemsJSON()
+{
+	if (items.size() > 0)
+	{
+		std::string * response = new std::string("{");
+		for (int i = 0; i < items.size(); i++)
+		{
+			LiveItem * li = items.at(i);
+			std::string * str = li->value();
 			if (str != nullptr)
 			{
 				response->append(*str);

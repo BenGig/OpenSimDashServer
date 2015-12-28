@@ -238,14 +238,16 @@ bool ConnectorRF::read()
 			for (int i = 0; i < 4; i++)
 			{
 				sd->telemetry.wheels[i].brakePressure.flt = td.data.telemetry.wheel[i].brakePressure;
-				sd->telemetry.wheels[i].brakeTemp.flt = td.data.telemetry.wheel[i].brakeTemp - 273.16;
+				if (td.data.telemetry.wheel[i].brakeTemp <= 20)
+					sd->telemetry.wheels[i].brakeTemp.flt = 20; // may be Kelvin or zero if in pits
+				else
+					sd->telemetry.wheels[i].brakeTemp.flt = td.data.telemetry.wheel[i].brakeTemp - 273.16;
 				sd->telemetry.wheels[i].camber.flt = td.data.telemetry.wheel[i].camber;
 				sd->telemetry.wheels[i].detached.bl = td.data.telemetry.wheel[i].detached;
 				sd->telemetry.wheels[i].flat.bl = td.data.telemetry.wheel[i].flat;
 				sd->telemetry.wheels[i].gripFract.flt = td.data.telemetry.wheel[i].gripFract;
 				sd->telemetry.wheels[i].lateralForce.flt = td.data.telemetry.wheel[i].lateralForce;
 				sd->telemetry.wheels[i].lateralGroundVel.flt = td.data.telemetry.wheel[i].lateralGroundVel;
-				sd->telemetry.wheels[i].lateralPatchVel.flt = td.data.telemetry.wheel[i].lateralPatchVel;
 				sd->telemetry.wheels[i].lateralPatchVel.flt = td.data.telemetry.wheel[i].lateralPatchVel;
 				sd->telemetry.wheels[i].longitudinalForce.flt = td.data.telemetry.wheel[i].longitudinalForce;
 				sd->telemetry.wheels[i].longitudinalGroundVel.flt = td.data.telemetry.wheel[i].longitudinalGroundVel;
@@ -278,7 +280,6 @@ bool ConnectorRF::read()
 					sd->telemetry.wheels[i].tireTempOutside.flt = td.data.telemetry.wheel[i].temperature[0] - 273.16;
 				}
 			}
-//			sd->telemetry.maxRPM.flt = td.data.telemetry.engineMaxRPM;
 			sd->telemetry.fuel.flt = td.data.telemetry.fuel;
 			if (rfVersion == 2)
 				sd->telemetry.fuel.max = td.data.telemetry.fuelCapacity;
@@ -328,7 +329,7 @@ bool ConnectorRF::read()
 			sd->telemetry.rearBrakeBias.flt = td.data.telemetry.rearBrakeBias;
 			sd->telemetry.turboBoostPressure.flt = td.data.telemetry.rearBrakeBias;
 
-
+			// different handling for rF1 and rf2
 			if (rfVersion == 1)
 			{
 				if (td.data.event.sectorFlag[sd->ownCar->currentSector.lint] > 0)
@@ -361,10 +362,10 @@ bool ConnectorRF::read()
 				}
 			}
 
-		}
+		} //  quickReady
 		sd->deriveValues();
 		return true;
-	}
+	} // if read()
 	else
 	{
 		return false;

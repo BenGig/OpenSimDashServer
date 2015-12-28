@@ -173,6 +173,7 @@ SimDataTime::SimDataTime(std::wstring name, double f)
 {
 	label = name;
 	flt = f;
+	str = new std::wstring(L"");
 	omitLeadingZeros = true;
 	omitMillis = false;
 }
@@ -180,6 +181,7 @@ SimDataTime::SimDataTime(std::wstring name, double f, bool omitZeros)
 {
 	label = name;
 	flt = f;
+	str = new std::wstring(L"");
 	omitLeadingZeros = omitZeros;
 	omitMillis = false;
 }
@@ -188,13 +190,17 @@ SimDataTime::SimDataTime(std::wstring name, double f, bool omitZeros, bool omitM
 {
 	label = name;
 	flt = f;
+	str = new std::wstring(L"");
 	omitLeadingZeros = omitZeros;
 	omitMillis = omitMilliseconds;
 }
 
 std::wstring SimDataTime::toString()
 {
-	return timeToString(flt, omitLeadingZeros, omitMillis);
+	if (str->length() > 0)
+		return * str;
+	else
+		return timeToString(flt, omitLeadingZeros, omitMillis);
 }
 
 std::wstring SimDataTime::json()

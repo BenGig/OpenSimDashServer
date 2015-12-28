@@ -38,43 +38,44 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 	case MG_EV_HTTP_REQUEST:
 
 		memcpy(buf, hm->uri.p, hm->uri.len);
-		if (strstr(buf, "event.json"))
+		if (strstr(buf, "status.json"))
 		{
 			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n");
-			switch (webserverSim) {
-			case SIM_RF:
-				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-				std::wstring * str = conn->sd->eventJson(conn->simName());
-				response = cv.to_bytes(*str);
-				mg_printf_http_chunk(nc, response.c_str());
-				delete str;
-			}
+			if (data->simreader == NULL)
+				response.assign("{\"status\":false}");
+			else
+				response.assign("{\"status\":true}");
+			mg_printf_http_chunk(nc, response.c_str());
+			mg_send_http_chunk(nc, "", 0);
+		}
+		else if (strstr(buf, "event.json"))
+		{
+			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n");
+			Connector * conn = (Connector *)data->simreader->connector;
+			std::wstring * str = conn->sd->eventJson(conn->simName());
+			response = cv.to_bytes(*str);
+			mg_printf_http_chunk(nc, response.c_str());
+			delete str;
 			mg_send_http_chunk(nc, "", 0);
 		}
 		else if (strstr(buf, "scoring.json"))
 		{
 			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n");
-			switch (webserverSim) {
-			case SIM_RF:
-				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-				std::wstring * str = conn->sd->scoringJson();
-				response = cv.to_bytes(*str);
-				mg_printf_http_chunk(nc, response.c_str());
-				delete str;
-			}
+			ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
+			std::wstring * str = conn->sd->scoringJson();
+			response = cv.to_bytes(*str);
+			mg_printf_http_chunk(nc, response.c_str());
+			delete str;
 			mg_send_http_chunk(nc, "", 0);
 		}
 		else if (strstr(buf, "dictionary.json"))
 		{
 			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n");
-			switch (webserverSim) {
-			case SIM_RF:
-				ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-				std::wstring * str = conn->sd->elementRegistry->jsonElements();
-				response = cv.to_bytes(*str);
-				mg_printf_http_chunk(nc, response.c_str());
-				delete str;
-			}
+			ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
+			std::wstring * str = conn->sd->elementRegistry->jsonElements();
+			response = cv.to_bytes(*str);
+			mg_printf_http_chunk(nc, response.c_str());
+			delete str;
 			mg_send_http_chunk(nc, "", 0);
 		}
 
@@ -152,9 +153,6 @@ void server(void *pParam)
 	data = (dataServed*)pParam;
 	pusherShouldEnd.lock();
 
-	ConnectorRF* crf = NULL;
-	// ConnectorAC* cac = NULL;
-
 	// Prepare webserver
 	struct mg_mgr mgr;
 	struct mg_connection *nc;
@@ -208,8 +206,20 @@ void server(void *pParam)
 				Sleep(1000);
 			}
 			
-			// TODO try to connect to Assetto Corsa
-
+			// try to connect to Assetto Corsa
+			data->simreader = new ConnectorScheduler(SIM_AC);
+			if (data->simreader->connector != NULL)
+			{
+				webserverSim = SIM_AC;
+				_tprintf(TEXT("Connected to %s.\n"), data->simreader->connector->simName()->c_str());
+				goto connected;
+			}
+			else
+			{
+				webserverSim = 0;
+				delete data->simreader; data->simreader = NULL;
+				Sleep(1000);
+			}
 		}
 
 	connected:

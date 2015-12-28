@@ -38,4 +38,7 @@
 #include "LiveItemRegistry.hpp"
 #include "WSProtocol.hpp"
 
+#include "SharedFileOut.h"
+#include "TelemetryDataAC.hpp"
+#include "ConnectorAC.hpp"
 #include "WebServer.hpp"

@@ -64,6 +64,7 @@ public:
 	SimDataString finishStatusString = SimDataString(L"finishStatusString", L"");
 	SimDataTime lastTime = SimDataTime(L"lastTime", 0);
 	SimDataTime bestTime = SimDataTime(L"bestTime", 0);
+	SimDataTime split = SimDataTime(L"split", 0);
 	SimDataInteger lapNumber = SimDataInteger(L"lapNumber", 0);
 	SimDataTime lapStartTime = SimDataTime(L"lapStartTime", 0);
 	SimDataTime currentTime = SimDataTime(L"currentTime", 0);
@@ -218,7 +219,7 @@ public:
 	SimDataFloating waterTemp = SimDataFloating(L"waterTemp", 0);
 	SimDataFloating oilTemp = SimDataFloating(L"oilTemp", 0);
 
-	SimDataInteger speedLimiter = SimDataInteger(L"speedLimiter", 0);   // whether speed limiter is on
+	SimDataBool speedLimiter = SimDataBool(L"speedLimiter", false);   // whether speed limiter is on
 	SimDataInteger maxGears = SimDataInteger(L"maxGears", 0);       // maximum forward gears
 	SimDataInteger frontTireCompoundIndex = SimDataInteger(L"frontTireCompoundIndex", 0);   // index within brand
 	SimDataInteger rearTireCompoundIndex = SimDataInteger(L"rearTireCompoundIndex", 0);    // index within brand
