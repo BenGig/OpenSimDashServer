@@ -26,7 +26,7 @@
 
 #include "../DataTransfer.hpp"
 
-#include "TelemetryData.hpp"
+#include "TelemetryDataRF.hpp"
 #include "SimDataElements.hpp"
 #include "SimDataElementsManager.hpp"
 #include "SimDataElementsManagerVar.hpp"

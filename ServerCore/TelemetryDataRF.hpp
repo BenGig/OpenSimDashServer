@@ -2,13 +2,13 @@
 
 #include "stdafx.h"
 
-class TelemetryData {
+class TelemetryDataRF {
 
 public:
 	UnifiedRfData data;
 	long rFactorVersion;
 
-	~TelemetryData();
+	~TelemetryDataRF();
 
 	bool connect();
 	bool read();
