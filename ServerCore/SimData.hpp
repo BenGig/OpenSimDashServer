@@ -63,6 +63,7 @@ public:
 	SimDataInteger finishStatus = SimDataInteger(L"finishStatus", 0); 	// 0=none, 1=finished, 2=dnf, 3=dq
 	SimDataString finishStatusString = SimDataString(L"finishStatusString", L"");
 	SimDataTime lastTime = SimDataTime(L"lastTime", 0);
+	SimDataTime formerTime = SimDataTime(L"formerTime", 0); // saved lastTime, because lastTime is replaced when line crossed
 	SimDataTime bestTime = SimDataTime(L"bestTime", 0);
 	SimDataTime split = SimDataTime(L"split", 0);
 	SimDataInteger lapNumber = SimDataInteger(L"lapNumber", 0);
@@ -195,7 +196,6 @@ public:
 	SimDataInteger lapsBehindLeader = SimDataInteger(L"lapsBehindLeader", 0);
 
 	// rF 2
-//	SimDataFloating maxFuel = SimDataFloating(L"maxFuel", 0);						// rF2, AC
 	SimDataFloating filteredThrottle = SimDataFloating(L"filteredThrottle", 0);
 	SimDataFloating filteredBrake = SimDataFloating(L"filteredBrake", 0);
 	SimDataFloating filteredSteering = SimDataFloating(L"filteredSteering", 0);
@@ -238,6 +238,12 @@ public:
 	// Values with references to other values (additional relative output)
 	SimDataFloatingLimited fuel = SimDataFloatingLimited(L"fuel", 0, -1);
 	SimDataFloatingLimited engineRPM = SimDataFloatingLimited(L"engineRPM", 0, -1);
+
+	// Calculated from laps completed and fuel used
+	SimDataFloating fuelLoaded = SimDataFloating(L"fuelLoaded", 0);
+	SimDataFloating fuelLoadedAt = SimDataFloating(L"fuelLoadedAt", 0);
+	SimDataFloating fuelNeeded = SimDataFloating(L"fuelNeeded", 0);
+
 };
 
 class SimData {

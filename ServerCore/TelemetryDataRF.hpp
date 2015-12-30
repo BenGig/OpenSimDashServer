@@ -2,6 +2,8 @@
 
 #include "stdafx.h"
 
+bool isReadyRFactor();
+
 class TelemetryDataRF {
 
 public:

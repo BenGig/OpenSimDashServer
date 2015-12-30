@@ -17,7 +17,7 @@ public:
 	Connector();
 	~Connector();
 
-	SimData * sd;
+	SimData sd;
 
 protected:
 	bool slowReady();

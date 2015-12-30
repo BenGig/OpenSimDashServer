@@ -1,14 +1,6 @@
 #include "stdafx.h"
 #include "TelemetryDataAC.hpp"
 
-/*
-struct SMElement
-{
-	HANDLE hMapFile;
-	unsigned char* mapFileBuffer;
-};
-*/
-
 void dismiss(SMElement element)
 {
 	UnmapViewOfFile(element.mapFileBuffer);
@@ -74,4 +66,17 @@ void TelemetryDataAC::disconnect()
 	CloseHandle(m_physics.hMapFile);
 	UnmapViewOfFile(m_static.mapFileBuffer);
 	CloseHandle(m_static.hMapFile);
+}
+
+bool isReadyAssettoCorsa()
+{
+	HANDLE hMapFile;
+
+	TCHAR szNamePhysics[] = TEXT("Local\\acpmf_static");
+	hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, szNamePhysics);
+	if (!hMapFile)
+		return false;
+	else
+		CloseHandle(hMapFile);
+	return true;
 }

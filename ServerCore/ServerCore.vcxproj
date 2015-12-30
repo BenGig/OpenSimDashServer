@@ -146,7 +146,7 @@
     <ClInclude Include="SimRacingToolsAdapter.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TelemetryData.hpp" />
+    <ClInclude Include="TelemetryDataRF.hpp" />
     <ClInclude Include="TelemetryDataAC.hpp" />
     <ClInclude Include="WebServer.hpp" />
     <ClInclude Include="WSProtocol.hpp" />
@@ -166,7 +166,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TelemetryData.cpp" />
+    <ClCompile Include="TelemetryDataRF.cpp" />
     <ClCompile Include="TelemetryDataAC.cpp" />
     <ClCompile Include="WebServer.cpp" />
     <ClCompile Include="WSProtocol.cpp" />

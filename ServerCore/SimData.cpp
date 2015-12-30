@@ -55,12 +55,36 @@ std::wstring formatGap(double gap, long myLaps, long otherLaps)
 // generally available values calculated based on raw values
 void SimData::deriveValues()
 {
+	bool lapLimited = false;
 	// may not be ready when launching
 	if (session.numCars.lint <= 1)
 		return;
 	int i = 0;
 	while (!ranking[i]->isPlayer.bl)
 		i += 1; // our driver record
+
+	// Fuel estimation
+	if (event.sessionString.str == L"Race")
+	{
+		if (event.numberOfLaps.lint < 2147483647)
+			lapLimited = true;
+		// detect refueling
+		if (telemetry.fuelLoaded.flt < telemetry.fuel.flt)
+		{
+			telemetry.fuelLoaded.flt = telemetry.fuel.flt;
+			if (lapLimited)
+				telemetry.fuelLoadedAt.flt = ownCar->lapNumber.lint;
+			else
+				telemetry.fuelLoadedAt.flt = event.currentTime.flt;
+		}
+		if (lapLimited)
+			if (ownCar->lapNumber.lint - telemetry.fuelLoadedAt.flt != 0)
+				telemetry.fuelNeeded.flt = (telemetry.fuelLoaded.flt - telemetry.fuel.flt) / (ownCar->lapNumber.lint - telemetry.fuelLoadedAt.flt)*(event.numberOfLaps.lint - ownCar->lapNumber.lint);
+		else
+			if (event.currentTime.flt - telemetry.fuelLoadedAt.flt != 0)
+				telemetry.fuelNeeded.flt = (telemetry.fuelLoaded.flt - telemetry.fuel.flt) / (event.currentTime.flt - telemetry.fuelLoadedAt.flt)*(event.endTime.flt - event.currentTime.flt);
+	}
+
 
 	// Gaps to previous and next. Compose complete string (time or lap, lap or laps)
 	if (i == 0)
@@ -143,6 +167,7 @@ std::wstring * SimData::scoringJson()
 		score->append(scoring[i].finishStatusString.json()); score->append(L",");
 		score->append(scoring[i].lastTime.json()); score->append(L",");
 		score->append(scoring[i].bestTime.json()); score->append(L",");
+		score->append(scoring[i].formerTime.json()); score->append(L",");
 		score->append(scoring[i].lapNumber.json()); score->append(L",");
 		score->append(scoring[i].bestSector1.json()); score->append(L",");
 		score->append(scoring[i].bestSector2.json()); score->append(L",");
@@ -222,6 +247,7 @@ void Driver::registerDriver()
 	finishStatusString.registerMe();
 	lastTime.registerMe();
 	bestTime.registerMe();
+	formerTime.registerMe();
 	split.registerMe();
 	lapNumber.registerMe();
 	lapStartTime.registerMe();
@@ -316,6 +342,9 @@ Car::Car()
 	overheating.registerMe();
 	oilTemp.registerMe();
 	waterTemp.registerMe();
+	fuelLoaded.registerMe();
+	fuelLoadedAt.registerMe();
+	fuelNeeded.registerMe();
 }
 
 Wheel::Wheel()

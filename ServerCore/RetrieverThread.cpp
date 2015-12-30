@@ -77,36 +77,44 @@ ConnectorScheduler::ConnectorScheduler(int sim)
 	ConnectorRF* crf = NULL; 
 	ConnectorAC* cac = NULL;
 
-
 	td = new threadData;
 	td->sim = sim;
+
 	switch (sim)
 	{
 	case SIM_RF:
-		crf = new ConnectorRF();
-		if (crf != NULL && crf->connect())
+		if (isReadyRFactor())
 		{
-			td->connector = (Connector*)crf;	// Pointer for thread
-			connector = (Connector*)crf;		// for main program
-			hRunMutex = CreateMutex(NULL, TRUE, NULL);      // set 
-			hReadingMutex = CreateMutex(NULL, FALSE, NULL); // unset 
-			_beginthread(SchedulerLaunch, 0, td);
-			return;
+			crf = new ConnectorRF();
+			if (crf != NULL && crf->connect())
+			{
+				td->connector = (Connector*)crf;	// Pointer for thread
+				connector = (Connector*)crf;		// for main program
+				hRunMutex = CreateMutex(NULL, TRUE, NULL);      // set 
+				hReadingMutex = CreateMutex(NULL, FALSE, NULL); // unset 
+				_beginthread(SchedulerLaunch, 0, td);
+				return;
+			}
+			delete crf; connector = NULL;
 		}
-		delete crf; connector = NULL;
 		break;
 	case SIM_AC:
-		cac = new ConnectorAC();
-		if (cac != NULL && cac->connect())
+		if (isReadyAssettoCorsa())
 		{
-			td->connector = (Connector*)cac;	// Pointer for thread
-			connector = (Connector*)cac;		// for main program
-			hRunMutex = CreateMutex(NULL, TRUE, NULL);      // set 
-			hReadingMutex = CreateMutex(NULL, FALSE, NULL); // unset 
-			_beginthread(SchedulerLaunch, 0, td);
-			return;
+			cac = new ConnectorAC();
+			if (cac != NULL && cac->connect())
+			{
+				td->connector = (Connector*)cac;	// Pointer for thread
+				connector = (Connector*)cac;		// for main program
+				hRunMutex = CreateMutex(NULL, TRUE, NULL);      // set 
+				hReadingMutex = CreateMutex(NULL, FALSE, NULL); // unset 
+				_beginthread(SchedulerLaunch, 0, td);
+				return;
+			}
+			delete cac; connector = NULL;
 		}
-		delete cac; connector = NULL;
+		
+
 		break;
 
 	default:

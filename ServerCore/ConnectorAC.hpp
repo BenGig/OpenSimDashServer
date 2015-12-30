@@ -8,6 +8,7 @@ public:
 	std::wstring acVersion;
 
 	ConnectorAC() {};
+	~ConnectorAC() {};
 
 	bool connect();
 	int check();

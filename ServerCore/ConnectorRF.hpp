@@ -72,6 +72,6 @@ public:
 
 
 private:
-	TelemetryData td;
+	TelemetryDataRF td;
 	void sessionToStr();
 };

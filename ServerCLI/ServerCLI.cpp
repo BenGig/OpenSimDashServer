@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
 
 	printf("Running on port %s, press CTRL-C to abort.\n", port.c_str());
 	int i = getchar();
-
 	return 0;
 }
 

@@ -1,19 +1,19 @@
 #include "stdafx.h"
 
-HANDLE hMapFile;
-LPCTSTR pBuf = NULL;
+HANDLE hMapFile = nullptr;
+LPCTSTR pBuf = nullptr;
 UnifiedRfData data;
 
-bool TelemetryData::connect()
+bool TelemetryDataRF::connect()
 {
-	if (pBuf == NULL)
+	if (pBuf == nullptr)
 	{
 		hMapFile = OpenFileMapping(
 			FILE_MAP_ALL_ACCESS,   // read/write access
 			FALSE,                 // do not inherit the name
 			transferBufferName);               // name of mapping object
 
-		if (hMapFile == NULL)
+		if (hMapFile == nullptr)
 		{
 			// _tprintf(TEXT("Could not open file mapping object (%d).\n"), GetLastError());
 			return false;
@@ -25,7 +25,7 @@ bool TelemetryData::connect()
 			0,
 			transferBufferSize);
 
-		if (pBuf == NULL)
+		if (pBuf == nullptr)
 		{
 			// _tprintf(TEXT("Could not map view of file (%d).\n"), GetLastError());
 
@@ -39,13 +39,13 @@ bool TelemetryData::connect()
 	return true;
 }
 
-TelemetryData::~TelemetryData()
+TelemetryDataRF::~TelemetryDataRF()
 {
 	disconnect();
 }
 
 
-bool TelemetryData::read()
+bool TelemetryDataRF::read()
 {
 	if (pBuf != NULL)
 	{
@@ -66,10 +66,21 @@ bool TelemetryData::read()
 	return true;
 }
 
-void TelemetryData::disconnect()
+void TelemetryDataRF::disconnect()
 {
 	UnmapViewOfFile(pBuf); pBuf = NULL;
 	CloseHandle(hMapFile);
 	rFactorVersion = 0;
 }
 
+bool isReadyRFactor()
+{
+	HANDLE hMapFile;
+
+	hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, transferBufferName);
+	if (!hMapFile)
+		return false;
+	else
+		CloseHandle(hMapFile);
+	return true;
+}

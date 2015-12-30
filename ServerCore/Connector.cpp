@@ -17,13 +17,13 @@ Connector::Connector()
 	quickInterval = std::chrono::milliseconds(33);
 	lastSlowUpdate = std::chrono::steady_clock::now() - slowInterval;
 	lastQuickUpdate = std::chrono::steady_clock::now() - quickInterval;
-	sd = new SimData();
+//	sd = new SimData();
 }
 
 Connector::~Connector()
 {
 	sdem.reset();
-	delete sd;
+//	delete sd;
 }
 
 bool Connector::slowReady()

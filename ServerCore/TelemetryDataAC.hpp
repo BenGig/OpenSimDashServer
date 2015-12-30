@@ -2,6 +2,8 @@
 
 #include "stdafx.h"
 
+bool isReadyAssettoCorsa();
+
 struct SMElement
 {
 	HANDLE hMapFile;

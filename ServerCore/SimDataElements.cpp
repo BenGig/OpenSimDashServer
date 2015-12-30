@@ -144,13 +144,13 @@ std::wstring timeToString(double time, bool omitLeadingZeros, bool omitMillis)
 	long hours = time / 3600;
 	double num_hours = time - (3600 * hours);
 	int minutes = num_hours / 60;
-#pragma warning(pop)
 	double seconds_f = num_hours - (minutes * 60);
 	int seconds;
 	if (omitMillis)
 		seconds = round(seconds_f);
 	else
 		seconds = trunc(seconds_f);
+#pragma warning(pop)
 
 	wchar_t buf[30];
 	if ((hours > 0 && minutes > 0) || ! omitLeadingZeros)

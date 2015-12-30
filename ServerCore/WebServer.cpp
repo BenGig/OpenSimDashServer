@@ -52,7 +52,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		{
 			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n");
 			Connector * conn = (Connector *)data->simreader->connector;
-			std::wstring * str = conn->sd->eventJson(conn->simName());
+			std::wstring * str = conn->sd.eventJson(conn->simName());
 			response = cv.to_bytes(*str);
 			mg_printf_http_chunk(nc, response.c_str());
 			delete str;
@@ -62,7 +62,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		{
 			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n");
 			ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-			std::wstring * str = conn->sd->scoringJson();
+			std::wstring * str = conn->sd.scoringJson();
 			response = cv.to_bytes(*str);
 			mg_printf_http_chunk(nc, response.c_str());
 			delete str;
@@ -72,7 +72,7 @@ static void ev_handler(struct mg_connection *nc, int ev, void *p) {
 		{
 			mg_printf(nc, "%s", "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n");
 			ConnectorRF * conn = (ConnectorRF *)data->simreader->connector;
-			std::wstring * str = conn->sd->elementRegistry->jsonElements();
+			std::wstring * str = conn->sd.elementRegistry->jsonElements();
 			response = cv.to_bytes(*str);
 			mg_printf_http_chunk(nc, response.c_str());
 			delete str;
